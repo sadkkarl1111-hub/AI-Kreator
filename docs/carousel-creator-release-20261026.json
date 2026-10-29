@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-26",
+  "status": "deployed and verified",
+  "url": "https://ai-kreator.pl/tools/carousel",
+  "templates": {
+    "newSets": 12,
+    "newSlides": 76,
+    "totalSets": 24,
+    "palettes": 6,
+    "newCompositions": 6
+  },
+  "indexSha256": "20f60d9b76d7402be0e289cc9301d9de2583f914f7c789fd5ea44d26a9ad9acb",
+  "verification": {
+    "testsPassed": 209,
+    "testFiles": 37,
+    "build": "passed",
+    "geometryRenderVariants": 230,
+    "textOverflow": 0,
+    "textCollisions": 0,
+    "localDownloads": [
+      "PNG",
+      "7-page PDF"
+    ],
+    "production": {
+      "httpStatus": 200,
+      "creatorTemplates": 12,
+      "totalTemplates": 24,
+      "downloads": [
+        "PNG",
+        "project JSON"
+      ],
+      "userImageReplacement": true,
+      "undo": true,
+      "mobileOverflow": false,
+      "seo": {
+        "title": "Darmowy kreator karuzel na Instagram | Kreator Grafik AI",
+        "canonical": "https://ai-kreator.pl/tools/carousel",
+        "robots": "index, follow, max-image-preview:large",
+        "font": true
+      },
+      "errors": []
+    },
+    "projectPhotoReplacement": "verified original ai-sample metadata removed when replacing image"
+  },
+  "backup": "/var/backups/ai-kreator/carousel-creator-20261026",
+  "assetsManifest": "public/demo-assets/carousel-creators-20261026/manifest.json",
+  "imageGeneration": "built-in image_gen; two original fictional subjects with transparent background, labelled as AI samples",
+  "font": "Anton, self-hosted, SIL OFL",
+  "reference": "https://www.instagram.com/marketingharry/",
+  "referenceAccess": "Instagram direct request was rate-limited; publicly available published examples informed broad typographic direction; no posts or personal likeness copied.",
+  "limitations": [
+    "Full existing TypeScript check reports pre-existing errors outside this change; no clean full typecheck claim.",
+    "Templates and sample copy do not guarantee conversion performance."
+  ]
+}

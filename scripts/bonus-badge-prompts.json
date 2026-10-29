@@ -1,0 +1,31 @@
+{
+  "tool": "Built-in image_gen.imagegen",
+  "transparent_background": true,
+  "generatedAt": "2026-10-25T15:34:35Z",
+  "prompts": [
+    {
+      "id": "course",
+      "prompt": "Use case: ads-marketing. Create ONE standalone Polish marketing badge for a professional bonus asset library. A single premium original violet-and-champagne-gold 3D badge: luxurious purple gift box with gold bow above a wide violet plaque. Exact two-line Polish text on the plaque: \"BONUS\" / \"DO KURSU\". Sophisticated embossed cream lettering. Full object isolated on a genuinely transparent background with safe transparent margins. Professional detailed 3D material rendering, refined studio lighting. Strong silhouette and perfectly legible text at thumbnail scale. Correct Polish spelling and accents. No extra words, no watermark, no checkerboard pattern, no collage, no ground plane or external shadow. Original artwork."
+    },
+    {
+      "id": "pdf",
+      "prompt": "Use case: ads-marketing. Create ONE standalone Polish marketing badge for a professional bonus asset library. A single original premium turquoise-and-silver 3D badge: a neat small stack of thick white digital-document sheets, a folded paper corner and turquoise ribbon across front. Exact two-line Polish text on the ribbon: \"MATERIAŁY\" / \"PDF\". PDF very large. Clean readable dark navy typography, turquoise accents. Full object isolated on a genuinely transparent background with safe transparent margins. Professional detailed 3D material rendering, refined studio lighting. Strong silhouette and perfectly legible text at thumbnail scale. Correct Polish spelling and accents. No extra words, no watermark, no checkerboard pattern, no collage, no ground plane or external shadow. Original artwork."
+    },
+    {
+      "id": "templates",
+      "prompt": "Use case: ads-marketing. Create ONE standalone Polish marketing badge for a professional bonus asset library. A single original premium coral-and-cream 3D badge: three overlapping small template cards with subtle grid and layout motifs above a broad coral-red rounded plaque. Exact two-line Polish text on the plaque: \"GOTOWE\" / \"SZABLONY\". Bold cream raised lettering. Full object isolated on a genuinely transparent background with safe transparent margins. Professional detailed 3D material rendering, refined studio lighting. Strong silhouette and perfectly legible text at thumbnail scale. Correct Polish spelling and accents. No extra words, no watermark, no checkerboard pattern, no collage, no ground plane or external shadow. Original artwork."
+    },
+    {
+      "id": "checklist",
+      "prompt": "Use case: ads-marketing. Create ONE standalone Polish marketing badge for a professional bonus asset library. A single original premium emerald-green and cream 3D checklist badge: a small tilted ivory clipboard with three gold checkmarks at the left, a wide rich green plaque beside it. Exact prominent Polish text: \"CHECKLISTA\". Rich embossed gold lettering, clean elegant silhouette. Full object isolated on a genuinely transparent background with safe transparent margins. Professional detailed 3D material rendering, refined studio lighting. Strong silhouette and perfectly legible text at thumbnail scale. Correct Polish spelling and accents. No extra words, no watermark, no checkerboard pattern, no collage, no ground plane or external shadow. Original artwork."
+    },
+    {
+      "id": "gift",
+      "prompt": "Use case: ads-marketing. Create ONE standalone Polish marketing badge for a professional bonus asset library. A single original premium royal-blue and gold gift badge: satin blue gift with a large flowing gold bow above a broad blue ticket-shaped plaque. Exact two-line Polish text on the plaque: \"PREZENT\" / \"DLA CIEBIE\". Bold embossed cream and gold typography. Full object isolated on a genuinely transparent background with safe transparent margins. Professional detailed 3D material rendering, refined studio lighting. Strong silhouette and perfectly legible text at thumbnail scale. Correct Polish spelling and accents. No extra words, no watermark, no checkerboard pattern, no collage, no ground plane or external shadow. Original artwork."
+    },
+    {
+      "id": "bundle",
+      "prompt": "Use case: ads-marketing. Create ONE standalone Polish marketing badge for a professional bonus asset library. A single original premium lilac and deep-purple 3D badge: a tasteful bundle of small gift box, PDF document and template cards above a broad dark purple rounded plaque. Exact two-line Polish text on plaque: \"PAKIET\" / \"BONUSÓW\". Large gold metallic raised lettering. Full object isolated on a genuinely transparent background with safe transparent margins. Professional detailed 3D material rendering, refined studio lighting. Strong silhouette and perfectly legible text at thumbnail scale. Correct Polish spelling and accents. No extra words, no watermark, no checkerboard pattern, no collage, no ground plane or external shadow. Original artwork."
+    }
+  ]
+}

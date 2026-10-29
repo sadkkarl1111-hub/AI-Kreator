@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_seo/
+
+Sitemap: https://ai-kreator.pl/sitemap.xml

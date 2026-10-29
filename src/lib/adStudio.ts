@@ -1,0 +1,5 @@
+export type AdResearchExample = { id: string; pageName: string; text: string; url?: string; startDate?: string; source: 'meta' | 'manual'; platforms?: string[] };
+export type AdResearchReport = { observations: { observation: string; evidenceIds: string[] }[]; tests: { hypothesis: string; variantA: string; variantB: string; metric: string }[] };
+export type AdCampaignGoal = 'auto' | 'sales' | 'leads' | 'messages';
+export const AD_CAMPAIGN_GOALS = [{ id: 'auto', label: 'Dobierz do oferty' }, { id: 'sales', label: 'Sprzedaż' }, { id: 'leads', label: 'Zapisy / kontakty' }, { id: 'messages', label: 'Wiadomości / rozmowy' }] as const;
+export function metaLibrarySearchUrl(query: string, country = 'PL') { const url = new URL('https://www.facebook.com/ads/library/');url.searchParams.set('active_status','active');url.searchParams.set('ad_type','all');url.searchParams.set('country',country);url.searchParams.set('q',query.trim().slice(0,120));url.searchParams.set('search_type','keyword_unordered');return url.href; }

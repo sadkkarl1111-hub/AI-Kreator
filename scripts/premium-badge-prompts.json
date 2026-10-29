@@ -1,0 +1,15 @@
+{
+  "tool": "Built-in image_gen.imagegen",
+  "transparent_background": true,
+  "purpose": "Six original Polish marketing badges, generated 2026-10-25. Outputs copied unchanged to src/assets/badges/premium.",
+  "guarantee30": "Use case: ads-marketing. Create ONE premium marketing badge for a Polish sales-page asset library. Isolated original 3D embossed gold and deep emerald shield with refined metallic beveled rim, embossed raised typography, short elegant green ribbon below, precise frontal product render. Text exactly three centered lines: 30 DNI / GWARANCJI / ZWROTU. 30 DNI largest, text perfectly legible, correct Polish spelling. Full object centered with generous transparent padding and transparent background. No other words, no watermark, no checkerboard pattern, no scene, no ground plane, no exterior shadow. Professional rich material detail but clean silhouette readable at thumbnail size. Output square.",
+  "other_prompts_prefix": "Use case: ads-marketing. Create a SINGLE standalone Polish marketing badge, ",
+  "other_prompts_suffix": " Correct Polish spelling and diacritics. Full object centered in square output with generous transparent padding. Genuinely transparent background. Professional detailed studio-rendered material, strong clean silhouette readable as a thumbnail. No other words, watermark, scene, checkerboard, ground plane or exterior shadow. This is one original isolated object for a website badge library.",
+  "other_prompts": {
+    "guarantee60": "ONE original premium round navy-blue and silver metallic 3D guarantee seal with scalloped edge and two short navy ribbon tails. Exactly three centered lines: 60 DNI / GWARANCJI / ZWROTU. 60 DNI largest. Raised silver typography and brushed metallic bevels.",
+    "refund100": "ONE original premium round copper-gold and cream 3D money-back guarantee seal, fine concentric rings, curved return-arrow pictogram at bottom, embossed navy typography. Exactly two centered text lines: 100% / ZWROTU. 100% very large. No ribbon.",
+    "webinarLive": "ONE original premium purple-and-gold 3D horizontal admission ticket, realistic thick paper, gold foil border, rounded ticket notches at left and right, small embossed play pictogram in a circle at right separated by vertical perforation. Exact Polish headline split in two lines: WEBINAR / NA ŻYWO. Clear bold cream typography.",
+    "webinarJoin": "ONE original premium vivid yellow and black 3D horizontal admission ticket, layered paper edges, black dashed perforation, rounded ticket notches at left and right. Exact Polish words in three lines: DOŁĄCZ / DO WEBINARU / ZAREZERWUJ MIEJSCE. First two lines large black bold typography. Original curved black arrow at right.",
+    "webinarRecording": "ONE original premium cobalt blue and white 3D webinar recording badge in shape of a softly rounded horizontal media-player card, sophisticated embossed surface, big white play triangle in a separate circle at left. Exact Polish words at right in two lines: NAGRANIE / WEBINARU. Large highly legible white bold typography. No fake app controls."
+  }
+}

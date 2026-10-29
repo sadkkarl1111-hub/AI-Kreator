@@ -1,0 +1,24 @@
+{
+  "tool": "Built-in image_gen.imagegen",
+  "transparent_background": true,
+  "addedAt": "2026-10-25T15:49:07Z",
+  "reference": "src/assets/badges/bonus/bonus-bundle.png",
+  "prompts": [
+    {
+      "id": "green",
+      "prompt": "Edit the provided original Polish 3D \"PAKIET BONUSÓW\" marketing badge. This is a precise COLOR VARIANT, preserve the existing composition, silhouette, all gift-box and satin-bow geometry, PDF document, template cards, rounded plaque, polished gold metallic outlines and raised gold lettering. Replace ALL purple/lilac/violet materials and graphic accents with a cohesive emerald green, with lighter mint-green surfaces and deep forest-green accents palette, including the plaque surface, present box, bow, paper borders and template illustrations. Keep the white paper and red PDF label as in original. Keep the text EXACTLY unchanged and perfectly legible: \"PDF\" and the two-line Polish headline \"PAKIET\" / \"BONUSÓW\", preserving the acute accent on Ó. Maintain professional rich materials, 3D depth and studio lighting. Preserve genuinely transparent background and safe margins; whole badge visible. No other objects or extra words, no watermark, no checkerboard pattern, no ground plane or exterior shadow. The original purple variant remains unchanged on disk; create a new variant."
+    },
+    {
+      "id": "red",
+      "prompt": "Edit the provided original Polish 3D \"PAKIET BONUSÓW\" marketing badge. This is a precise COLOR VARIANT, preserve the existing composition, silhouette, all gift-box and satin-bow geometry, PDF document, template cards, rounded plaque, polished gold metallic outlines and raised gold lettering. Replace ALL purple/lilac/violet materials and graphic accents with a cohesive rich ruby red, with lighter coral-red surfaces and deep burgundy accents palette, including the plaque surface, present box, bow, paper borders and template illustrations. Keep the white paper and red PDF label as in original. Keep the text EXACTLY unchanged and perfectly legible: \"PDF\" and the two-line Polish headline \"PAKIET\" / \"BONUSÓW\", preserving the acute accent on Ó. Maintain professional rich materials, 3D depth and studio lighting. Preserve genuinely transparent background and safe margins; whole badge visible. No other objects or extra words, no watermark, no checkerboard pattern, no ground plane or exterior shadow. The original purple variant remains unchanged on disk; create a new variant."
+    },
+    {
+      "id": "blue",
+      "prompt": "Edit the provided original Polish 3D \"PAKIET BONUSÓW\" marketing badge. This is a precise COLOR VARIANT, preserve the existing composition, silhouette, all gift-box and satin-bow geometry, PDF document, template cards, rounded plaque, polished gold metallic outlines and raised gold lettering. Replace ALL purple/lilac/violet materials and graphic accents with a cohesive royal cobalt blue, with lighter sky-blue surfaces and deep navy-blue accents palette, including the plaque surface, present box, bow, paper borders and template illustrations. Keep the white paper and red PDF label as in original. Keep the text EXACTLY unchanged and perfectly legible: \"PDF\" and the two-line Polish headline \"PAKIET\" / \"BONUSÓW\", preserving the acute accent on Ó. Maintain professional rich materials, 3D depth and studio lighting. Preserve genuinely transparent background and safe margins; whole badge visible. No other objects or extra words, no watermark, no checkerboard pattern, no ground plane or exterior shadow. The original purple variant remains unchanged on disk; create a new variant."
+    },
+    {
+      "id": "orange",
+      "prompt": "Edit the provided original Polish 3D \"PAKIET BONUSÓW\" marketing badge. This is a precise COLOR VARIANT, preserve the existing composition, silhouette, all gift-box and satin-bow geometry, PDF document, template cards, rounded plaque, polished gold metallic outlines and raised gold lettering. Replace ALL purple/lilac/violet materials and graphic accents with a cohesive warm tangerine orange, with lighter apricot-orange surfaces and deep burnt-orange accents palette, including the plaque surface, present box, bow, paper borders and template illustrations. Keep the white paper and red PDF label as in original. Keep the text EXACTLY unchanged and perfectly legible: \"PDF\" and the two-line Polish headline \"PAKIET\" / \"BONUSÓW\", preserving the acute accent on Ó. Maintain professional rich materials, 3D depth and studio lighting. Preserve genuinely transparent background and safe margins; whole badge visible. No other objects or extra words, no watermark, no checkerboard pattern, no ground plane or exterior shadow. The original purple variant remains unchanged on disk; create a new variant."
+    }
+  ]
+}

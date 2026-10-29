@@ -1,0 +1,27 @@
+.carousel-workspace { min-width: 0; border: 1px solid hsl(var(--border)); border-radius: 14px; background: hsl(var(--card)); }
+.carousel-workspace-toolbar { display: flex; min-width: 0; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid hsl(var(--border)); }
+.carousel-workspace-body { display: flex; min-width: 0; flex-direction: column; }
+.carousel-workspace-sidebar { order: 2; min-width: 0; border-top: 1px solid hsl(var(--border)); }
+.carousel-workspace-rail { display: flex; gap: 4px; overflow-x: auto; padding: 8px; background: hsl(var(--muted) / .35); }
+.carousel-workspace-settings { min-width: 0; }
+.carousel-workspace-preview { order: 1; min-width: 0; padding: 12px; }
+.carousel-workspace-canvas { display: flex; align-items: center; justify-content: center; min-width: 0; margin: 12px 0; padding: 12px; border-radius: 12px; background: hsl(var(--muted) / .45); }
+.carousel-workspace-canvas canvas { width: 100%; object-fit: contain; max-height: clamp(120px, calc(100svh - 400px), 620px); }
+.carousel-workspace-filmstrip { min-width: 0; border-top: 1px solid hsl(var(--border)); padding-top: 8px; }
+@media (min-width: 1024px) {
+  .carousel-workspace { display: flex; flex-direction: column; height: calc(100svh - 92px); min-height: 420px; overflow: hidden; }
+  .carousel-workspace-toolbar { flex-shrink: 0; }
+  .carousel-workspace-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 410px minmax(0, 1fr); }
+  .carousel-workspace-sidebar { order: 0; min-height: 0; display: grid; grid-template-columns: 80px minmax(0, 1fr); border-top: 0; border-right: 1px solid hsl(var(--border)); }
+  .carousel-workspace-rail { min-height: 0; flex-direction: column; gap: 2px; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; padding: 6px 2px; border-right: 1px solid hsl(var(--border)); }
+  .carousel-workspace-rail button { min-width: 0; min-height: 52px; padding-top: 5px; padding-bottom: 5px; }
+  .carousel-workspace-settings { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+  .carousel-workspace-preview { order: 0; min-height: 0; display: flex; flex-direction: column; gap: 8px; padding: 12px; }
+  .carousel-workspace-canvas { flex: 1; min-height: 0; margin: 0; padding: 12px; overflow: hidden; }
+  .carousel-workspace-canvas canvas { height: 100%; max-height: 100%; }
+  .carousel-workspace-filmstrip { flex-shrink: 0; }
+}
+@media (min-width: 1600px) {
+  .carousel-workspace-body { grid-template-columns: 460px minmax(0, 1fr); }
+  .carousel-workspace-sidebar { grid-template-columns: 88px minmax(0, 1fr); }
+}

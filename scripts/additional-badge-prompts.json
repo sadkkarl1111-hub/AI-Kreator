@@ -1,0 +1,23 @@
+{
+  "tool": "Built-in image_gen.imagegen",
+  "transparent_background": true,
+  "generatedAt": "2026-10-25",
+  "prompts": [
+    {
+      "key": "guarantee90",
+      "prompt": "Use case: ads-marketing. Create ONE original standalone Polish marketing badge for a professional sales-page asset library. A single circular premium burgundy-and-gold guarantee seal with a finely scalloped edge, embossed 3D lettering, two short burgundy satin ribbon tails. Exact three-line Polish text: \"90 DNI\" / \"GWARANCJI\" / \"ZWROTU\". Make 90 DNI largest. Correct Polish spelling and diacritics, perfectly legible bold typography at thumbnail size. Rich detailed materials, refined studio lighting and clean silhouette. Genuinely transparent background, full object centered with safe transparent margins. No other words, watermark, checkerboard pattern, ground plane or exterior shadow. No collage. Isolated original 3D object."
+    },
+    {
+      "key": "guarantee14",
+      "prompt": "Use case: ads-marketing. Create ONE original standalone Polish marketing badge for a professional sales-page asset library. A single premium deep cobalt-blue shield badge with a polished silver bevel and small checkmark, no ribbon. Exact three-line Polish text: \"14 DNI\" / \"NA ZWROT\" / \"ZAKUPU\". Make 14 DNI largest. Correct Polish spelling and diacritics, perfectly legible bold typography at thumbnail size. Rich detailed materials, refined studio lighting and clean silhouette. Genuinely transparent background, full object centered with safe transparent margins. No other words, watermark, checkerboard pattern, ground plane or exterior shadow. No collage. Isolated original 3D object."
+    },
+    {
+      "key": "webinarSignup",
+      "prompt": "Use case: ads-marketing. Create ONE original standalone Polish marketing badge for a professional sales-page asset library. A single eye-catching coral-red horizontal admission ticket with cream lettering, ticket notches at both ends, a subtle realistic layered paper edge, a clear right arrow on the right separated by dashed perforation. Exact two-line Polish headline: \"ZAPISZ SIĘ\" / \"NA WEBINAR\". Correct Polish spelling and diacritics, perfectly legible bold typography at thumbnail size. Rich detailed materials, refined studio lighting and clean silhouette. Genuinely transparent background, full object centered with safe transparent margins. No other words, watermark, checkerboard pattern, ground plane or exterior shadow. No collage. Isolated original 3D object."
+    },
+    {
+      "key": "webinarBonus",
+      "prompt": "Use case: ads-marketing. Create ONE original standalone Polish marketing badge for a professional sales-page asset library. A single premium violet and gold 3D gift badge: a small luxurious gift box with a gold satin bow above a broad horizontal purple plaque. Exact two-line Polish text on plaque: \"BONUS\" / \"DLA UCZESTNIKÓW\". Large legible cream and gold typography. Correct Polish spelling and diacritics, perfectly legible bold typography at thumbnail size. Rich detailed materials, refined studio lighting and clean silhouette. Genuinely transparent background, full object centered with safe transparent margins. No other words, watermark, checkerboard pattern, ground plane or exterior shadow. No collage. Isolated original 3D object."
+    }
+  ]
+}

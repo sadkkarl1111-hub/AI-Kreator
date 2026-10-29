@@ -1,0 +1,17 @@
+{
+  "created": "2026-10-26",
+  "method": "built-in image_gen",
+  "purpose": "Original fictional AI-generated sample portraits for editable carousel templates; no real influencer likeness used",
+  "images": [
+    {
+      "file": "creator-male.png",
+      "web": "creator-male.webp",
+      "prompt": "Use case: photorealistic cutout asset for editable social media carousel cover. Create ONE fictional adult male content creator about 30 years old, chest-up portrait, short dark hair, warm Mediterranean complexion, clean black crew-neck T-shirt, subtle round black glasses. He looks into camera with a lively curious half-smile, right index finger raised and pointing toward empty upper-left space, left hand low and visible. Both hands anatomically natural, all fingers and entire hair inside frame, shoulders fully visible. Slight three-quarter angle, body mostly upright. Crisp premium studio portrait photography, punchy neutral lighting, realistic skin, fine hair edges. Centered subject occupying about 85 percent of canvas height; portrait 4:5. Actual transparent alpha background, clean isolated cutout, no floor and no cast shadow. No text, no badges, no logo, no watermark. Original fictional person; do not resemble any real influencer."
+    },
+    {
+      "file": "creator-female.png",
+      "web": "creator-female.webp",
+      "prompt": "Use case: photorealistic cutout asset for editable social media carousel cover. Create ONE fictional adult female entrepreneur about 32 years old, chest-up portrait, medium brown wavy shoulder-length hair, light tan skin, red-orange tailored blazer over white shirt. She looks into camera with a confident inviting smile and gestures open palm up toward left, as if presenting a useful idea. Natural relaxed pose, both hands anatomically natural and completely in frame, whole hair and shoulders visible with generous clean silhouette. Premium editorial studio portrait photography, vivid but natural color, realistic skin and clean hair edges, neutral lighting. Centered subject occupying about 85 percent of canvas height, portrait 4:5. Actual transparent alpha background, isolated cutout, no environment and no cast shadow. No text, no badge, no logo, no watermark. Original fictional person; do not resemble any real influencer."
+    }
+  ]
+}

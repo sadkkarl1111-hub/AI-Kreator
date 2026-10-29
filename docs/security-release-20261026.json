@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-26",
+  "scope": "Backup, restoration test, compatible security dependency upgrades and production deployment",
+  "backup": {
+    "server": "/var/backups/ai-kreator/launch-security-20261026",
+    "localEncryptedArchive": ".private-backups/launch-backup-20261026.tar.gz.enc",
+    "bytes": 355291040,
+    "sha256": "d5c2791e27e31a991575ae7fb8c7d3a32ae9df2a473bc93f3e7031dda8ec7f63",
+    "keyProtection": "Local recovery key protected with Windows DPAPI CurrentUser; independent root-only recovery key on server",
+    "includes": [
+      "PostgreSQL custom dump",
+      "264 S3 objects, total 163589671 bytes",
+      "frontend build",
+      "server source and config",
+      "Apache virtual host config",
+      "rollback API image"
+    ],
+    "restore": {
+      "isolatedPostgreSQL": true,
+      "network": "none",
+      "tables": 48,
+      "profiles": 9,
+      "graphics": 103,
+      "purchases": 6,
+      "settings": 22,
+      "encryptedArchiveDecryptionVerified": true
+    },
+    "schedule": "one-time; no automatic backup schedule installed"
+  },
+  "security": {
+    "backendAudit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "frontendAndDevAudit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 2,
+      "critical": 0,
+      "total": 2
+    },
+    "versions": {
+      "express": "5.3.0",
+      "proxy-addr": "2.0.8",
+      "body-parser": "2.4.0",
+      "sharp": "0.35.5",
+      "dompurify": "3.4.17",
+      "zod": "4.6.7",
+      "vite": "8.3.5",
+      "vitest": "4.1.12"
+    },
+    "remainingFinding": {
+      "id": "GHSA-mrhx-c7xc-m3w5",
+      "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+      "severity": "high",
+      "auditPackageEntries": [
+        "@imgly/background-removal",
+        "nested zod"
+      ],
+      "note": "One advisory is counted twice in npm audit, as dependency and consuming package.",
+      "review": "background-removal 1.7.0 also embeds Zod 3.24.2 in its prebuilt JS; overriding the installed dependency would not fix the embedded code. Its ConfigSchema has no array/set/map collection input; the app calls removeBackground(imageData) with default trusted configuration only. Image data is decoded separately, not passed to Zod. No attacker-controlled collection validation path identified. Keep function unchanged rather than masking the finding via an incompatible override or downgrade.",
+      "status": "documented exception; upstream patch or maintained replacement remains future work"
+    }
+  },
+  "verification": {
+    "frontendTests": 192,
+    "backendTests": 61,
+    "frontendBuild": "passed",
+    "backendBuild": "passed",
+    "chrome": {
+      "localAndProduction": true,
+      "exports": [
+        "real vector SVG",
+        "text effect PNG",
+        "text effect SVG",
+        "carousel PDF with uploaded logo"
+      ],
+      "freeTools": [
+        "emoji:443 entries and webinar search",
+        "vectorize",
+        "text-effects",
+        "carousel",
+        "prompt-generator"
+      ],
+      "auth": "form loads; empty credentials rejected with 400",
+      "mobile": "390px without horizontal overflow",
+      "runtimeErrors": 0
+    },
+    "publicHTTP": {
+      "health": 200,
+      "gallery": 200,
+      "pricing": 200,
+      "legalContent": 200,
+      "guestPaidOperations": 401,
+      "malformedCompressedJSON": 400
+    },
+    "tpay": "production OAuth test passed; no purchase created",
+    "configurationChecksums": "env and compose unchanged"
+  },
+  "deployment": {
+    "frontendSHA256": "d2552cf98de942aea52a9d4dbd8cea83005ace3312622b9e558b2c73501004ab",
+    "apiImage": "sha256:1d9329d35955605bf076a08a56901ca57b69adfe376c4bdd7c21690f1a0f254b",
+    "rollbackTag": "vps-api:before-launch-security-20261026"
+  },
+  "remainingLaunchChecks": [
+    "Fresh real checkout -> signed webhook -> exact credits, including duplicate webhook and customer confirmation",
+    "Fresh registration/email confirmation/password reset delivery",
+    "Automatic scheduled backup and periodic restoration",
+    "Meta Ad Library credentials absent; manual inspiration available"
+  ]
+}

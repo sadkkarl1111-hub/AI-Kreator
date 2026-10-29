@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-29",
+  "status": "deployed and verified",
+  "issue": "The two reported smartphone mockups were opaque PNGs with no alpha channel. The generator sent PNG format but did not set native API background transparency.",
+  "originalGraphicChecks": [
+    {
+      "id": "9c8cfd37-3bf5-48f8-96b8-fab84d1a2639",
+      "format": "png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": false,
+      "isOpaque": true
+    },
+    {
+      "id": "10595fd7-87f5-4a1a-a078-c3ed82781a4c",
+      "format": "png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": false,
+      "isOpaque": true
+    }
+  ],
+  "changes": [
+    "background=transparent sent to GPT Image generation and multipart reference-edit endpoint",
+    "Auto mode detects explicit Polish and English transparent-background requests; explicit opaque mode overrides detection",
+    "Unsupported explicit transparency and invalid settings rejected before credit reservation",
+    "PNG alpha pixels verified before saving; opaque and all-opaque-alpha results throw into existing credit refund path",
+    "Generator adds Auto / Transparent PNG / Full background options; preview uses CSS checkerboard outside image pixels",
+    "Download keeps original PNG bytes"
+  ],
+  "officialReferences": [
+    "https://developers.openai.com/api/reference/resources/images/methods/generate",
+    "https://developers.openai.com/api/reference/resources/images/methods/edit"
+  ],
+  "validation": {
+    "backendTests": 65,
+    "newBackgroundTests": 4,
+    "frontendBuild": "passed",
+    "localBrowser": {
+      "requests": [
+        {
+          "background": "transparent",
+          "model": "openai-gpt-image-2.5-sunburst"
+        },
+        {
+          "background": "opaque",
+          "model": "openai-gpt-image-2.5-sunburst"
+        }
+      ],
+      "downloadHasTransparency": true,
+      "mobileOverflow": false,
+      "errors": []
+    },
+    "livePaidGeneration": "not performed; request builders tested with mocked provider responses; original files inspected read-only",
+    "isolatedDockerTestsPassed": 4,
+    "productionUi": {
+      "status": 200,
+      "backgroundOption": "transparent",
+      "mobileOverflow": false,
+      "errors": [],
+      "paidRequests": 0
+    },
+    "health": "API HTTP 200; Apache config Syntax OK; daily database backup timer active",
+    "configuration": "env and compose hashes unchanged; no billing prices changed"
+  },
+  "backup": "/var/backups/ai-kreator/transparent-20261029",
+  "indexSha256": "c723bd6ffc1c8a1b2abfb8af5ea59b0a7540a19dd7d0b84befa466208e2a1e3d",
+  "limits": [
+    "Existing opaque files are preserved; enabling this setting does not retroactively remove their background.",
+    "Alpha validation rejects fully opaque results; it does not prove semantic quality of every edge.",
+    "Original reference screenshot must be composited separately for pixel-exact screen content; generative models can alter text."
+  ],
+  "apiImage": "sha256:b8634974a42f896d9b983a76c3f2e33f31c5c87238b4719c85e93c38a7cbe2b3"
+}

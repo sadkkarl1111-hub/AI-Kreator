@@ -1,0 +1,34 @@
+import { Router } from "express";
+import { adminRouter } from "./admin.js";
+import { adPromptGeneratorRouter } from "./adPromptGenerator.js";
+import { aiRouter } from "./ai.js";
+import { assetsRouter } from "./assets.js";
+import { authRouter } from "./auth.js";
+import { billingRouter } from "./billing.js";
+import { clientErrorsRouter } from "./clientErrors.js";
+import { companyAssistantRouter } from "./companyAssistant.js";
+import { emailRouter } from "./email.js";
+import { galleryRouter } from "./gallery.js";
+import { healthRouter } from "./health.js";
+import { internalRouter } from "./internal.js";
+import { meRouter } from "./me.js";
+import { publicRouter } from "./public.js";
+import { svgPromptRouter } from "./svgPrompt.js";
+
+export const apiRouter = Router();
+
+apiRouter.use(healthRouter);
+apiRouter.use(authRouter);
+apiRouter.use(adminRouter);
+apiRouter.use(adPromptGeneratorRouter);
+apiRouter.use(aiRouter);
+apiRouter.use(assetsRouter);
+apiRouter.use(companyAssistantRouter);
+apiRouter.use(billingRouter);
+apiRouter.use(clientErrorsRouter);
+apiRouter.use(emailRouter);
+apiRouter.use(internalRouter);
+apiRouter.use(meRouter);
+apiRouter.use(galleryRouter);
+apiRouter.use(publicRouter);
+apiRouter.use(svgPromptRouter);

@@ -1,0 +1,16 @@
+{
+  "tool": "Built-in image_gen.imagegen",
+  "transparent_background": false,
+  "prompts": [
+    {
+      "id": "ad",
+      "reference": "public/demo-assets/ad-example.webp",
+      "prompt": "Edit the provided square Polish advertising example into a fresh original variant for an AI graphic creation app's public homepage. Preserve the burgundy / dark wine-red background and bold neon-lime, white and black marketing style, but refine spacing and composition. Replace the existing man's identity completely with ONE new fictional adult woman, approximately 35–45, with short dark curly hair, confident friendly expression, dark navy blazer over a light shirt, half-body at the right side. She must not resemble the original man or any identifiable public figure. Leave a clear left text area and three pinned lime notes below. Exact visible text: top banner \"3-DNIOWE WYZWANIE AI\"; main headline \"Inteligencja może być sztuczna,\" then emphasized lime phrase \"ale pomysły są Twoje\"; notes \"Dzień 1\" / \"Grafiki i reklamy\", \"Dzień 2\" / \"Ebook i okładka\", \"Dzień 3\" / \"Aplikacje bez kodu\". Bottom CTA \"Zarezerwuj miejsce\". Remove the obsolete date and existing personal portrait. Add a clearly legible permanent small dark footer strip with the exact white Polish text \"Wygenerowano przy użyciu AI\". The footer must be visible and inside the safe margins, not a watermark over the person's face. Full square advertisement, clean polish, correct Polish diacritics, no extra logos or text, no browser/UI framing."
+    },
+    {
+      "id": "mockup",
+      "reference": "public/demo-assets/mockup-example.webp",
+      "prompt": "Edit the provided portrait 2:3 Polish premium digital-product box image into a fresh original variant for an AI graphic creation app's public homepage. Preserve the product-only category: ONE realistic premium 3D upright ebook/course box with a visible front and narrow spine, not a person. Refresh the cover composition and the perspective slightly: deep midnight navy with subtle emerald / teal gradients, brushed champagne-gold typography and four elegant architectural gold pillars arranged as an original connected diamond motif. Subtle non-numerical teal chart/light lines in the distant dark background, restrained highlights and realistic soft reflection on a studio tabletop. Exact cover title \"4 FILARY\" on first line, \"INWESTOWANIA\" on second, prominent and legible. Exact smaller subtitle \"Przewodnik po świadomym inwestowaniu\". Spine text \"4 FILARY INWESTOWANIA\". Small cover footer \"EDYCJA PREMIUM\". Remove the bull logo and any other existing small slogans. Add a clearly legible permanent dark strip along the BOTTOM of the full image with the exact white Polish text \"Wygenerowano przy użyciu AI\"; place it outside the product cover, inside the image margins, readable on opening the example. Keep a complete unobstructed box, safe margins, portrait 2:3 full illustration, polished photorealistic 3D product mockup, correct Polish diacritics. No people, no extra logos, no invented labels, no UI or webpage framing."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "configuredDate": "2026-10-26",
+  "execution": "server-native systemd timer, independent of Codex and desktop",
+  "timezone": "Europe/Warsaw",
+  "time": "00:00:00",
+  "nextRunLocal": "2026-10-27T00:00:00+01:00",
+  "nextRunUTC": "2026-10-26T23:00:00Z",
+  "timer": "ai-kreator-db-backup.timer",
+  "service": "ai-kreator-db-backup.service",
+  "directory": "/var/backups/ai-kreator/daily-db",
+  "retention": {
+    "successfulCopies": 14,
+    "cleanup": "only after a new full restoration and checksum verification",
+    "historicalFullBackups": "outside retention directory; preserved",
+    "symlinksAndUnmanagedFiles": "never removed"
+  },
+  "firstBackup": {
+    "filename": "kreator-ai-db-20261026T083837Z.dump",
+    "bytes": 658809,
+    "restoredTables": 48,
+    "result": "success",
+    "sha256Check": "passed",
+    "directoryMode": "0700 root",
+    "dumpMode": "0600 root"
+  },
+  "tests": {
+    "retentionTests": 3,
+    "excessCopies": "17 -> 14; manual historical backups preserved",
+    "invalidNewest": "no deletion on absent metadata or bad checksum",
+    "simulatedDumpFailure": "17 previous test copies retained; incomplete file cleaned",
+    "overlap": "second run skipped",
+    "temporaryRestoreContainers": "removed with their anonymous volumes",
+    "health": 200
+  },
+  "recovery": "Persistent timer; retries on failure; journal available; no proactive email messages configured",
+  "scope": "daily DB snapshots on the VPS; does not replace off-server backups",
+  "sources": [
+    "vps/scripts/daily-db-backup.sh",
+    "vps/scripts/db_backup_retention.py",
+    "vps/systemd/ai-kreator-db-backup.service",
+    "vps/systemd/ai-kreator-db-backup.timer"
+  ]
+}

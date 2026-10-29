@@ -1,0 +1,11 @@
+[Unit]
+Description=AI Kreator daily database backup at midnight in Poland
+
+[Timer]
+OnCalendar=*-*-* 00:00:00 Europe/Warsaw
+AccuracySec=1s
+Persistent=true
+Unit=ai-kreator-db-backup.service
+
+[Install]
+WantedBy=timers.target

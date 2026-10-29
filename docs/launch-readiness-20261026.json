@@ -1,0 +1,232 @@
+{
+  "date": "2026-10-26",
+  "timezone": "Europe/Warsaw",
+  "scope": "Read-only launch readiness check; no paid generation, purchase, email sending or account creation",
+  "verdict": "Not yet verified for broad paid launch",
+  "confirmed": {
+    "services": "API/Postgres/Redis/Apache running",
+    "diskFreeGB": 58,
+    "paymentProvider": "Tpay production",
+    "paymentOAuthConnection": true,
+    "openAIListModelsHTTP": 200,
+    "geminiListModelsHTTP": 200,
+    "latestBilledGenerationUTC": "2026-10-26T06:13:31.867Z",
+    "generationHistoryLast7Days": {
+      "count": 6,
+      "creditsSpent": 360,
+      "model": "openai-gpt-image-2.5-sunburst"
+    },
+    "publicPagesHTTP": 200,
+    "packages": [
+      {
+        "name": "Starter",
+        "pln": 25,
+        "credits": 1250
+      },
+      {
+        "name": "Popular",
+        "pln": 49,
+        "credits": 2750
+      },
+      {
+        "name": "Pro",
+        "pln": 99,
+        "credits": 6000
+      },
+      {
+        "name": "Enterprise",
+        "pln": 199,
+        "credits": 15000
+      }
+    ],
+    "maxCouponPercent": 20,
+    "emailTransportConfigured": true,
+    "googleOAuthConfigured": true,
+    "storage": "s3",
+    "maintenance": false
+  },
+  "notVerified": {
+    "checkout": "Last completed Tpay purchase in DB: 2026-04-24; current OAuth success is not an end-to-end checkout/webhook/credits test",
+    "email": "No confirmation or password reset tokens issued in last 7 days; provider configured but current delivery and full flows not tested",
+    "backups": "Deployment frontend/source backups exist; only located full PostgreSQL dump dated 2026-08-30. No current scheduled app DB backup or restoration test confirmed. External provider snapshots not inspected.",
+    "capacity": "No load test or capacity measurement",
+    "profitability": "Discount cap and credit pricing confirmed; no guarantee of net profit after provider cost, currency, taxes and fees"
+  },
+  "optionalUnavailable": {
+    "metaAdLibrary": "No access token/version configured; manual inspiration remains available"
+  },
+  "security": {
+    "frontend": {
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 4,
+        "critical": 1,
+        "total": 5
+      },
+      "packages": [
+        {
+          "name": "@imgly/background-removal",
+          "severity": "high",
+          "range": ">=1.2.0",
+          "advisories": []
+        },
+        {
+          "name": "dompurify",
+          "severity": "critical",
+          "range": "<=3.4.16",
+          "advisories": [
+            {
+              "title": "DOMPurify: IN_PLACE: node-removing afterSanitize hook leaves detached subtree event handlers armed, causing DOM XSS",
+              "url": "https://github.com/advisories/GHSA-p98j-92pf-mc4p",
+              "range": ">=3.4.13 <=3.4.15"
+            },
+            {
+              "title": "DOMPurify: IN_PLACE returns a force-removed rawtext root whose text carries attacker markup — pure HTML reparse executes",
+              "url": "https://github.com/advisories/GHSA-6688-9rhm-gjv2",
+              "range": "<=3.4.15"
+            },
+            {
+              "title": "DOMPurify SAFE_FOR_TEMPLATES bypass: split template expressions survive in attached shadow root content on DOM output modes",
+              "url": "https://github.com/advisories/GHSA-cg2g-xh64-v4q7",
+              "range": ">=3.4.4 <=3.4.16"
+            },
+            {
+              "title": "DOMPurify IN_PLACE: hook that removes a parent or sibling leaves the detached subtree's event handlers armed (incomplete fix for GHSA-p98j-92pf-mc4p)",
+              "url": "https://github.com/advisories/GHSA-mrv2-3pqr-j5jr",
+              "range": "<=3.4.16"
+            },
+            {
+              "title": "DOMPurify: SMIL attributeName=href guard is skipped when PARSER_MEDIA_TYPE is application/xhtml+xml",
+              "url": "https://github.com/advisories/GHSA-c6gr-qvv4-5v3f",
+              "range": "<=3.4.16"
+            }
+          ]
+        },
+        {
+          "name": "source-map-js",
+          "severity": "high",
+          "range": "1.0.0 - 1.2.1",
+          "advisories": [
+            {
+              "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+              "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+              "range": ">=1.0.0 <1.2.2"
+            }
+          ]
+        },
+        {
+          "name": "vite",
+          "severity": "high",
+          "range": "8.2.0 - 8.2.2",
+          "advisories": [
+            {
+              "title": "launch-editor: escapeCmdArgs() omits % escaping on Windows",
+              "url": "https://github.com/advisories/GHSA-698v-4r3x-3vcv",
+              "range": ">=8.2.0 <=8.2.3"
+            },
+            {
+              "title": "launch-editor: Editor CLI flag misinterpretation causing arbitrary command execution for some editors",
+              "url": "https://github.com/advisories/GHSA-r825-w8mm-5pxw",
+              "range": ">=8.2.0 <=8.2.3"
+            },
+            {
+              "title": "launch-editor: `fs.existsSync()` existence check can be bypassed on Windows",
+              "url": "https://github.com/advisories/GHSA-587h-7wmj-h5pm",
+              "range": ">=8.2.0 <=8.2.3"
+            },
+            {
+              "title": "Vite: Cross origin script execution through Vite custom middleware",
+              "url": "https://github.com/advisories/GHSA-9jrq-w75r-8gcw",
+              "range": ">=8.2.0 <=8.2.3"
+            },
+            {
+              "title": "Vite: Files outside `server.fs.allow` could be served when project paths match system paths on non-Windows machine",
+              "url": "https://github.com/advisories/GHSA-rq7h-c2jc-7f22",
+              "range": ">=8.2.0 <=8.2.3"
+            },
+            {
+              "title": "Vite: First 4 bytes of files outside of `server.fs` setting is exposed by `?vite-wasm-instance`",
+              "url": "https://github.com/advisories/GHSA-vfpm-58rq-9qcg",
+              "range": ">=8.2.0 <=8.2.3"
+            }
+          ]
+        },
+        {
+          "name": "zod",
+          "severity": "high",
+          "range": "<4.6.6",
+          "advisories": [
+            {
+              "title": "Zod can exhaust memory while validating oversized constrained collections",
+              "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+              "range": "<4.6.6"
+            }
+          ]
+        }
+      ]
+    },
+    "backend": {
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 2,
+        "critical": 1,
+        "total": 3
+      },
+      "packages": [
+        {
+          "name": "body-parser",
+          "severity": "high",
+          "range": "2.0.0 - 2.3.0",
+          "advisories": [
+            {
+              "title": "body-parser vulnerable to Denial of Service via trailing bytes after a compressed request body",
+              "url": "https://github.com/advisories/GHSA-27r3-jxmh-p828",
+              "range": ">=2.0.0 <2.4.0"
+            }
+          ]
+        },
+        {
+          "name": "proxy-addr",
+          "severity": "critical",
+          "range": "1.1.0 - 2.0.7",
+          "advisories": [
+            {
+              "title": "proxy-addr vulnerable to IP spoofing via IPv4-mapped IPv6 trust subnet",
+              "url": "https://github.com/advisories/GHSA-jqcg-44mw-7w3h",
+              "range": ">=1.1.0 <2.0.8"
+            }
+          ]
+        },
+        {
+          "name": "sharp",
+          "severity": "high",
+          "range": "<0.35.5",
+          "advisories": [
+            {
+              "title": "sharp : Vulnerability in librsvg dependency CVE-2026-96889",
+              "url": "https://github.com/advisories/GHSA-wq5f-xc86-pv6w",
+              "range": "<0.35.5"
+            }
+          ]
+        }
+      ]
+    },
+    "productionVersions": {
+      "proxy-addr": "2.0.7",
+      "body-parser": "2.3.0",
+      "sharp": "0.35.4"
+    },
+    "applicabilityNotes": [
+      "npm severity reports do not demonstrate an exploitable application path.",
+      "proxy-addr advisory describes malformed trust CIDRs; app uses trust proxy=true, not the CIDR configuration in that advisory.",
+      "sharp advisory RCE description specifies glibc runtime conditions; production image is node:22-alpine (musl).",
+      "Vite dev server advisories do not imply the static Apache deployment exposes a Vite development server.",
+      "DOMPurify affected modes/hooks need application path review."
+    ],
+    "recommendation": "Apply compatible security patches and regression checks before broad launch; confirm full critical user journeys and backup restoration."
+  }
+}

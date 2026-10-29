@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-26",
+  "site": "https://ai-kreator.pl",
+  "status": "deployed and verified",
+  "indexSha256": "a492898e78a3ac7e9e1d9e2503155d765d5d773330bc5f2f63f3d26bf0768f8f",
+  "sitemap": "https://ai-kreator.pl/sitemap.xml",
+  "publicPages": 39,
+  "articles": 9,
+  "features": [
+    "Build-generated sitemap from guest-accessible route allowlist",
+    "robots.txt with sitemap, API and internal HTML directory exclusions",
+    "Unique titles, descriptions, canonical URLs, Open Graph and Twitter metadata in initial HTML",
+    "Organization, WebSite, WebPage/Article and BreadcrumbList JSON-LD without fabricated reviews or prices",
+    "Public text and full blog sections/tables/links available before JavaScript; React replaces initial content",
+    "Client navigation synchronizes metadata and removes private canonical/schema",
+    "Protected/auth/shared routes return noindex HTML; API X-Robots-Tag noindex",
+    "Real HTTP 404 for missing pages, articles and assets",
+    "301 legal aliases, known trailing slashes, index.html and HTTPS www to apex",
+    "Google verification tag preserved",
+    "830 malformed Polish encoding fragments repaired in blog",
+    "Existing homepage image used for OG and preload instead of missing og-image.png"
+  ],
+  "validation": {
+    "existingFrontendTestsPassed": 192,
+    "newSeoTestsPassed": 8,
+    "build": "passed",
+    "apacheConfig": "Syntax OK",
+    "stagingAndPublicHttp": "all 39 public pages verified for status, canonical, robots, Google tag and initial H1; private views, redirects, 404 and XML content type checked",
+    "chrome": "home, tools, carousel, blog, article, public gallery, auth and SPA navigation checked; no page errors; 390px blog no horizontal overflow",
+    "apiHealth": "HTTP 200",
+    "dailyDbBackupTimer": "active"
+  },
+  "backup": "/var/backups/ai-kreator/seo-20261026",
+  "apacheRoutes": "/etc/apache2/ai-kreator-seo-routes.conf",
+  "deploymentNote": "Apache PrivateTmp required preview in /opt; DirectorySlash Off resolves /blog physical asset-directory collision; preview config removed after checks.",
+  "manualNextStep": "Submit sitemap.xml in the verified ai-kreator.pl Google Search Console property. Not submitted from this session.",
+  "limits": [
+    "Sitemap and technical SEO do not guarantee indexing or rankings.",
+    "New public routes require updating src/lib/seo.ts and deploying regenerated Apache include along with dist."
+  ]
+}
