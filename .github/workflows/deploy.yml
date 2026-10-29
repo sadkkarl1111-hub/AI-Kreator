@@ -1,0 +1,123 @@
+name: Testy i wdrożenie
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ai-kreator-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DEPLOY_HOST: 57.128.201.254
+  # Publiczny klucz serwera — chroni przed podszyciem się pod VPS.
+  DEPLOY_HOST_KEY: "57.128.201.254 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGcoHupyGUQpx89BThZOHOydQ3cDH5J34/q31BLz1LUb"
+
+jobs:
+  verify:
+    name: Testy i budowanie
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            vps/server/package-lock.json
+
+      - name: Frontend — zależności
+        run: npm ci --no-audit --no-fund
+
+      - name: Frontend — testy
+        run: npm test
+
+      - name: Frontend — budowanie
+        run: npm run build
+        env:
+          VITE_VPS_API_BASE_URL: /api
+
+      - name: Backend — zależności i testy
+        working-directory: vps/server
+        run: |
+          npm ci --no-audit --no-fund
+          npm test
+
+      - name: Paczka do wdrożenia
+        if: github.event_name != 'pull_request'
+        run: |
+          tar -czf release.tar.gz \
+            --exclude=vps/server/node_modules \
+            --exclude=vps/server/dist \
+            --exclude=vps/.env \
+            dist vps
+          ls -lh release.tar.gz
+
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          name: release
+          path: release.tar.gz
+          retention-days: 7
+
+  deploy:
+    name: Wdrożenie na ai-kreator.pl
+    needs: verify
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Sprawdź, czy klucz wdrożeniowy jest ustawiony
+        id: cfg
+        env:
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          if [ -z "$KEY" ]; then
+            echo "::warning::Brak sekretu DEPLOY_SSH_KEY — testy przeszły, ale nic nie zostało wysłane na serwer."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/download-artifact@v4
+        if: steps.cfg.outputs.ready == 'true'
+        with:
+          name: release
+
+      - name: Przygotuj SSH
+        if: steps.cfg.outputs.ready == 'true'
+        env:
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_HOST_KEY" > ~/.ssh/known_hosts
+          printf 'Host vps\n  HostName %s\n  User deploy\n  IdentityFile ~/.ssh/deploy_key\n  IdentitiesOnly yes\n  StrictHostKeyChecking yes\n  ServerAliveInterval 15\n' "$DEPLOY_HOST" > ~/.ssh/config
+
+      - name: Wyślij paczkę na serwer
+        if: steps.cfg.outputs.ready == 'true'
+        run: scp -q release.tar.gz "vps:/home/deploy/incoming/${GITHUB_SHA}.tar.gz"
+
+      - name: Wdróż
+        if: steps.cfg.outputs.ready == 'true'
+        run: ssh vps "sudo /usr/local/sbin/ai-kreator-deploy ${GITHUB_SHA}"
+
+      - name: Sprawdź stronę
+        if: steps.cfg.outputs.ready == 'true'
+        run: |
+          curl -fsS -o /dev/null -w "ai-kreator.pl: HTTP %{http_code}\n" https://ai-kreator.pl/
+          curl -fsS -o /dev/null -w "API /api/health: HTTP %{http_code}\n" https://ai-kreator.pl/api/health
+
+      - name: Usuń klucz
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
