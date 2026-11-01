@@ -4,9 +4,10 @@ import { parseGIF, decompressFrames } from 'gifuct-js';
 import { GIF_LIBRARY } from './gifLibrary';
 
 describe('downloadable GIF assets', () => {
-  it('ships real, looping animations with accurate sizes and still previews', () => {
+  it('has unique asset identifiers', () => {
     expect(new Set(GIF_LIBRARY.map(gif => gif.id)).size).toBe(GIF_LIBRARY.length);
-    for (const gif of GIF_LIBRARY) {
+  });
+  it.each(GIF_LIBRARY)('ships animated GIF, still preview and MP4 for $id', gif => {
       const bytes = readFileSync(`public${gif.src}`);
       expect(bytes.length, gif.id).toBe(gif.bytes);
       expect(bytes.subarray(0, 6).toString(), gif.id).toBe('GIF89a');
@@ -19,6 +20,9 @@ describe('downloadable GIF assets', () => {
       expect(frames.every(frame => frame.delay >= 80), gif.id).toBe(true);
       expect(frames[0].pixels, gif.id).not.toEqual(frames[8].pixels);
       expect(readFileSync(`public${gif.poster}`).subarray(1, 4).toString(), gif.id).toBe('PNG');
-    }
+      const mp4 = readFileSync(`public${gif.mp4}`);
+      expect(mp4.length, gif.id).toBe(gif.mp4Bytes);
+      expect(mp4.subarray(4, 8).toString(), gif.id).toBe('ftyp');
+      if (gif.category === 'Emoji') expect(frames.every(frame => frame.transparentIndex !== undefined), gif.id).toBe(true);
   });
 });

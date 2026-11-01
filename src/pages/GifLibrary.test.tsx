@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { MemoryRouter } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import GifLibrary from './GifLibrary';
+import { GIF_LIBRARY } from '@/lib/gifLibrary';
 
 vi.mock('@/components/AppLayout', () => ({ AppLayout: ({ children }: { children: ReactNode }) => <main>{children}</main> }));
 const openLibrary = () => render(<MemoryRouter><GifLibrary /></MemoryRouter>);
@@ -16,7 +17,7 @@ it('searches Polish text without diacritics, combines filters and recovers from 
   fireEvent.click(screen.getByRole('button', { name: 'Reakcje' }));
   expect(screen.queryAllByRole('article')).toHaveLength(0);
   fireEvent.click(screen.getByRole('button', { name: 'Pokaż wszystkie GIF-y' }));
-  expect(screen.getAllByRole('article')).toHaveLength(18);
+  expect(screen.getAllByRole('article')).toHaveLength(GIF_LIBRARY.length);
   expect(screen.getByRole('textbox', { name: 'Szukaj GIF-ów' })).toHaveValue('');
 });
 

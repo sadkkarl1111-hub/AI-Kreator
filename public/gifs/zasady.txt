@@ -1,6 +1,7 @@
 GIF-y AI Kreatora — zasady korzystania
 
-Animacje w katalogu /gifs/v1/ to własna, ilustrowana kolekcja AI Kreatora.
+Animacje GIF i MP4 w katalogach /gifs/v1/ oraz /gifs/emoji-v1/
+to własna, ilustrowana kolekcja AI Kreatora.
 Możesz bezpłatnie pobierać, kopiować, przesyłać, publikować i modyfikować
 te GIF-y w projektach prywatnych oraz komercyjnych. Nie musisz podawać autora.
 

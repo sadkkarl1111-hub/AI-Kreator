@@ -45,12 +45,21 @@ npm run dev
 
 ## Darmowa galeria GIF-ów
 
-`/tools/gifs` udostępnia 18 autorskich animacji z polskimi napisami, wyszukiwarkę,
-kategorie, kopiowanie publicznych linków i pobieranie plików. Nie wymaga konta ani API.
+`/tools/gifs` udostępnia 34 autorskie animacje: 16 emoji z przezroczystym tłem
+oraz 18 polskich reakcji. Każda ma GIF, statyczny podgląd i MP4 (H.264, yuv420p,
+bez dźwięku, 2,4 s, faststart) do przesyłania jako film w WhatsApp Web.
+Okno wysyłania pokazuje podgląd filmu i przygotowuje prawdziwy plik, jeśli przeglądarka
+obsługuje systemowe menu udostępniania plików. Do WhatsApp Web można przeciągnąć
+MP4 z folderu Pobrane. Link jest osobną opcją;
+schowek nie zapewnia uniwersalnego wklejania animacji. Nie wymaga konta ani API.
 Podglądy można zatrzymać; preferencja ograniczenia ruchu w systemie włącza statyczne obrazy.
 
 Pliki są w `public/gifs/v1/`, a katalog w `src/data/gif-library.json`.
 Odtwarzanie kolekcji: `node scripts/generate-gif-library.mjs` (Sharp + gifenc).
+Potem uruchom `node scripts/generate-emoji-gifs.mjs` oraz
+`node scripts/prepare-gif-sharing.mjs` (wymaga FFmpeg na PATH).
+Emoji są w `public/gifs/emoji-v1/`. MP4 ma jasne tło i zachowuje ruch jako film;
+nie jest automatycznie instalowaną naklejką WhatsApp ani gwarancją zapętlenia.
 Po zmianie grafiki opublikuj nową wersję katalogu, aby zachować wcześniej udostępnione linki.
 Normalny build korzysta z gotowych plików. Przy wdrożeniu nowej trasy trzeba także
 zaktualizować generowane HTML `_seo/`, mapę strony i reguły Apache zgodnie z `vps/README.md`.

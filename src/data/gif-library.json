@@ -1,5 +1,213 @@
 [
   {
+    "id": "emoji-brawa",
+    "title": "Brawa dla Ciebie",
+    "category": "Emoji",
+    "keywords": "brawa brawo oklaski gratulacje",
+    "src": "/gifs/emoji-v1/brawa.gif",
+    "poster": "/gifs/emoji-v1/brawa.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 92837,
+    "mp4": "/gifs/emoji-v1/brawa.mp4",
+    "mp4Bytes": 31656
+  },
+  {
+    "id": "emoji-kciuk",
+    "title": "Kciuk w górę",
+    "category": "Emoji",
+    "keywords": "kciuk tak zgoda super",
+    "src": "/gifs/emoji-v1/kciuk.gif",
+    "poster": "/gifs/emoji-v1/kciuk.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 68183,
+    "mp4": "/gifs/emoji-v1/kciuk.mp4",
+    "mp4Bytes": 16010
+  },
+  {
+    "id": "emoji-serce",
+    "title": "Bijące serce",
+    "category": "Emoji",
+    "keywords": "serce love miłość",
+    "src": "/gifs/emoji-v1/serce.gif",
+    "poster": "/gifs/emoji-v1/serce.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 31609,
+    "mp4": "/gifs/emoji-v1/serce.mp4",
+    "mp4Bytes": 10079
+  },
+  {
+    "id": "emoji-ogien",
+    "title": "Ogień!",
+    "category": "Emoji",
+    "keywords": "ogien ogień fire gorąco",
+    "src": "/gifs/emoji-v1/ogien.gif",
+    "poster": "/gifs/emoji-v1/ogien.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 59285,
+    "mp4": "/gifs/emoji-v1/ogien.mp4",
+    "mp4Bytes": 17916
+  },
+  {
+    "id": "emoji-moneta",
+    "title": "Złota moneta",
+    "category": "Emoji",
+    "keywords": "zysk monety kasa sukces",
+    "src": "/gifs/emoji-v1/moneta.gif",
+    "poster": "/gifs/emoji-v1/moneta.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 93907,
+    "mp4": "/gifs/emoji-v1/moneta.mp4",
+    "mp4Bytes": 32670
+  },
+  {
+    "id": "emoji-pieniadze",
+    "title": "Latające banknoty",
+    "category": "Emoji",
+    "keywords": "cash money pieniądze pieniadze banknoty",
+    "src": "/gifs/emoji-v1/pieniadze.gif",
+    "poster": "/gifs/emoji-v1/pieniadze.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 126293,
+    "mp4": "/gifs/emoji-v1/pieniadze.mp4",
+    "mp4Bytes": 35552
+  },
+  {
+    "id": "emoji-impreza",
+    "title": "Czas na imprezę",
+    "category": "Emoji",
+    "keywords": "impreza urodziny konfetti",
+    "src": "/gifs/emoji-v1/impreza.gif",
+    "poster": "/gifs/emoji-v1/impreza.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 138089,
+    "mp4": "/gifs/emoji-v1/impreza.mp4",
+    "mp4Bytes": 30511
+  },
+  {
+    "id": "emoji-sen",
+    "title": "Śpiąca buźka",
+    "category": "Emoji",
+    "keywords": "sen dobranoc zmęczenie",
+    "src": "/gifs/emoji-v1/sen.gif",
+    "poster": "/gifs/emoji-v1/sen.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 136037,
+    "mp4": "/gifs/emoji-v1/sen.mp4",
+    "mp4Bytes": 31417
+  },
+  {
+    "id": "emoji-myslenie",
+    "title": "Zastanawiam się",
+    "category": "Emoji",
+    "keywords": "myslenie myślenie hmm pytanie",
+    "src": "/gifs/emoji-v1/myslenie.gif",
+    "poster": "/gifs/emoji-v1/myslenie.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 149629,
+    "mp4": "/gifs/emoji-v1/myslenie.mp4",
+    "mp4Bytes": 34142
+  },
+  {
+    "id": "emoji-zlosc",
+    "title": "Złość",
+    "category": "Emoji",
+    "keywords": "zlosc złość gniew",
+    "src": "/gifs/emoji-v1/zlosc.gif",
+    "poster": "/gifs/emoji-v1/zlosc.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 139339,
+    "mp4": "/gifs/emoji-v1/zlosc.mp4",
+    "mp4Bytes": 29155
+  },
+  {
+    "id": "emoji-smutek",
+    "title": "Smutna buźka",
+    "category": "Emoji",
+    "keywords": "smutek łzy lzy płacz",
+    "src": "/gifs/emoji-v1/smutek.gif",
+    "poster": "/gifs/emoji-v1/smutek.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 141049,
+    "mp4": "/gifs/emoji-v1/smutek.mp4",
+    "mp4Bytes": 28144
+  },
+  {
+    "id": "emoji-zaskoczenie",
+    "title": "Ale wow!",
+    "category": "Emoji",
+    "keywords": "wow zdziwienie zaskoczenie",
+    "src": "/gifs/emoji-v1/zaskoczenie.gif",
+    "poster": "/gifs/emoji-v1/zaskoczenie.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 133537,
+    "mp4": "/gifs/emoji-v1/zaskoczenie.mp4",
+    "mp4Bytes": 26611
+  },
+  {
+    "id": "emoji-okulary",
+    "title": "Pełen luz",
+    "category": "Emoji",
+    "keywords": "okulary luz cool",
+    "src": "/gifs/emoji-v1/okulary.gif",
+    "poster": "/gifs/emoji-v1/okulary.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 135247,
+    "mp4": "/gifs/emoji-v1/okulary.mp4",
+    "mp4Bytes": 29568
+  },
+  {
+    "id": "emoji-mrugniecie",
+    "title": "Oczko",
+    "category": "Emoji",
+    "keywords": "mrugnięcie oczko wink",
+    "src": "/gifs/emoji-v1/mrugniecie.gif",
+    "poster": "/gifs/emoji-v1/mrugniecie.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 136119,
+    "mp4": "/gifs/emoji-v1/mrugniecie.mp4",
+    "mp4Bytes": 27594
+  },
+  {
+    "id": "emoji-serduszka",
+    "title": "Zakochana buźka",
+    "category": "Emoji",
+    "keywords": "serca miłość milosc love",
+    "src": "/gifs/emoji-v1/serduszka.gif",
+    "poster": "/gifs/emoji-v1/serduszka.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 136935,
+    "mp4": "/gifs/emoji-v1/serduszka.mp4",
+    "mp4Bytes": 26936
+  },
+  {
+    "id": "emoji-smiech",
+    "title": "Śmiech do łez",
+    "category": "Emoji",
+    "keywords": "haha lol smiech śmiech radość",
+    "src": "/gifs/emoji-v1/smiech.gif",
+    "poster": "/gifs/emoji-v1/smiech.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 144945,
+    "mp4": "/gifs/emoji-v1/smiech.mp4",
+    "mp4Bytes": 30267
+  },
+  {
     "id": "hej",
     "title": "Hej!",
     "category": "Pozdrowienia",
@@ -8,7 +216,9 @@
     "poster": "/gifs/v1/hej.png",
     "width": 360,
     "height": 280,
-    "bytes": 95134
+    "bytes": 95134,
+    "mp4": "/gifs/v1/hej.mp4",
+    "mp4Bytes": 12551
   },
   {
     "id": "dzien-dobry",
@@ -19,7 +229,9 @@
     "poster": "/gifs/v1/dzien-dobry.png",
     "width": 360,
     "height": 280,
-    "bytes": 133919
+    "bytes": 133919,
+    "mp4": "/gifs/v1/dzien-dobry.mp4",
+    "mp4Bytes": 16839
   },
   {
     "id": "dobranoc",
@@ -30,7 +242,9 @@
     "poster": "/gifs/v1/dobranoc.png",
     "width": 360,
     "height": 280,
-    "bytes": 131413
+    "bytes": 131413,
+    "mp4": "/gifs/v1/dobranoc.mp4",
+    "mp4Bytes": 19463
   },
   {
     "id": "dzieki",
@@ -41,7 +255,9 @@
     "poster": "/gifs/v1/dzieki.png",
     "width": 360,
     "height": 280,
-    "bytes": 105820
+    "bytes": 105820,
+    "mp4": "/gifs/v1/dzieki.mp4",
+    "mp4Bytes": 14236
   },
   {
     "id": "przytulam",
@@ -52,7 +268,9 @@
     "poster": "/gifs/v1/przytulam.png",
     "width": 360,
     "height": 280,
-    "bytes": 121270
+    "bytes": 121270,
+    "mp4": "/gifs/v1/przytulam.mp4",
+    "mp4Bytes": 13018
   },
   {
     "id": "kawa",
@@ -63,7 +281,9 @@
     "poster": "/gifs/v1/kawa.png",
     "width": 360,
     "height": 280,
-    "bytes": 123841
+    "bytes": 123841,
+    "mp4": "/gifs/v1/kawa.mp4",
+    "mp4Bytes": 15248
   },
   {
     "id": "super",
@@ -74,7 +294,9 @@
     "poster": "/gifs/v1/super.png",
     "width": 360,
     "height": 280,
-    "bytes": 110877
+    "bytes": 110877,
+    "mp4": "/gifs/v1/super.mp4",
+    "mp4Bytes": 12806
   },
   {
     "id": "brawo",
@@ -85,7 +307,9 @@
     "poster": "/gifs/v1/brawo.png",
     "width": 360,
     "height": 280,
-    "bytes": 109385
+    "bytes": 109385,
+    "mp4": "/gifs/v1/brawo.mp4",
+    "mp4Bytes": 13926
   },
   {
     "id": "udalo-sie",
@@ -96,7 +320,9 @@
     "poster": "/gifs/v1/udalo-sie.png",
     "width": 360,
     "height": 280,
-    "bytes": 126659
+    "bytes": 126659,
+    "mp4": "/gifs/v1/udalo-sie.mp4",
+    "mp4Bytes": 12855
   },
   {
     "id": "sto-lat",
@@ -107,7 +333,9 @@
     "poster": "/gifs/v1/sto-lat.png",
     "width": 360,
     "height": 280,
-    "bytes": 110259
+    "bytes": 110259,
+    "mp4": "/gifs/v1/sto-lat.mp4",
+    "mp4Bytes": 14769
   },
   {
     "id": "piateczka",
@@ -118,7 +346,9 @@
     "poster": "/gifs/v1/piateczka.png",
     "width": 360,
     "height": 280,
-    "bytes": 129434
+    "bytes": 129434,
+    "mp4": "/gifs/v1/piateczka.mp4",
+    "mp4Bytes": 13891
   },
   {
     "id": "lecimy",
@@ -129,7 +359,9 @@
     "poster": "/gifs/v1/lecimy.png",
     "width": 360,
     "height": 280,
-    "bytes": 120047
+    "bytes": 120047,
+    "mp4": "/gifs/v1/lecimy.mp4",
+    "mp4Bytes": 16011
   },
   {
     "id": "haha",
@@ -140,7 +372,9 @@
     "poster": "/gifs/v1/haha.png",
     "width": 360,
     "height": 280,
-    "bytes": 109381
+    "bytes": 109381,
+    "mp4": "/gifs/v1/haha.mp4",
+    "mp4Bytes": 12262
   },
   {
     "id": "wow",
@@ -151,7 +385,9 @@
     "poster": "/gifs/v1/wow.png",
     "width": 360,
     "height": 280,
-    "bytes": 102033
+    "bytes": 102033,
+    "mp4": "/gifs/v1/wow.mp4",
+    "mp4Bytes": 13322
   },
   {
     "id": "kocham-to",
@@ -162,7 +398,9 @@
     "poster": "/gifs/v1/kocham-to.png",
     "width": 360,
     "height": 280,
-    "bytes": 124925
+    "bytes": 124925,
+    "mp4": "/gifs/v1/kocham-to.mp4",
+    "mp4Bytes": 14899
   },
   {
     "id": "jasne",
@@ -173,7 +411,9 @@
     "poster": "/gifs/v1/jasne.png",
     "width": 360,
     "height": 280,
-    "bytes": 112554
+    "bytes": 112554,
+    "mp4": "/gifs/v1/jasne.mp4",
+    "mp4Bytes": 12006
   },
   {
     "id": "chwila",
@@ -184,7 +424,9 @@
     "poster": "/gifs/v1/chwila.png",
     "width": 360,
     "height": 280,
-    "bytes": 120906
+    "bytes": 120906,
+    "mp4": "/gifs/v1/chwila.mp4",
+    "mp4Bytes": 16438
   },
   {
     "id": "dasz-rade",
@@ -195,6 +437,8 @@
     "poster": "/gifs/v1/dasz-rade.png",
     "width": 360,
     "height": 280,
-    "bytes": 137752
+    "bytes": 137752,
+    "mp4": "/gifs/v1/dasz-rade.mp4",
+    "mp4Bytes": 15198
   }
 ]
