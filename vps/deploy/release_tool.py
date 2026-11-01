@@ -26,7 +26,7 @@ def allowed(name):
         return True
     if path.parts[:2] == ("vps", "server"):
         tail = path.parts[2:]
-        return not tail or tail[0] in {"src", "test", "package.json", "package-lock.json", "tsconfig.json", "Dockerfile", ".dockerignore"}
+        return not tail or tail[0] in {"src", "test", "package.json", "package-lock.json", "tsconfig.json", "Dockerfile", ".dockerignore", ".gitignore"}
     return str(path) in {"vps", "vps/apache"}
 
 

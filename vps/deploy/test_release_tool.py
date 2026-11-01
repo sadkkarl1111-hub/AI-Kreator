@@ -12,14 +12,14 @@ COMMIT = 'a' * 40
 
 class ReleaseTests(unittest.TestCase):
     def test_allowed_paths_exclude_secrets_and_traversal(self):
-        for name in ['dist/index.html', 'dist/assets/app.js', 'vps/server/src/server.ts', 'vps/server/test/ok.test.mjs', 'vps/docker-compose.yml']:
+        for name in ['dist/index.html', 'dist/assets/app.js', 'vps/server/src/server.ts', 'vps/server/test/ok.test.mjs', 'vps/server/.gitignore', 'vps/docker-compose.yml']:
             self.assertTrue(allowed(name), name)
         for name in ['/etc/passwd', '../etc/passwd', 'dist/../../etc/passwd', 'dist/.env', 'vps/server/src/.env.production', 'dist/secret.pem', 'dist/id_ed25519', 'dist\\file', 'dist//file', 'vps/server/node_modules/x', 'vps/.env', 'vps/server/dist/server.js']:
             self.assertFalse(allowed(name), name)
 
     def package(self, root, extra=None, commit=COMMIT):
         archive = root / 'release.tar.gz'
-        files = {'release.json': json.dumps({'format': 1, 'commit': commit}), 'dist/index.html': 'HTML', 'dist/assets/app.js': 'JS', 'dist/_seo/index.html': 'SEO', 'vps/server/Dockerfile': 'FROM node:24-alpine', 'vps/server/package.json': '{}', 'vps/server/package-lock.json': '{}', 'vps/server/tsconfig.json': '{}', 'vps/docker-compose.yml': 'services:', 'vps/apache/seo-routes.conf': 'config'}
+        files = {'release.json': json.dumps({'format': 1, 'commit': commit}), 'dist/index.html': 'HTML', 'dist/assets/app.js': 'JS', 'dist/_seo/index.html': 'SEO', 'vps/server/.gitignore': 'node_modules\ndist\n.env\n', 'vps/server/Dockerfile': 'FROM node:24-alpine', 'vps/server/package.json': '{}', 'vps/server/package-lock.json': '{}', 'vps/server/tsconfig.json': '{}', 'vps/docker-compose.yml': 'services:', 'vps/apache/seo-routes.conf': 'config'}
         with tarfile.open(archive, 'w:gz') as target:
             for name, text in files.items():
                 data = text.encode()
