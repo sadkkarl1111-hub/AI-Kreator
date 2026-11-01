@@ -14,6 +14,7 @@ import { BADGE_CATALOG } from '@/lib/badgeCatalog';
 import { normalizeSvgSearch } from '@/lib/svgCatalog';
 import { useLocalAssetFavorites } from '@/hooks/useLocalAssetFavorites';
 import { badgeIsNew, newestBadgesFirst } from '@/lib/badgeLibraryView';
+import { badgeAppearance, BADGE_LOOKS } from '@/lib/badgeAppearance';
 
 type BadgeItem = {
   id: string;
@@ -24,6 +25,8 @@ type BadgeItem = {
   addedAt?: string;
   style?: string;
   color?: string;
+  colors?: string[];
+  look?: string;
 };
 
 type BadgeAccessEntry = {
@@ -50,6 +53,7 @@ const BadgeLibrary = () => {
   const favorites = useLocalAssetFavorites('badges');
   const [params, setParams] = useSearchParams();
   const view = params.get('view');
+  const activeLook = BADGE_LOOKS.some(look => look.id === params.get('look')) ? params.get('look') || '' : '';
   const onlyFavorites = view === 'favorites', onlyNew = view === 'new';
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeStyle, setActiveStyle] = useState('');
@@ -80,7 +84,7 @@ const BadgeLibrary = () => {
         const visibleStatic = STATIC_BADGES.filter(b => !hiddenKeys.includes(b.id));
 
         setBadgeAccess(data.access || []);
-        setAllBadges(newestBadgesFirst([...new Map([...visibleStatic, ...(data.badges || []).filter(b => !hiddenKeys.includes(b.id))].map(b => [b.id, b])).values()]));
+        setAllBadges(newestBadgesFirst([...new Map([...visibleStatic, ...(data.badges || []).filter(b => !hiddenKeys.includes(b.id))].map(b => [b.id, b])).values()].map(badge => ({ ...badge, ...badgeAppearance(badge) }))));
 
         const labels: Record<string, string> = {};
         (data.packages || []).forEach(p => { labels[p.id] = p.label; });
@@ -108,8 +112,9 @@ const BadgeLibrary = () => {
   }, []);
 
   const categories = [...new Set(allBadges.map(b => b.category))];
-  const styles = [...new Set(allBadges.map(b => b.style).filter(Boolean))];
-  const colors = [...new Set(allBadges.map(b => b.color).filter(Boolean))];
+  const lookBadges = allBadges.filter(b => !activeLook || b.look === activeLook);
+  const styles = [...new Set(lookBadges.map(b => b.style).filter(Boolean))];
+  const colors = [...new Set(lookBadges.flatMap(b => b.colors || [b.color]).filter(Boolean))].sort((a,b) => a.localeCompare(b, 'pl'));
 
   const isBadgeLocked = (badgeId: string): boolean => {
     const accessEntries = badgeAccess.filter(a => a.badge_key === badgeId);
@@ -126,14 +131,20 @@ const BadgeLibrary = () => {
   };
 
   const filtered = allBadges.filter(b => {
-    const matchSearch = normalizeSvgSearch(search).split(/\s+/).every(word => normalizeSvgSearch(`${b.name} ${b.description} ${b.category} ${b.style || ''} ${b.color || ''}`).includes(word));
+    const matchSearch = normalizeSvgSearch(search).split(/\s+/).every(word => normalizeSvgSearch(`${b.name} ${b.description} ${b.category} ${b.style || ''} ${b.color || ''} ${BADGE_LOOKS.find(look => look.id === b.look)?.label || ''}`).includes(word));
     const matchCat = !activeCategory || b.category === activeCategory;
-    return matchSearch && matchCat && (!activeStyle || b.style === activeStyle) && (!activeColor || b.color === activeColor) && (!onlyFavorites || favorites.has(b.id)) && (!onlyNew || badgeIsNew(b));
+    return matchSearch && matchCat && (!activeLook || b.look === activeLook) && (!activeStyle || b.style === activeStyle) && (!activeColor || b.colors?.includes(activeColor) || b.color === activeColor) && (!onlyFavorites || favorites.has(b.id)) && (!onlyNew || badgeIsNew(b));
   });
   const newCount = allBadges.filter(badge => badgeIsNew(badge)).length;
   const chooseView = (next: 'all' | 'new' | 'favorites') => {
     setParams(next === 'all' ? {} : { view: next }, { replace: true });
     setSearch(''); setActiveCategory(null); setActiveStyle(''); setActiveColor('');
+  };
+  const chooseLook = (look: string) => {
+    const next = new URLSearchParams(params);
+    if (look === activeLook) next.delete('look'); else next.set('look', look);
+    setParams(next, { replace: true });
+    setActiveStyle(''); setActiveColor(''); setActiveCategory(null); setSearch('');
   };
 
   const handleDownload = async (badge: BadgeItem) => {
@@ -176,6 +187,20 @@ const BadgeLibrary = () => {
           </div>
         </div>
 
+        <section aria-label="Wybierz wygląd badge’ów" className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2"><h2 className="text-lg font-semibold">Wybierz wygląd</h2><p className="text-xs text-muted-foreground">Także starsze grafiki są podzielone według stylu</p></div>
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            {BADGE_LOOKS.filter(look => look.id !== 'other' || allBadges.some(badge => badge.look === 'other')).map(look => {
+              const items = allBadges.filter(badge => badge.look === look.id);
+              const preview = items.find(badge => !isBadgeLocked(badge.id));
+              return <button key={look.id} type="button" aria-label={look.label} aria-pressed={activeLook === look.id} onClick={() => chooseLook(look.id)} className={`flex min-w-0 flex-col items-start gap-2 rounded-xl border-2 p-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:p-4 ${activeLook === look.id ? 'border-primary bg-primary/5' : 'border-border bg-card hover:border-primary/50'}`}>
+                <div className="flex h-16 w-full items-center justify-between gap-2">{preview ? <img src={preview.src} alt="" width="76" height="64" loading="lazy" className="h-16 w-20 object-contain" /> : <Award aria-hidden="true" className="h-8 w-8 text-muted-foreground" />}<span className="rounded-full bg-muted px-2.5 py-1 text-xs font-semibold" aria-hidden="true">{items.length}</span></div>
+                <span className="text-sm font-semibold sm:text-base">{look.label}</span><span className="text-xs leading-5 text-muted-foreground">{look.description}</span>
+              </button>;
+            })}
+          </div>
+        </section>
+
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
@@ -190,7 +215,7 @@ const BadgeLibrary = () => {
           <Button variant={onlyNew ? 'default' : 'outline'} size="sm" aria-pressed={onlyNew} onClick={() => chooseView(onlyNew ? 'all' : 'new')}><Sparkles className="mr-1 h-4 w-4"/>Nowe<span aria-hidden="true" className="ml-1">({newCount})</span></Button>
           <Button variant={onlyFavorites ? 'default' : 'outline'} size="sm" aria-pressed={onlyFavorites} onClick={() => chooseView(onlyFavorites ? 'all' : 'favorites')}><Star className="mr-1 h-4 w-4"/>Ulubione</Button>
           <Button
-            variant={!activeCategory && !activeStyle && !activeColor && !onlyFavorites && !onlyNew && !search ? 'default' : 'outline'}
+            variant={!activeLook && !activeCategory && !activeStyle && !activeColor && !onlyFavorites && !onlyNew && !search ? 'default' : 'outline'}
             size="sm"
             onClick={() => chooseView('all')}
           >
@@ -219,7 +244,7 @@ const BadgeLibrary = () => {
 
         <p className="text-xs text-muted-foreground">Kliknij gwiazdkę, aby zapisać ulubione na tym urządzeniu. Badge’e wstawisz też w kreatorze karuzel: Media → Badge’e.</p>
 
-        {!loadingBadges && !loadError && <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border bg-card p-3"><p role="status" className="text-sm">W bibliotece: <strong>{allBadges.length}</strong>. Wyświetlono: <strong>{filtered.length}</strong>. <span className="text-muted-foreground">Najnowsze są na początku. Cała lista poniżej.</span></p><div className="flex flex-wrap gap-2">{(search || activeCategory || activeStyle || activeColor || onlyFavorites || onlyNew) && <Button variant="outline" size="sm" className="h-10" onClick={() => chooseView('all')}>Pokaż wszystkie badge’e</Button>}<Button variant="ghost" size="sm" className="h-10 gap-1" onClick={() => setReloadKey(key => key + 1)}><RefreshCw className="h-4 w-4"/>Odśwież listę</Button></div></div>}
+        {!loadingBadges && !loadError && <div className="sticky top-14 z-20 flex flex-wrap items-center justify-between gap-2 rounded-xl border bg-card p-3 shadow-sm sm:top-16"><p role="status" className="text-sm">W bibliotece: <strong>{allBadges.length}</strong>. Wyświetlono: <strong>{filtered.length}</strong>. <span className="text-muted-foreground">{activeLook ? BADGE_LOOKS.find(look => look.id === activeLook)?.label : 'Wszystkie rodzaje'}. Najnowsze są na początku.</span></p><div className="flex flex-wrap gap-2">{(search || activeLook || activeCategory || activeStyle || activeColor || onlyFavorites || onlyNew) && <Button variant="outline" size="sm" className="h-10" onClick={() => chooseView('all')}>Pokaż wszystkie badge’e</Button>}<Button variant="ghost" size="sm" className="h-10 gap-1" onClick={() => setReloadKey(key => key + 1)}><RefreshCw className="h-4 w-4"/>Odśwież listę</Button></div></div>}
 
         {loadingBadges && <p role="status" className="text-center text-muted-foreground py-8">Ładowanie badge’ów...</p>}
         {loadError && (
@@ -259,7 +284,7 @@ const BadgeLibrary = () => {
                       <button type="button" aria-label={`${favorites.has(badge.id) ? 'Usuń z' : 'Dodaj do'} ulubionych: ${badge.name}`} aria-pressed={favorites.has(badge.id)} onClick={() => favorites.toggle(badge.id)} className="absolute right-1 top-1 flex h-10 w-10 items-center justify-center rounded-full border bg-background/95 text-primary shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"><Star className={`h-5 w-5 ${favorites.has(badge.id) ? 'fill-current' : ''}`}/></button>
                     </div>
                     <div className="text-center w-full break-words">
-                      {badgeIsNew(badge) && <Badge className="mb-1 text-[10px]">Nowość</Badge>}
+                      <div className="mb-1 flex flex-wrap justify-center gap-1">{badgeIsNew(badge) && <Badge className="text-[10px]">Nowość</Badge>}{badge.style && badge.style !== 'Inny' && <Badge variant="outline" className="text-[10px]">{badge.style}</Badge>}</div>
                       <p className="font-medium text-sm">{badge.name}</p>
                       <p className="text-xs text-muted-foreground">{badge.description}</p>
                     </div>

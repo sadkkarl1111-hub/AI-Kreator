@@ -22,7 +22,7 @@ const library = {
   packages: [{ id: 'premium', label: 'Premium' }], purchasedPackageIds: [],
 };
 const EditorDestination = () => <p>Edytor AI{useLocation().search}</p>;
-const openLibrary = () => render(<MemoryRouter initialEntries={['/tools/badges']}><Routes>
+const openLibrary = (url = '/tools/badges') => render(<MemoryRouter initialEntries={[url]}><Routes>
   <Route path="/tools/badges" element={<BadgeLibrary />} />
   <Route path="/tools/badge-editor" element={<EditorDestination />} />
 </Routes></MemoryRouter>);
@@ -34,6 +34,28 @@ beforeEach(() => {
   vi.mocked(vpsFetch).mockResolvedValue(library);
 });
 afterEach(() => { cleanup(); vi.resetAllMocks(); vi.restoreAllMocks(); });
+
+it('opens the 3D section from a link and keeps hidden and paid assets protected', async () => {
+  vi.mocked(vpsPublicFetch).mockResolvedValue({ ...library, hiddenKeys: ['hidden', 'hidden-3d'], access: [{ badge_key: 'paid-3d', package_id: 'premium' }], badges: [
+    { id: 'gift-3d', name: 'Prezent przestrzenny', description: '', category: 'Bonusy', style: '3D', look: '3d', src: '/gift.png' },
+    { id: 'hidden-3d', name: 'Ukryty prezent', description: '', category: 'Bonusy', style: '3D', look: '3d', src: '/hidden.png' },
+    { id: 'paid-3d', name: 'Prezent płatny', description: '', category: 'Bonusy', style: '3D', look: '3d', src: '/paid.png' },
+    { id: 'drawn', name: 'Rysunek', description: '', category: 'Bonusy', style: 'Ołówkowy', look: 'drawn', src: '/drawn.png' },
+  ] });
+  openLibrary('/tools/badges?look=3d');
+  await screen.findByText('Prezent przestrzenny');
+  expect(screen.getByRole('button', { name: '3D i przestrzenne' })).toHaveAttribute('aria-pressed', 'true');
+  expect(screen.queryByAltText('Ukryty prezent')).not.toBeInTheDocument();
+  expect(screen.queryByAltText('Rysunek')).not.toBeInTheDocument();
+  const card = screen.getByText('Prezent płatny').parentElement!.parentElement!;
+  expect(within(card).getByRole('button', { name: 'Dostęp' })).toBeDisabled();
+  fireEvent.click(screen.getByRole('button', { name: 'Ołówkowe i rysowane' }));
+  expect(screen.getByAltText('Rysunek')).toBeInTheDocument();
+  expect(screen.queryByAltText('Prezent przestrzenny')).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Pokaż wszystkie badge’e' }));
+  expect(screen.getByAltText('Prezent przestrzenny')).toBeInTheDocument();
+  expect(screen.queryByAltText('Ukryty prezent')).not.toBeInTheDocument();
+});
 
 it('combines category, Polish search, style and color and resets all filters', async () => {
   const extra = [
@@ -50,7 +72,7 @@ it('combines category, Polish search, style and color and resets all filters', a
   fireEvent.change(screen.getByLabelText('Styl badge’ów'), { target: { value: 'Złota pieczęć' } });
   expect(screen.getAllByRole('img')).toHaveLength(1);
   await waitFor(() => expect(screen.getByAltText('Gwarancja 30 dni złota')).toBeVisible());
-  fireEvent.change(screen.getByLabelText('Kolor badge’ów'), { target: { value: 'Miętowy' } });
+  fireEvent.change(screen.getByLabelText('Kolor badge’ów'), { target: { value: 'Zielony' } });
   expect(screen.queryAllByRole('img')).toHaveLength(0);
   fireEvent.click(screen.getByRole('button', { name: 'Pokaż wszystkie badge’e' }));
   expect(screen.getAllByRole('img')).toHaveLength(5);

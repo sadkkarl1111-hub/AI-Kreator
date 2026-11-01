@@ -77,6 +77,20 @@ Odtwarzanie: `node scripts/generate-sales-badges.mjs` (Sharp).
 Wdrożenie wymaga także skopiowania `dist/badges/` do publicznego katalogu serwera.
 Zachowuj starsze adresy plików. Ustawienia ukrywania i dostępu pozostają w istniejącym API.
 
+## Podział badge’ów według wyglądu
+
+Kafelki na `/tools/badges` grupują całą kolekcję, także starsze grafiki:
+3D i przestrzenne, ołówkowe i rysowane, neonowe oraz płaskie i wektorowe.
+`?look=3d`, `?look=drawn`, `?look=neon`, `?look=flat` otwierają wybrany widok.
+Klasyfikacja: `src/lib/badgeAppearance.ts`. Kolory w palecie są indeksowane osobno,
+więc filtr „Złoty” obejmuje też złoto-granatowe ilustracje. Kafelki i miniatury
+uwzględniają widoczność oraz dostęp do pakietów.
+
+Kolekcja 12 ilustracji (4 × 3D, 4 × ołówkowe, 4 × neonowe) jest w
+`public/badges/illustrated-v1/`, katalog w `src/data/illustrated-badges.json`.
+Grafiki przygotowano w imagegen; opisy do ponownego wygenerowania są w
+`scripts/illustrated-badge-prompts.json`. Zachowuj przezroczystość PNG i istniejące adresy.
+
 ## Wymagane klucze API
 
 - `OPENAI_API_KEY`

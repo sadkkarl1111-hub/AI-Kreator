@@ -2,6 +2,8 @@ import { WORK_BADGES } from './workBadges';
 import { PREMIUM_BADGES } from './premiumBadges';
 import { BONUS_BADGES } from './bonusBadges';
 import salesBadges from '@/data/sales-badges.json';
+import illustratedBadges from '@/data/illustrated-badges.json';
+import { badgeAppearance } from './badgeAppearance';
 import badge5Stars from '@/assets/badges/badge-5stars.webp';
 import badgeBestPrice from '@/assets/badges/badge-bestprice.webp';
 import badgeBestQuality from '@/assets/badges/badge-bestquality.webp';
@@ -45,9 +47,11 @@ export type BadgeCatalogItem = {
   addedAt?: string;
   style?: string;
   color?: string;
+  colors?: string[];
+  look?: string;
 };
 
-export const BADGE_CATALOG: BadgeCatalogItem[] = [
+const CATALOG: BadgeCatalogItem[] = [
   { id: 'free', name: 'Free', description: 'Badge „Za darmo”', category: 'Promocje', src: badgeFree },
   { id: 'sale50', name: '-50% Sale', description: 'Badge rabatowy -50%', category: 'Promocje', src: badgeSale50 },
   { id: 'sale25', name: '-25% Sale', description: 'Badge rabatowy -25%', category: 'Promocje', src: badgeSale25 },
@@ -85,4 +89,7 @@ export const BADGE_CATALOG: BadgeCatalogItem[] = [
   ...BONUS_BADGES,
   ...WORK_BADGES,
   ...salesBadges,
+  ...illustratedBadges,
 ];
+
+export const BADGE_CATALOG: BadgeCatalogItem[] = CATALOG.map(badge => ({ ...badge, ...badgeAppearance(badge) }));
