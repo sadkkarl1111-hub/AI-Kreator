@@ -29,7 +29,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
           cache-dependency-path: |
             package-lock.json
@@ -52,21 +52,27 @@ jobs:
           npm ci --no-audit --no-fund
           npm test
 
+      - name: Kontrola paczek i cofania wdrożeń
+        run: |
+          bash -n vps/deploy/ai-kreator-deploy.sh
+          bash -n vps/deploy/ai-kreator-maintenance.sh
+          python3 -m unittest discover -s vps/deploy -p 'test_release_tool.py' -v
+          sudo python3 -m unittest discover -s vps/deploy -p 'test_deploy_transaction.py' -v
+
       - name: Paczka do wdrożenia
         if: github.event_name != 'pull_request'
         run: |
-          tar -czf release.tar.gz \
-            --exclude=vps/server/node_modules \
-            --exclude=vps/server/dist \
-            --exclude=vps/.env \
-            dist vps
-          ls -lh release.tar.gz
+          node scripts/package-release.mjs "$RUNNER_TEMP/ai-kreator-release"
+          mv "$RUNNER_TEMP/ai-kreator-release/$GITHUB_SHA.tar.gz" .
+          mv "$RUNNER_TEMP/ai-kreator-release/$GITHUB_SHA.tar.gz.sha256" .
 
       - uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
         with:
           name: release
-          path: release.tar.gz
+          path: |
+            ${{ github.sha }}.tar.gz
+            ${{ github.sha }}.tar.gz.sha256
           retention-days: 7
 
   deploy:
@@ -106,7 +112,10 @@ jobs:
 
       - name: Wyślij paczkę na serwer
         if: steps.cfg.outputs.ready == 'true'
-        run: scp -q release.tar.gz "vps:/home/deploy/incoming/${GITHUB_SHA}.tar.gz"
+        run: |
+          ssh vps 'umask 077; mkdir -p /home/deploy/incoming; chmod 700 /home/deploy/incoming'
+          scp -q "$GITHUB_SHA.tar.gz" "$GITHUB_SHA.tar.gz.sha256" vps:/home/deploy/incoming/
+          ssh vps "chmod 600 /home/deploy/incoming/$GITHUB_SHA.tar.gz /home/deploy/incoming/$GITHUB_SHA.tar.gz.sha256"
 
       - name: Wdróż
         if: steps.cfg.outputs.ready == 'true'

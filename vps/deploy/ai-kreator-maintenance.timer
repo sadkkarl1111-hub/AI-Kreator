@@ -1,0 +1,11 @@
+[Unit]
+Description=AI Kreator patch maintenance on the first Sunday at 03:20 in Poland
+
+[Timer]
+OnCalendar=Sun *-*-01..07 03:20:00 Europe/Warsaw
+AccuracySec=1min
+Persistent=false
+Unit=ai-kreator-maintenance.service
+
+[Install]
+WantedBy=timers.target

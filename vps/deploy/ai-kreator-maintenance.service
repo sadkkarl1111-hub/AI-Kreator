@@ -1,0 +1,15 @@
+[Unit]
+Description=AI Kreator verified PostgreSQL 16 and Redis 7 patch updates
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+UMask=0077
+ExecStart=/usr/local/sbin/ai-kreator-maintenance
+TimeoutStartSec=40min
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7

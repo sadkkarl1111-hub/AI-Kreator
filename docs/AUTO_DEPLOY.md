@@ -1,49 +1,28 @@
-# Automatyczne wdrożenie (GitHub Actions → VPS)
+# GitHub Actions i wdrożenie ręczne
 
-Każdy push na `main` uruchamia `.github/workflows/deploy.yml`:
+Aktualna procedura serwera: [VPS_SYNC_GUIDE.md](./VPS_SYNC_GUIDE.md). Wdrożenie ręczne przez `ubuntu` działa niezależnie od Actions. Sam `git push` nie jest potwierdzeniem publikacji strony.
 
-1. **Testy i budowanie** (GitHub): `npm ci`, `npm test`, `npm run build`, testy backendu `vps/server`.
-   Jeśli cokolwiek się nie powiedzie, nic nie trafia na serwer.
-2. **Wdrożenie**: paczka (`dist/` + `vps/` bez `.env`) idzie przez SSH na użytkownika `deploy`,
-   a następnie `sudo /usr/local/sbin/ai-kreator-deploy <sha>`:
-   - nowe zasoby i `_seo/` są wgrywane przed przełączeniem, stare pliki z hashem zostają,
-   - reguły `/etc/apache2/ai-kreator-seo-routes.conf` podmieniane tylko po udanym `apache2ctl configtest`,
-   - `index.html` podmieniany na końcu, atomowo,
-   - kontener `api` przebudowywany tylko, gdy zmienił się kod backendu; potem sprawdzany jest `/health`,
-     a przy błędzie przywracana jest poprzednia wersja backendu.
-3. Na koniec sprawdzenie `https://ai-kreator.pl/` i `https://ai-kreator.pl/api/health`.
+Workflow `.github/workflows/deploy.yml` testuje i buduje frontend oraz API z Node.js 24. `scripts/package-release.mjs` tworzy paczkę dla konkretnego commita z sumą SHA256, bez lokalnych sekretów i nieśledzonych źródeł.
 
-Pull requesty do `main` uruchamiają tylko testy, bez wdrożenia.
-Ręczne uruchomienie: GitHub → Actions → „Testy i wdrożenie” → Run workflow.
+Automatyczna publikacja wymaga osobnego konta `deploy`, jego klucza publicznego i sekretu `DEPLOY_SSH_KEY` w GitHubie. Nie zakładaj, że te elementy istnieją. Bez sekretu workflow pomija publikację z ostrzeżeniem. Wynik testów i wynik wdrożenia sprawdzaj osobno.
 
-## Konfiguracja (jednorazowo)
+## Opcjonalna konfiguracja automatu
 
-### Serwer (jako root)
+1. Prześlij cały katalog `vps/deploy` do prywatnego katalogu administracyjnego na VPS.
+2. Uruchom `setup-deploy-user.sh` przez `ubuntu` i sudo z uzgodnionym kluczem publicznym dedykowanym GitHub Actions. Skrypt instaluje narzędzia i ogranicza sudo konta deploy do stałego skryptu. Nie używaj osobistego klucza SSH jako klucza CI.
+3. Zapisz dedykowany klucz prywatny w sekrecie GitHuba `DEPLOY_SSH_KEY`, nigdy w repozytorium.
+4. Sprawdź udany workflow i numer commita na `https://ai-kreator.pl/deployment-check.json`.
+
+Paczki trafiają do `/home/deploy/incoming`, katalog 0700, pliki 0600. Konto deploy uruchamia `sudo /usr/local/sbin/ai-kreator-deploy <pełny-sha>`. Serwer wymaga paczki, sumy i manifestu oraz wykonuje te same kontrole, kopie, budowanie z `--pull` i próby cofnięcia co przy wdrożeniu ręcznym.
+
+Stałe narzędzia root instaluje administrator oddzielnie. Paczka aplikacji nie może podmieniać skryptu wdrażania ani SSH.
+
+## Testy procedury
 
 ```bash
-scp vps/deploy/ai-kreator-deploy.sh vps/deploy/setup-deploy-user.sh root@57.128.201.254:/root/
-ssh root@57.128.201.254 'bash /root/setup-deploy-user.sh "<klucz publiczny ai_kreator_deploy.pub>"'
+python3 -m unittest discover -s vps/deploy -p 'test_release_tool.py' -v
+# Linux, root i rsync; wszystkie ścieżki oraz usługi są zastąpione w testach:
+sudo python3 -m unittest discover -s vps/deploy -p 'test_deploy_transaction.py' -v
 ```
 
-Skrypt zakłada użytkownika `deploy` (logowanie tylko kluczem, opcja `restrict`),
-instaluje `/usr/local/sbin/ai-kreator-deploy` i pozwala przez sudo uruchomić wyłącznie ten skrypt.
-Nie zmienia SSH, Apache, Dockera ani bazy.
-
-### GitHub
-
-Settings → Secrets and variables → Actions → New repository secret:
-
-- `DEPLOY_SSH_KEY`: cała zawartość prywatnego klucza `ai_kreator_deploy`
-  (od `-----BEGIN OPENSSH PRIVATE KEY-----` do `-----END OPENSSH PRIVATE KEY-----`).
-
-Bez tego sekretu workflow robi testy i budowanie, a wdrożenie pomija z ostrzeżeniem.
-
-## Cofnięcie wdrożenia
-
-Kopie poprzedniego `index.html`, `_seo/`, reguł SEO i kodu backendu: `/var/lib/ai-kreator/releases/` (ostatnie 15).
-Najprościej cofnąć przez `git revert` na `main` — automat wdroży poprzednią wersję.
-
-## Ręczne wdrożenie awaryjne
-
-`scripts/deploy-vps.ps1` nadal działa (logowanie jako root), ale pomija sprawdzanie testów i kasuje stare pliki z hashem.
-Używaj tylko, gdy GitHub Actions nie działa.
+Testowane awarie: nowe API, konfiguracja Apache i kontrola publicznej strony. Testy nie przełączają działających usług.

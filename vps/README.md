@@ -1,5 +1,12 @@
 ﻿# VPS Starter
 
+## Aktualna eksploatacja po aktualizacji 1 listopada 2026
+
+Serwer używa Ubuntu 26.04.1 LTS i Apache. Aktualna procedura: [VPS_SYNC_GUIDE.md](../docs/VPS_SYNC_GUIDE.md). Poniższy opis nginx i migracji dotyczy historycznego punktu startowego. Używamy konta ubuntu, prywatnych paczek z manifestem i stałego /usr/local/sbin/ai-kreator-deploy. API budujemy w Dockerze z Node.js 24 i --pull. Node.js 22 z hosta nie steruje wersją API w kontenerze.
+
+Przed zmianą API i comiesięcznymi poprawkami PostgreSQL 16 / Redis 7 narzędzia wykonują kopię z próbą odtworzenia. Codzienny timer pozostaje niezależny. Zwykłe wdrożenie nie zmienia innych witryn, kluczy SSH, .env ani wolumenów.
+
+
 Ten folder jest punktem startowym pod pelne odejscie od legacy-backend.
 
 ## Co jest tutaj przygotowane

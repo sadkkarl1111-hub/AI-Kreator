@@ -17,7 +17,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 
 [[ $EUID -eq 0 ]] || { echo "Uruchom jako root."; exit 1; }
 [[ "$PUBKEY" =~ ^ssh-ed25519\ [A-Za-z0-9+/=]+(\ .*)?$ ]] || { echo "Podaj klucz publiczny ssh-ed25519 w cudzysłowie."; exit 1; }
-[[ -f "$HERE/ai-kreator-deploy.sh" ]] || { echo "Brak ai-kreator-deploy.sh obok tego skryptu."; exit 1; }
+[[ -f "$HERE/install-release-tools.sh" ]] || { echo "Prześlij cały katalog vps/deploy."; exit 1; }
 
 for cmd in flock curl tar diff docker apache2ctl sudo; do
   command -v "$cmd" >/dev/null || { echo "Brak programu: $cmd"; exit 1; }
@@ -34,9 +34,7 @@ printf 'restrict %s\n' "$PUBKEY" > /home/deploy/.ssh/authorized_keys
 chown deploy:deploy /home/deploy/.ssh/authorized_keys
 chmod 600 /home/deploy/.ssh/authorized_keys
 
-sed -i 's/\r$//' "$HERE/ai-kreator-deploy.sh"
-install -m 750 -o root -g root "$HERE/ai-kreator-deploy.sh" /usr/local/sbin/ai-kreator-deploy
-install -d -m 700 -o root -g root /var/lib/ai-kreator/releases
+bash "$HERE/install-release-tools.sh"
 
 SUDOERS=/etc/sudoers.d/ai-kreator-deploy
 echo 'deploy ALL=(root) NOPASSWD: /usr/local/sbin/ai-kreator-deploy' > "$SUDOERS.tmp"
