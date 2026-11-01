@@ -86,10 +86,25 @@ Klasyfikacja: `src/lib/badgeAppearance.ts`. Kolory w palecie są indeksowane oso
 więc filtr „Złoty” obejmuje też złoto-granatowe ilustracje. Kafelki i miniatury
 uwzględniają widoczność oraz dostęp do pakietów.
 
-Kolekcja 12 ilustracji (4 × 3D, 4 × ołówkowe, 4 × neonowe) jest w
+Kolekcja 24 ilustracji (8 × 3D, 8 × ołówkowe, 8 × neonowe) jest w
 `public/badges/illustrated-v1/`, katalog w `src/data/illustrated-badges.json`.
 Grafiki przygotowano w imagegen; opisy do ponownego wygenerowania są w
 `scripts/illustrated-badge-prompts.json`. Zachowuj przezroczystość PNG i istniejące adresy.
+
+## Gdzie są przechowywane dane — kontrola 1.11.2026
+
+| Zawartość | Lokalizacja |
+| --- | --- |
+| Gotowa biblioteka badge’ów, GIF-ów i pliki strony | VPS: `/var/www/ai-kreator.pl/`; kopia źródeł i biblioteki w lokalnym projekcie oraz na GitHubie |
+| Grafiki AI w galerii oraz pliki zapisywane przez backend | Cloudflare R2; działające API ma `STORAGE_DRIVER=s3` i endpoint R2 |
+| Konta, kredyty, metadane grafik i konfiguracja | PostgreSQL na VPS, usługa `postgres` |
+| Roboczy projekt karuzeli i ulubione zasoby | Przeglądarka użytkownika; „Zapisz projekt” pobiera dodatkowo plik JSON na jego urządzenie |
+
+Kontrola serwera potwierdziła również `Result=success` i `ExecMainStatus=0`
+dla zadania kopii PostgreSQL. Kopie bazy są w `/var/backups/ai-kreator/daily-db`.
+Ta kontrola nie obejmowała niezależnej kopii zawartości R2.
+Generowanie nowych ilustracji biblioteki w imagegen nie zmienia lokalizacji,
+z której strona je udostępnia: wybrane PNG są kopiowane do projektu i wdrażane na VPS.
 
 ## Wymagane klucze API
 

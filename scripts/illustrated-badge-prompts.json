@@ -94,5 +94,101 @@
     "tool": "imagegen",
     "transparent_background": true,
     "prompt": "Use case: ads-marketing. Asset type: standalone downloadable Polish marketing badge for a creative asset library. A high-end neon glass membership badge with electric blue crown above the exact text VIP in bright violet neon block letters, rounded diamond outline frame. Real glass tube construction with white luminous cores, beautiful soft glow into transparency, isolated entire object, no black or colored backdrop rectangle. Square image, single centered badge occupying 80% of the canvas, full object visible with safe transparent padding on all sides. Text verbatim: \"VIP\". No other text, no watermark, no brand logo. True transparent RGBA outside the artwork. Professional finished asset, not a web page or mockup."
+  },
+  {
+    "id": "guarantee60-3d",
+    "style": "3D",
+    "color": "Czerwony / złoty",
+    "tool": "imagegen",
+    "transparent_background": true,
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish sales badge illustration. A realistic premium 3D ruby red enamel guarantee medallion with thick sculpted gold bevel, a chunky gold checkmark and curled red satin ribbons. Large exact front-facing text 60 DNI. Strong physical depth, luxury product photography, no other words. A single centered badge, square canvas, full complete object visible, safe transparent padding around all edges. True transparent RGBA background outside the artwork. Text verbatim: \"60 DNI\". No other text, no watermark or logos. Production-quality illustration, not a web page, not a flat vector substitute."
+  },
+  {
+    "id": "video-3d",
+    "style": "3D",
+    "color": "Turkusowy / srebrny",
+    "tool": "imagegen",
+    "transparent_background": true,
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish sales badge illustration. A premium realistic 3D bundle of three glossy mint and cyan video-course boxes, a silver film reel and a big glass play button, on a compact curved plaque with the large exact text WIDEO. Beautiful tactile glass and metal, isolated complete cluster. A single centered badge, square canvas, full complete object visible, safe transparent padding around all edges. True transparent RGBA background outside the artwork. Text verbatim: \"WIDEO\". No other text, no watermark or logos. Production-quality illustration, not a web page, not a flat vector substitute."
+  },
+  {
+    "id": "delivery-3d",
+    "style": "3D",
+    "color": "Niebieski / złoty",
+    "tool": "imagegen",
+    "transparent_background": true,
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish sales badge illustration. A delightful premium 3D cyan blue delivery parcel tied with gold ribbon, small sculpted wings and a large cream label reading exactly GRATIS. Rounded tactile cardboard, metallic ribbon, studio lighting, full isolated object. A single centered badge, square canvas, full complete object visible, safe transparent padding around all edges. True transparent RGBA background outside the artwork. Text verbatim: \"GRATIS\". No other text, no watermark or logos. Production-quality illustration, not a web page, not a flat vector substitute."
+  },
+  {
+    "id": "sale50-3d",
+    "style": "3D",
+    "color": "Pomarańczowy / złoty",
+    "tool": "imagegen",
+    "transparent_background": true,
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish sales badge illustration. A luxurious chunky 3D sculpted copper orange discount tag with a polished gold rim, small gold lightning bolt and large extruded white text exactly −50%. Glossy bevels and real physical depth, isolated complete sales badge. A single centered badge, square canvas, full complete object visible, safe transparent padding around all edges. True transparent RGBA background outside the artwork. Text verbatim: \"−50%\". No other text, no watermark or logos. Production-quality illustration, not a web page, not a flat vector substitute."
+  },
+  {
+    "id": "live-pencil",
+    "style": "Ołówkowy",
+    "color": "Grafitowy / czerwony",
+    "tool": "imagegen",
+    "transparent_background": true,
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish sales badge illustration. A charming graphite pencil drawing of a standing desk calendar with small play triangle, hand sketched stars and bold clearly readable exact Polish lettering NA ŻYWO. Restrained red pencil accents, visible crosshatching and genuine graphite texture. No paper page behind the illustration. A single centered badge, square canvas, full complete object visible, safe transparent padding around all edges. True transparent RGBA background outside the artwork. Text verbatim: \"NA ŻYWO\". No other text, no watermark or logos. Production-quality illustration, not a web page, not a flat vector substitute."
+  },
+  {
+    "id": "ebook-pencil",
+    "style": "Ołówkowy",
+    "color": "Grafitowy / niebieski",
+    "tool": "imagegen",
+    "transparent_background": true,
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish sales badge illustration. A beautiful hand drawn graphite pencil illustration of an open ebook with a blue bookmark, small pencil and a hanging paper label reading exact large text EBOOK. Real pencil strokes and soft crosshatching, subtle blue colored pencil accents. No rectangular paper or page background. A single centered badge, square canvas, full complete object visible, safe transparent padding around all edges. True transparent RGBA background outside the artwork. Text verbatim: \"EBOOK\". No other text, no watermark or logos. Production-quality illustration, not a web page, not a flat vector substitute."
+  },
+  {
+    "id": "checklist-pencil",
+    "style": "Ołówkowy",
+    "color": "Grafitowy / zielony",
+    "tool": "imagegen",
+    "transparent_background": true,
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish sales badge illustration. A hand drawn graphite pencil illustration of a clipboard with three big checked boxes and a pencil beside it, with a paper banner reading the exact large word CHECKLISTA. Visible crosshatching and imperfect handmade linework, subtle green colored pencil details, no page or background rectangle. A single centered badge, square canvas, full complete object visible, safe transparent padding around all edges. True transparent RGBA background outside the artwork. Text verbatim: \"CHECKLISTA\". No other text, no watermark or logos. Production-quality illustration, not a web page, not a flat vector substitute."
+  },
+  {
+    "id": "delivery-pencil",
+    "style": "Ołówkowy",
+    "color": "Grafitowy / pomarańczowy",
+    "tool": "imagegen",
+    "transparent_background": true,
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish sales badge illustration. A charming graphite pencil sketch of a small delivery truck carrying a tied gift parcel, with a large side panel reading exact text DOSTAWA. Handmade crosshatching, soft real pencil texture and restrained orange pencil accents. Entire compact cutout illustration, no page behind it. A single centered badge, square canvas, full complete object visible, safe transparent padding around all edges. True transparent RGBA background outside the artwork. Text verbatim: \"DOSTAWA\". No other text, no watermark or logos. Production-quality illustration, not a web page, not a flat vector substitute."
+  },
+  {
+    "id": "live-neon",
+    "style": "Neon",
+    "color": "Czerwony / różowy",
+    "tool": "imagegen",
+    "transparent_background": true,
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish sales badge illustration. A premium realistic neon glass tube sign with a simple play button above the exact text NA ŻYWO, red and hot pink tubes with bright luminous white cores, rounded rectangular outline. Beautiful glow fading into alpha transparency, no black background or rectangular backdrop. A single centered badge, square canvas, full complete object visible, safe transparent padding around all edges. True transparent RGBA background outside the artwork. Text verbatim: \"NA ŻYWO\". No other text, no watermark or logos. Production-quality illustration, not a web page, not a flat vector substitute."
+  },
+  {
+    "id": "gratis-neon",
+    "style": "Neon",
+    "color": "Zielony / turkusowy",
+    "tool": "imagegen",
+    "transparent_background": true,
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish sales badge illustration. A premium neon glass tube badge shaped like a gift tag with exact big glowing text GRATIS, emerald green and cyan tubes, white bright cores, small star detail above. Real glass construction with subtle neon bloom into transparent alpha, no black rectangular background. A single centered badge, square canvas, full complete object visible, safe transparent padding around all edges. True transparent RGBA background outside the artwork. Text verbatim: \"GRATIS\". No other text, no watermark or logos. Production-quality illustration, not a web page, not a flat vector substitute."
+  },
+  {
+    "id": "best-neon",
+    "style": "Neon",
+    "color": "Pomarańczowy / żółty",
+    "tool": "imagegen",
+    "transparent_background": true,
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish sales badge illustration. An energetic premium neon glass badge with a five point star above the exact large word HIT, orange and golden yellow glass tubes with white luminous cores. Compact complete sales design, beautiful soft glow fades into transparent alpha. No black rectangle or backdrop. A single centered badge, square canvas, full complete object visible, safe transparent padding around all edges. True transparent RGBA background outside the artwork. Text verbatim: \"HIT\". No other text, no watermark or logos. Production-quality illustration, not a web page, not a flat vector substitute."
+  },
+  {
+    "id": "bonus5-neon",
+    "style": "Neon",
+    "color": "Fioletowy / różowy",
+    "tool": "imagegen",
+    "transparent_background": true,
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish sales badge illustration. A premium neon glass gift box outline with exact large Polish text 5 BONUSÓW stacked neatly in two readable lines. Electric purple and hot pink tubes, white glowing cores, beautiful luminous bloom fading into transparency. Single complete isolated design, no black rectangular background. A single centered badge, square canvas, full complete object visible, safe transparent padding around all edges. True transparent RGBA background outside the artwork. Text verbatim: \"5 BONUSÓW\". No other text, no watermark or logos. Production-quality illustration, not a web page, not a flat vector substitute."
   }
 ]
