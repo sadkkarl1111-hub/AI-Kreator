@@ -43,7 +43,7 @@ type EditorProps = {
   mode?: 'general' | 'badge';
 };
 
-type BadgeEditAction = 'replace-text' | 'remove-element' | 'custom';
+type BadgeEditAction = 'replace-text' | 'change-color' | 'remove-element' | 'custom';
 
 type BadgeEditorLibraryResponse = {
   badges?: BadgeCatalogItem[];
@@ -70,6 +70,8 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
   const [badgeEditAction, setBadgeEditAction] = useState<BadgeEditAction>('replace-text');
   const [oldText, setOldText] = useState('');
   const [newText, setNewText] = useState('');
+  const [colorTarget, setColorTarget] = useState('');
+  const [targetColor, setTargetColor] = useState('');
   const [elementToRemove, setElementToRemove] = useState('');
   const [badgeSearch, setBadgeSearch] = useState('');
   const [availableBadges, setAvailableBadges] = useState<BadgeCatalogItem[]>(isBadgeEditor ? [] : BADGE_CATALOG);
@@ -88,6 +90,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const maskCanvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const lastDrawPoint = useRef<{ x: number; y: number } | null>(null);
 
   const [brushSize, setBrushSize] = useState(30);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -111,9 +114,11 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
   const hasEditDescription = isBadgeEditor
     ? badgeEditAction === 'replace-text'
       ? Boolean(oldText.trim() && newText.trim())
-      : badgeEditAction === 'remove-element'
-        ? Boolean(elementToRemove.trim())
-        : Boolean(prompt.trim())
+      : badgeEditAction === 'change-color'
+        ? Boolean(colorTarget.trim() && targetColor.trim())
+        : badgeEditAction === 'remove-element'
+          ? Boolean(elementToRemove.trim())
+          : Boolean(prompt.trim())
     : Boolean(prompt.trim());
 
   const resetEditor = useCallback(() => {
@@ -261,35 +266,33 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
   }, [sourceImage]);
 
   const getPos = (event: React.MouseEvent | React.TouchEvent) => {
-    const rect = maskCanvasRef.current!.getBoundingClientRect();
-
-    if ('touches' in event) {
-      return {
-        x: event.touches[0].clientX - rect.left,
-        y: event.touches[0].clientY - rect.top,
-      };
-    }
-
+    const canvas = maskCanvasRef.current!;
+    const rect = canvas.getBoundingClientRect();
+    const pointer = 'touches' in event ? event.touches[0] : event;
     return {
-      x: (event as React.MouseEvent).clientX - rect.left,
-      y: (event as React.MouseEvent).clientY - rect.top,
+      x: (pointer.clientX - rect.left) * canvas.width / rect.width,
+      y: (pointer.clientY - rect.top) * canvas.height / rect.height,
     };
   };
 
   const startDraw = (event: React.MouseEvent | React.TouchEvent) => {
     event.preventDefault();
+    if (editing) return;
     const maskContext = maskCanvasRef.current?.getContext('2d');
     if (!maskContext || !maskCanvasRef.current) return;
 
+    const snapshot = maskContext.getImageData(0, 0, maskCanvasRef.current.width, maskCanvasRef.current.height);
     setMaskHistory((prev) => [
       ...prev.slice(-10),
-      maskContext.getImageData(0, 0, maskCanvasRef.current!.width, maskCanvasRef.current!.height),
+      snapshot,
     ]);
 
     setIsDrawing(true);
     const { x, y } = getPos(event);
+    lastDrawPoint.current = { x, y };
+    const scale = maskCanvasRef.current.width / maskCanvasRef.current.getBoundingClientRect().width;
     maskContext.beginPath();
-    maskContext.arc(x, y, brushSize / 2, 0, Math.PI * 2);
+    maskContext.arc(x, y, brushSize * scale / 2, 0, Math.PI * 2);
     maskContext.fillStyle = 'rgba(255, 0, 0, 0.4)';
     maskContext.fill();
     setHasMask(true);
@@ -297,19 +300,28 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
 
   const draw = (event: React.MouseEvent | React.TouchEvent) => {
     event.preventDefault();
-    if (!isDrawing) return;
+    if (!isDrawing || editing) return;
 
     const maskContext = maskCanvasRef.current?.getContext('2d');
     if (!maskContext) return;
 
     const { x, y } = getPos(event);
+    const previous = lastDrawPoint.current ?? { x, y };
+    const canvas = maskCanvasRef.current!;
     maskContext.beginPath();
-    maskContext.arc(x, y, brushSize / 2, 0, Math.PI * 2);
-    maskContext.fillStyle = 'rgba(255, 0, 0, 0.4)';
-    maskContext.fill();
+    maskContext.moveTo(previous.x, previous.y);
+    maskContext.lineTo(x, y);
+    maskContext.lineWidth = brushSize * canvas.width / canvas.getBoundingClientRect().width;
+    maskContext.lineCap = 'round';
+    maskContext.strokeStyle = 'rgba(255, 0, 0, 0.4)';
+    maskContext.stroke();
+    lastDrawPoint.current = { x, y };
   };
 
-  const stopDraw = () => setIsDrawing(false);
+  const stopDraw = () => {
+    setIsDrawing(false);
+    lastDrawPoint.current = null;
+  };
 
   const clearMask = () => {
     const maskContext = maskCanvasRef.current?.getContext('2d');
@@ -326,6 +338,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
 
     const previous = maskHistory[maskHistory.length - 1];
     maskContext.putImageData(previous, 0, 0);
+    setHasMask(previous.data.some((value, index) => index % 4 === 3 && value > 10));
     setMaskHistory((history) => history.slice(0, -1));
   };
 
@@ -382,6 +395,12 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
       ].join(' ');
     }
 
+    if (badgeEditAction === 'change-color') {
+      return colorTarget.trim() && targetColor.trim()
+        ? `Change only the color of ${colorTarget.trim()} to ${targetColor.trim()}. Keep all lettering, texture, shapes and the original illustration style unchanged.`
+        : '';
+    }
+
     return prompt.trim();
   };
 
@@ -408,6 +427,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
 
     try {
       const maskBase64 = getMaskBase64();
+      if (isBadgeEditor && !maskBase64) throw new Error('Zaznacz pędzlem napis lub element do zmiany.');
 
       const data = await vpsFetch<{ imageUrl?: string; error?: string }>('/ai/edit-image', {
         method: 'POST',
@@ -416,6 +436,13 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
           imageBase64: sourceBase64,
           imageMimeType: sourceMime,
           maskBase64,
+          badgeEdit: isBadgeEditor ? {
+            action: badgeEditAction,
+            oldText: oldText.trim(),
+            newText: newText.trim(),
+            target: badgeEditAction === 'change-color' ? colorTarget.trim() : elementToRemove.trim(),
+            color: targetColor.trim(),
+          } : undefined,
           model: selectedModel,
           parentGraphicId: sourceGraphicId,
         }),
@@ -431,7 +458,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
       toast.success(`${isBadgeEditor ? 'Badge' : 'Obraz'} edytowany i zapisany do galerii`);
     } catch (error) {
       console.error('Edit error:', error);
-      toast.error('Nie udalo sie edytowac obrazu');
+      toast.error(error instanceof Error ? error.message : 'Nie udało się edytować obrazu');
     } finally {
       setEditing(false);
     }
@@ -665,14 +692,14 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                   </p>
                   {sourceLabel && <p className="text-xs text-muted-foreground mt-0.5">Wybrano: {sourceLabel}</p>}
                 </div>
-                <Button variant="ghost" size="sm" onClick={resetEditor}>
+                <Button variant="ghost" size="sm" onClick={resetEditor} disabled={editing}>
                   Zmień obraz
                 </Button>
               </div>
 
               {isBadgeEditor && (
                 <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-sm text-muted-foreground">
-                  Pędzlem zaznacz cały stary napis albo element wraz z małym marginesem. AI zmieni wyłącznie zaznaczony obszar.
+                  Zaznacz tylko napis albo fragment do zmiany, z małym marginesem. Poza zaznaczeniem zachowamy oryginalne piksele. Styl wewnątrz zaznaczenia AI dopasuje do oryginału.
                 </div>
               )}
 
@@ -690,10 +717,10 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                   />
                 </div>
                 <div className="flex gap-1">
-                  <Button variant="outline" size="sm" onClick={undoMask} disabled={maskHistory.length === 0} className="gap-1">
+                  <Button variant="outline" size="sm" onClick={undoMask} disabled={editing || maskHistory.length === 0} className="gap-1">
                     <Undo2 className="w-3.5 h-3.5" /> Cofnij
                   </Button>
-                  <Button variant="outline" size="sm" onClick={clearMask} disabled={!hasMask} className="gap-1">
+                  <Button variant="outline" size="sm" onClick={clearMask} disabled={editing || !hasMask} className="gap-1">
                     <Eraser className="w-3.5 h-3.5" /> Wyczysc
                   </Button>
                   {!isBadgeEditor && (
@@ -722,6 +749,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                 <canvas ref={canvasRef} className="block w-full" />
                 <canvas
                   ref={maskCanvasRef}
+                  aria-label="Zaznaczenie obszaru do edycji"
                   className="absolute top-0 left-0 w-full h-full"
                   style={{ cursor: 'crosshair' }}
                   onMouseDown={startDraw}
@@ -736,7 +764,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
 
               {isBadgeEditor ? (
                 <div className="space-y-3">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
                     <Button
                       type="button"
                       variant={badgeEditAction === 'replace-text' ? 'default' : 'outline'}
@@ -744,6 +772,14 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                       className="gap-1.5"
                     >
                       <Type className="w-4 h-4" /> Zmień napis
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={badgeEditAction === 'change-color' ? 'default' : 'outline'}
+                      onClick={() => setBadgeEditAction('change-color')}
+                      className="gap-1.5"
+                    >
+                      <Paintbrush className="w-4 h-4" /> Zmień kolor
                     </Button>
                     <Button
                       type="button"
@@ -788,6 +824,19 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                     </div>
                   )}
 
+                  {badgeEditAction === 'change-color' && (
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-medium" htmlFor="badge-color-target">Co przemalować?</label>
+                        <Input id="badge-color-target" value={colorTarget} onChange={(event) => setColorTarget(event.target.value)} placeholder="np. czerwony nagłówek kalendarza" maxLength={180} />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-medium" htmlFor="badge-target-color">Nowy kolor</label>
+                        <Input id="badge-target-color" value={targetColor} onChange={(event) => setTargetColor(event.target.value)} placeholder="np. granatowy lub #2048A0" maxLength={80} />
+                      </div>
+                    </div>
+                  )}
+
                   {badgeEditAction === 'remove-element' && (
                     <div className="space-y-1.5">
                       <label className="text-sm font-medium" htmlFor="badge-remove-element">Co usunąć?</label>
@@ -804,6 +853,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                   {badgeEditAction === 'custom' && (
                     <Textarea
                       placeholder="Opisz dokładnie zmianę w zaznaczonym obszarze..."
+                      aria-label="Opis zmiany badge’a"
                       value={prompt}
                       onChange={(event) => setPrompt(event.target.value)}
                       className="min-h-[80px] resize-none"
@@ -888,7 +938,9 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                         ? 'Zmień napis'
                         : badgeEditAction === 'remove-element'
                           ? 'Usuń element'
-                          : 'Edytuj badge'
+                          : badgeEditAction === 'change-color'
+                            ? 'Zmień kolor'
+                            : 'Edytuj badge'
                       : hasMask ? 'Edytuj zaznaczony obszar' : 'Edytuj cały obraz'}{' '}
                     ({currentModelCost} kr)
                   </>

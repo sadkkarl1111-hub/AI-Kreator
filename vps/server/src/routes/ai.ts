@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import { Router, type RequestHandler } from "express";
 import { createCarouselImageRouter } from "./carouselImage.js";
 import sharp from "sharp";
+import { applyEditMask, badgeEditInstruction, ImageEditInputError, prepareEditMask, preservingEditPrompt, type PreparedEditMask } from "../lib/imageEditing.js";
 import { AD_IMAGE_QUALITY_LOCK, AD_REFERENCE_INSTRUCTIONS, isCompiledAdPrompt } from "../lib/adCreative.js";
 import { env } from "../config/env.js";
 import { deleteGraphicFile } from "../lib/graphics.js";
@@ -67,6 +68,7 @@ type GenerateImageBody = {
 };
 
 type EditImageBody = {
+  badgeEdit?: unknown;
   prompt?: string;
   imageBase64?: string;
   imageMimeType?: string;
@@ -454,6 +456,8 @@ const handleOpenAIImageError = async (
 };
 
 const getSafeErrorMessage = (error: unknown): { message: string; status: number } => {
+  if (error instanceof ImageEditInputError) return { message: error.message, status: 400 };
+
   if (error instanceof AiRouteError) {
     return { message: error.message, status: error.status };
   }
@@ -1191,197 +1195,87 @@ export const generateWithOpenAI = async (
   return { base64: b64, mimeType: "image/png" };
 };
 
-const editWithOpenAI = async (params: {
+export const editWithOpenAI = async (params: {
   prompt: string;
   imageBase64: string;
   imageMimeType: string;
-  maskBase64?: string;
+  editMask?: PreparedEditMask;
   dimensions?: string;
   apiModel: string;
   apiKey: string | null;
 }): Promise<GeneratedImageResult> => {
   if (!params.apiKey) throw new Error("AI_SERVICE_UNAVAILABLE");
 
-  if (isOpenAIGptImageModel(params.apiModel) && !params.maskBase64) {
-    const strictPrompt = [
-      "Apply only the explicitly requested edit.",
-      "Keep the original composition, framing, colors, layout, proportions, style, background, and every unchanged element exactly the same as in the source image.",
-      TEXT_RENDERING_RULES,
-      params.prompt,
-      `OUTPUT FORMAT OVERRIDE: ignore every format, aspect ratio, resolution, orientation, or crop instruction in the edit prompt. Use only the selected ${getImageAspectRatio(params.dimensions)} format (${params.dimensions || "1024x1024"}) and keep all important content inside the canvas.`,
-    ].join(" ");
+  if (!isOpenAIGptImageModel(params.apiModel) && params.apiModel !== "chatgpt-image-latest") {
+    throw new ImageEditInputError("Ten model nie obsługuje edycji oryginalnego obrazu. Wybierz inny model.");
+  }
+  const strictPrompt = preservingEditPrompt(params.prompt, Boolean(params.editMask));
 
-    const formData = new FormData();
-    formData.append("model", params.apiModel);
-    formData.append("prompt", strictPrompt);
-    formData.append("size", getOpenAIImageSize(params.dimensions, params.apiModel));
-    if (!isOpenAIGptImage2Model(params.apiModel)) {
-      formData.append("input_fidelity", "high");
-    }
-    formData.append("output_format", "png");
-    formData.append("quality", getOpenAIImageQuality(params.apiModel));
-    formData.append(
-      "image[]",
-      new Blob([base64ToUint8Array(params.imageBase64)], { type: params.imageMimeType }),
-      `source.${getFileExtensionFromMimeType(params.imageMimeType)}`
-    );
+  const formData = new FormData();
+  formData.append("model", params.apiModel);
+  formData.append("prompt", strictPrompt);
+  formData.append("size", params.editMask ? "auto" : getOpenAIImageSize(params.dimensions, params.apiModel));
+  if (params.apiModel === "gpt-image-1" || params.apiModel === "gpt-image-1.5") {
+    formData.append("input_fidelity", "high");
+  }
+  formData.append("output_format", "png");
+  formData.append("quality", getOpenAIImageQuality(params.apiModel));
+  formData.append(
+    "image[]",
+    new Blob([base64ToUint8Array(params.editMask?.sourceBase64 ?? params.imageBase64)], { type: params.editMask ? "image/png" : params.imageMimeType }),
+    params.editMask ? "source.png" : `source.${getFileExtensionFromMimeType(params.imageMimeType)}`
+  );
 
-    const editResponse = await fetch("https://api.openai.com/v1/images/edits", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${params.apiKey}` },
-      body: formData,
-    });
-
-    if (!editResponse.ok) {
-      await handleOpenAIImageError(editResponse, {
-        apiModel: params.apiModel,
-        referenceCount: 1,
-        operation: "edit",
-      });
-    }
-
-    const editData = await editResponse.json();
-    const resultBase64 = editData.data?.[0]?.b64_json;
-    if (!resultBase64) throw new Error("GENERATION_FAILED");
-
-    return { base64: resultBase64, mimeType: "image/png" };
+  if (params.editMask) {
+    formData.append("mask", new Blob([base64ToUint8Array(params.editMask.alphaMaskBase64)], { type: "image/png" }), "mask.png");
   }
 
-  const editPrompt = params.maskBase64
-    ? `Based on the provided image, modify ONLY the areas marked in red in the mask image according to this instruction: "${params.prompt}". Generate a complete new image that looks like the original but with the requested changes applied to the masked areas.`
-    : `Based on the provided image, apply only the explicitly requested edit: "${params.prompt}". Preserve the original composition, framing, colors, layout, proportions, style, background, and every unchanged element exactly as in the source image. Generate the complete edited image.`;
+  const editResponse = await fetch("https://api.openai.com/v1/images/edits", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${params.apiKey}` },
+    body: formData,
+  });
 
-  const messages = [
-    {
-      role: "user",
-      content: [
-        { type: "text", text: editPrompt },
-        { type: "image_url", image_url: { url: `data:${params.imageMimeType};base64,${params.imageBase64}` } },
-        ...(params.maskBase64
-          ? [{ type: "image_url", image_url: { url: `data:image/png;base64,${params.maskBase64}` } }]
-          : []),
-      ],
-    },
-  ];
-
-  const maxRetries = 3;
-  let description = "";
-
-  for (let attempt = 0; attempt < maxRetries; attempt += 1) {
-    const visionResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${params.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are an image editing assistant. Describe in detail what the final edited image should look like, incorporating the user's edit request. Be very specific about colors, composition, objects, and style. Output ONLY the image description, nothing else.",
-          },
-          ...messages,
-        ],
-        max_tokens: 500,
-      }),
-    });
-
-    if (visionResponse.ok) {
-      const visionData = await visionResponse.json();
-      description = String(visionData.choices?.[0]?.message?.content || "");
-      break;
-    }
-
-    if (visionResponse.status === 429 && attempt < maxRetries - 1) {
-      await sleep((attempt + 1) * 10000);
-      continue;
-    }
-
-    if (visionResponse.status === 429) throw new Error("RATE_LIMIT");
-    throw new Error("GENERATION_FAILED");
-  }
-
-  if (!description) {
-    throw new Error("GENERATION_FAILED");
-  }
-
-  for (let attempt = 0; attempt < maxRetries; attempt += 1) {
-    const response = await fetch("https://api.openai.com/v1/images/generations", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${params.apiKey}`,
-      },
-      body: JSON.stringify(
-        isOpenAIGptImageModel(params.apiModel)
-          ? {
-              model: params.apiModel,
-              prompt: `${TEXT_RENDERING_RULES} ${description}`,
-              size: "auto",
-              output_format: "png",
-              quality: getOpenAIImageQuality(params.apiModel),
-            }
-          : {
-              model: params.apiModel,
-              prompt: `${TEXT_RENDERING_RULES} ${description}`,
-              n: 1,
-              size: "1024x1024",
-              response_format: "b64_json",
-              quality: "hd",
-            }
-      ),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      const resultBase64 = data.data?.[0]?.b64_json;
-      if (!resultBase64) throw new Error("GENERATION_FAILED");
-
-      return { base64: resultBase64, mimeType: "image/png" };
-    }
-
-    if (response.status === 429 && attempt < maxRetries - 1) {
-      await sleep((attempt + 1) * 10000);
-      continue;
-    }
-
-    await handleOpenAIImageError(response, {
+  if (!editResponse.ok) {
+    await handleOpenAIImageError(editResponse, {
       apiModel: params.apiModel,
-      referenceCount: params.maskBase64 ? 2 : 1,
-      operation: params.maskBase64 ? "edit-mask-generate" : "edit-fallback-generate",
+      referenceCount: 1,
+      operation: "edit",
     });
   }
 
-  throw new Error("GENERATION_FAILED");
+  const editData = await editResponse.json();
+  const resultBase64 = editData.data?.[0]?.b64_json;
+  if (!resultBase64) throw new Error("GENERATION_FAILED");
+
+  return { base64: resultBase64, mimeType: "image/png" };
 };
 
-const editWithGemini = async (params: {
+export const editWithGemini = async (params: {
   prompt: string;
   imageBase64: string;
   imageMimeType: string;
-  maskBase64?: string;
+  editMask?: PreparedEditMask;
   dimensions?: string;
   apiModel: string;
   apiKey: string | null;
 }): Promise<GeneratedImageResult> => {
   if (!params.apiKey) throw new Error("AI_SERVICE_UNAVAILABLE");
-
   const parts: Array<Record<string, unknown>> = [
-    { inlineData: { mimeType: params.imageMimeType, data: params.imageBase64 } },
+    { inlineData: { mimeType: params.editMask ? "image/png" : params.imageMimeType, data: params.editMask?.sourceBase64 ?? params.imageBase64 } },
   ];
-
-  if (params.maskBase64) {
-    parts.push({ inlineData: { mimeType: "image/png", data: params.maskBase64 } });
-    parts.push({
-      text: `I'm providing two images: the first is the original image, and the second is a mask where RED areas indicate the regions I want to modify. Please edit ONLY the red-masked areas of the original image according to this instruction: "${params.prompt}". Keep everything outside the red mask exactly the same. Return the complete edited image.`,
-    });
-  } else {
-    parts.push({
-      text: `Edit this image according to the following instruction: "${params.prompt}". Apply only the explicitly requested change. OUTPUT FORMAT OVERRIDE: ignore every format, aspect ratio, resolution, orientation, or crop instruction inside the edit prompt. Use only the selected ${getImageAspectRatio(params.dimensions)} format (${params.dimensions || "1024x1024"}). Recompose the complete image natively for that selected format when needed, keeping every important element fully visible with safe margins. Do not crop or cut off any content. Keep the colors, line thickness, style, background, and every unchanged element exactly the same. Return the complete edited image.`,
-    });
+  if (params.editMask) {
+    parts.push({ inlineData: { mimeType: "image/png", data: params.editMask.redMaskBase64 } });
   }
+  parts.push({ text: [
+    preservingEditPrompt(params.prompt, Boolean(params.editMask)),
+    params.editMask
+      ? "The first image is the original. The second is a red-on-white mask: edit only RED regions of the FIRST image. White regions are locked. Return the edited original at its original aspect ratio, with no crop, padding or repositioning."
+      : params.dimensions
+        ? "Use the selected " + getImageAspectRatio(params.dimensions) + " output format, keeping all important content visible."
+        : "Keep the original canvas and aspect ratio.",
+    "Return the complete edited image.",
+  ].join(" ") });
 
   const body = JSON.stringify({
     contents: [{ role: "user", parts }],
@@ -1400,7 +1294,7 @@ const editWithGemini = async (params: {
   if (!response.ok) {
     await handleGeminiImageError(response, {
       apiModel: params.apiModel,
-      referenceCount: params.maskBase64 ? 2 : 1,
+      referenceCount: params.editMask ? 2 : 1,
       operation: "edit",
     });
   }
@@ -1642,7 +1536,7 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
   try {
     const user = request.authUser!;
     const body = (request.body || {}) as EditImageBody;
-    const prompt = typeof body.prompt === "string" ? body.prompt.trim() : "";
+    const prompt = badgeEditInstruction(body.badgeEdit, typeof body.prompt === "string" ? body.prompt.trim() : "");
     const imageBase64 = typeof body.imageBase64 === "string" ? body.imageBase64 : "";
     const imageMimeType =
       (typeof body.imageMimeType === "string" && body.imageMimeType) ||
@@ -1663,6 +1557,8 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
     }
     validateBase64ImageInput(imageBase64);
     if (maskBase64) validateBase64ImageInput(maskBase64);
+    if (body.badgeEdit !== undefined && !maskBase64) throw new ImageEditInputError("Zaznacz pędzlem napis lub element do zmiany.");
+    const editMask = maskBase64 ? await prepareEditMask(imageBase64, maskBase64) : undefined;
     if (dimensions && !ALLOWED_IMAGE_DIMENSIONS.includes(dimensions as (typeof ALLOWED_IMAGE_DIMENSIONS)[number])) {
       jsonError(response, "Invalid dimensions", 400);
       return;
@@ -1672,6 +1568,9 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
     const modelConfig = await getActiveModelConfig(selectedModelId, "editing");
       const modelProvider = getLegacyProvider(selectedModelId, modelConfig.provider, modelConfig.api_model);
     const apiModel = getLegacyApiModel(selectedModelId, modelConfig.api_model);
+    if (modelProvider === "openai" && !isOpenAIGptImageModel(apiModel) && apiModel !== "chatgpt-image-latest") {
+      throw new ImageEditInputError("Ten model nie obsługuje edycji oryginalnego obrazu. Wybierz inny model.");
+    }
     // Editing cost follows the selected server-side model. A client-controlled
     // tool id must not be able to lower or otherwise override that price.
     const editCost = modelConfig.credit_cost || 50;
@@ -1695,8 +1594,8 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
             prompt,
             imageBase64,
             imageMimeType,
-            maskBase64,
-            dimensions,
+            editMask,
+            dimensions: editMask ? undefined : dimensions,
             apiModel,
             apiKey,
           })
@@ -1704,20 +1603,23 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
             prompt,
             imageBase64,
             imageMimeType,
-            maskBase64,
-            dimensions,
+            editMask,
+            dimensions: editMask ? undefined : dimensions,
             apiModel,
             apiKey,
           });
 
+    const badgeAction = (body.badgeEdit as { action?: string } | undefined)?.action;
+    const preserveAlpha = badgeAction === "replace-text" || badgeAction === "change-color";
+    const finalResult = editMask ? await applyEditMask(result.base64, editMask, preserveAlpha) : result;
     const saved = await saveGeneratedGraphicToStorage({
       userId: user.id,
-      base64: result.base64,
-      mimeType: result.mimeType,
+      base64: finalResult.base64,
+      mimeType: finalResult.mimeType,
       prompt: `[Edycja] ${prompt}`,
       style: "realistic",
       type: "edited",
-      dimensions: dimensions ?? null,
+      dimensions: editMask ? null : dimensions ?? null,
       parentGraphicId: body.parentGraphicId ?? null,
     });
 
