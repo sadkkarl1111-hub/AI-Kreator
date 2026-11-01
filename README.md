@@ -64,6 +64,19 @@ Po zmianie grafiki opublikuj nową wersję katalogu, aby zachować wcześniej ud
 Normalny build korzysta z gotowych plików. Przy wdrożeniu nowej trasy trzeba także
 zaktualizować generowane HTML `_seo/`, mapę strony i reguły Apache zgodnie z `vps/README.md`.
 
+## Kolekcja badge’ów sprzedażowych
+
+`/tools/badges` zawiera dodatkowo 144 autorskie badge’e: po 48 gwarancji,
+bonusów i elementów sprzedażowych. Każdy z 24 motywów ma sześć stylów i palet.
+Biblioteka pozwala łączyć wyszukiwanie, kategorię, styl i kolor.
+Nowe elementy są też dostępne w karuzelach i panelu zarządzania badge’ami.
+
+Źródła SVG oraz PNG 1000×1000 z przezroczystym tłem:
+`public/badges/sales-v1/`. Katalog: `src/data/sales-badges.json`.
+Odtwarzanie: `node scripts/generate-sales-badges.mjs` (Sharp).
+Wdrożenie wymaga także skopiowania `dist/badges/` do publicznego katalogu serwera.
+Zachowuj starsze adresy plików. Ustawienia ukrywania i dostępu pozostają w istniejącym API.
+
 ## Wymagane klucze API
 
 - `OPENAI_API_KEY`

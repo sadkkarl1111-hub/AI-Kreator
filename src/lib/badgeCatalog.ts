@@ -1,6 +1,7 @@
 import { WORK_BADGES } from './workBadges';
 import { PREMIUM_BADGES } from './premiumBadges';
 import { BONUS_BADGES } from './bonusBadges';
+import salesBadges from '@/data/sales-badges.json';
 import badge5Stars from '@/assets/badges/badge-5stars.webp';
 import badgeBestPrice from '@/assets/badges/badge-bestprice.webp';
 import badgeBestQuality from '@/assets/badges/badge-bestquality.webp';
@@ -42,6 +43,8 @@ export type BadgeCatalogItem = {
   category: string;
   src: string;
   addedAt?: string;
+  style?: string;
+  color?: string;
 };
 
 export const BADGE_CATALOG: BadgeCatalogItem[] = [
@@ -81,4 +84,5 @@ export const BADGE_CATALOG: BadgeCatalogItem[] = [
   ...PREMIUM_BADGES,
   ...BONUS_BADGES,
   ...WORK_BADGES,
+  ...salesBadges,
 ];

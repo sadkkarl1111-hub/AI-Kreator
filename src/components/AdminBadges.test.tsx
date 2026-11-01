@@ -2,6 +2,7 @@ import { cleanup, render, screen, within } from '@testing-library/react';
 import { afterEach, expect, it, vi } from 'vitest';
 import { AdminBadges } from './AdminBadges';
 import { BADGE_CATALOG } from '@/lib/badgeCatalog';
+import { newestBadgesFirst } from '@/lib/badgeLibraryView';
 import { vpsFetch } from '@/lib/vpsApi';
 vi.mock('@/lib/vpsApi', () => ({ vpsFetch: vi.fn() }));
 vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
@@ -12,7 +13,7 @@ it('lists the entire real catalog with latest releases first, retaining admin vi
   const image = await screen.findByAltText('Gwarancja zwrotu 90 dni — bordo');
   const images = container.querySelectorAll('img');
   expect(images).toHaveLength(BADGE_CATALOG.length);
-  expect(images[0]).toHaveAttribute('alt', 'Pakiet bonusów — zielony zestaw');
+  expect(images[0]).toHaveAttribute('alt', newestBadgesFirst(BADGE_CATALOG)[0].name);
   const card = image.parentElement!.parentElement!;
   expect(within(card).getByText('Ukryty')).toBeInTheDocument();
   expect(within(card).getByRole('button', { name: 'Przywróć' })).toBeEnabled();

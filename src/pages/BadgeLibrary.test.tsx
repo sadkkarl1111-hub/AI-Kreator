@@ -35,6 +35,30 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.resetAllMocks(); vi.restoreAllMocks(); });
 
+it('combines category, Polish search, style and color and resets all filters', async () => {
+  const extra = [
+    { id: 'gold', name: 'Gwarancja 30 dni złota', category: 'Gwarancje', description: 'Pieczęć', style: 'Złota pieczęć', color: 'Złoty', src: '/gold.png' },
+    { id: 'mint', name: 'Gwarancja 30 dni miętowa', category: 'Gwarancje', description: 'Prosta', style: 'Minimalistyczny', color: 'Miętowy', src: '/mint.png' },
+    { id: 'bonus', name: 'Bonus złoty', category: 'Bonusy', description: 'Pieczęć', style: 'Złota pieczęć', color: 'Złoty', src: '/bonus.png' },
+    { id: 'hidden-style', name: 'Ukryta nowa', category: 'Bonusy', description: '', style: 'Ukryty styl', color: 'Ukryty kolor', src: '/hidden.png' },
+  ];
+  vi.mocked(vpsPublicFetch).mockResolvedValue({ ...library, hiddenKeys: ['hidden', 'hidden-style'], badges: extra });
+  openLibrary(); await screen.findByText('Gwarancja 30 dni złota');
+  expect(screen.queryByRole('option', { name: 'Ukryty styl' })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Gwarancje' }));
+  fireEvent.change(screen.getByPlaceholderText("Szukaj badge'ów..."), { target: { value: 'gwarancja 30' } });
+  fireEvent.change(screen.getByLabelText('Styl badge’ów'), { target: { value: 'Złota pieczęć' } });
+  expect(screen.getAllByRole('img')).toHaveLength(1);
+  await waitFor(() => expect(screen.getByAltText('Gwarancja 30 dni złota')).toBeVisible());
+  fireEvent.change(screen.getByLabelText('Kolor badge’ów'), { target: { value: 'Miętowy' } });
+  expect(screen.queryAllByRole('img')).toHaveLength(0);
+  fireEvent.click(screen.getByRole('button', { name: 'Pokaż wszystkie badge’e' }));
+  expect(screen.getAllByRole('img')).toHaveLength(5);
+  expect(screen.getByLabelText('Styl badge’ów')).toHaveValue('');
+  expect(screen.getByLabelText('Kolor badge’ów')).toHaveValue('');
+  expect(screen.queryByAltText('Ukryta nowa')).not.toBeInTheDocument();
+});
+
 it.each([false, true])('honors hidden badges and package restrictions for signed-in=%s', async signedIn => {
   if (signedIn) auth.user = { id: 'user' };
   openLibrary();

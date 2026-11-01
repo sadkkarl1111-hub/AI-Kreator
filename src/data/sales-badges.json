@@ -1,0 +1,1442 @@
+[
+  {
+    "id": "sales-v1-return14-seal",
+    "name": "Gwarancja zwrotu 14 dni — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-return14-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return14-shield",
+    "name": "Gwarancja zwrotu 14 dni — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-return14-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return14-minimal",
+    "name": "Gwarancja zwrotu 14 dni — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-return14-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return14-sticker",
+    "name": "Gwarancja zwrotu 14 dni — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-return14-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return14-neon",
+    "name": "Gwarancja zwrotu 14 dni — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-return14-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return14-stamp",
+    "name": "Gwarancja zwrotu 14 dni — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-return14-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return30-seal",
+    "name": "Gwarancja zwrotu 30 dni — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-return30-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return30-shield",
+    "name": "Gwarancja zwrotu 30 dni — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-return30-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return30-minimal",
+    "name": "Gwarancja zwrotu 30 dni — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-return30-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return30-sticker",
+    "name": "Gwarancja zwrotu 30 dni — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-return30-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return30-neon",
+    "name": "Gwarancja zwrotu 30 dni — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-return30-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return30-stamp",
+    "name": "Gwarancja zwrotu 30 dni — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-return30-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return60-seal",
+    "name": "Gwarancja zwrotu 60 dni — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-return60-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return60-shield",
+    "name": "Gwarancja zwrotu 60 dni — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-return60-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return60-minimal",
+    "name": "Gwarancja zwrotu 60 dni — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-return60-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return60-sticker",
+    "name": "Gwarancja zwrotu 60 dni — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-return60-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return60-neon",
+    "name": "Gwarancja zwrotu 60 dni — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-return60-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return60-stamp",
+    "name": "Gwarancja zwrotu 60 dni — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-return60-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return90-seal",
+    "name": "Gwarancja zwrotu 90 dni — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-return90-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return90-shield",
+    "name": "Gwarancja zwrotu 90 dni — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-return90-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return90-minimal",
+    "name": "Gwarancja zwrotu 90 dni — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-return90-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return90-sticker",
+    "name": "Gwarancja zwrotu 90 dni — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-return90-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return90-neon",
+    "name": "Gwarancja zwrotu 90 dni — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-return90-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-return90-stamp",
+    "name": "Gwarancja zwrotu 90 dni — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-return90-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-year-seal",
+    "name": "Rok gwarancji — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-year-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-year-shield",
+    "name": "Rok gwarancji — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-year-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-year-minimal",
+    "name": "Rok gwarancji — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-year-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-year-sticker",
+    "name": "Rok gwarancji — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-year-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-year-neon",
+    "name": "Rok gwarancji — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-year-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-year-stamp",
+    "name": "Rok gwarancji — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-year-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-satisfaction-seal",
+    "name": "Gwarancja satysfakcji — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-satisfaction-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-satisfaction-shield",
+    "name": "Gwarancja satysfakcji — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-satisfaction-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-satisfaction-minimal",
+    "name": "Gwarancja satysfakcji — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-satisfaction-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-satisfaction-sticker",
+    "name": "Gwarancja satysfakcji — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-satisfaction-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-satisfaction-neon",
+    "name": "Gwarancja satysfakcji — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-satisfaction-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-satisfaction-stamp",
+    "name": "Gwarancja satysfakcji — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-satisfaction-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-support-seal",
+    "name": "Gwarancja wsparcia — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-support-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-support-shield",
+    "name": "Gwarancja wsparcia — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-support-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-support-minimal",
+    "name": "Gwarancja wsparcia — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-support-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-support-sticker",
+    "name": "Gwarancja wsparcia — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-support-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-support-neon",
+    "name": "Gwarancja wsparcia — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-support-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-support-stamp",
+    "name": "Gwarancja wsparcia — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-support-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-secure-seal",
+    "name": "Bezpieczne zakupy — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-secure-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-secure-shield",
+    "name": "Bezpieczne zakupy — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-secure-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-secure-minimal",
+    "name": "Bezpieczne zakupy — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-secure-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-secure-sticker",
+    "name": "Bezpieczne zakupy — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-secure-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-secure-neon",
+    "name": "Bezpieczne zakupy — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-secure-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-secure-stamp",
+    "name": "Bezpieczne zakupy — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-secure-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-pdf-seal",
+    "name": "Ebook PDF w bonusie — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-pdf-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-pdf-shield",
+    "name": "Ebook PDF w bonusie — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-pdf-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-pdf-minimal",
+    "name": "Ebook PDF w bonusie — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-pdf-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-pdf-sticker",
+    "name": "Ebook PDF w bonusie — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-pdf-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-pdf-neon",
+    "name": "Ebook PDF w bonusie — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-pdf-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-pdf-stamp",
+    "name": "Ebook PDF w bonusie — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-pdf-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-video-seal",
+    "name": "Bonus kurs wideo — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-video-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-video-shield",
+    "name": "Bonus kurs wideo — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-video-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-video-minimal",
+    "name": "Bonus kurs wideo — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-video-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-video-sticker",
+    "name": "Bonus kurs wideo — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-video-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-video-neon",
+    "name": "Bonus kurs wideo — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-video-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-video-stamp",
+    "name": "Bonus kurs wideo — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-video-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-templates-seal",
+    "name": "Pakiet szablonów gratis — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-templates-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-templates-shield",
+    "name": "Pakiet szablonów gratis — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-templates-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-templates-minimal",
+    "name": "Pakiet szablonów gratis — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-templates-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-templates-sticker",
+    "name": "Pakiet szablonów gratis — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-templates-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-templates-neon",
+    "name": "Pakiet szablonów gratis — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-templates-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-templates-stamp",
+    "name": "Pakiet szablonów gratis — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-templates-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-checklist-seal",
+    "name": "Bonus checklista — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-checklist-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-checklist-shield",
+    "name": "Bonus checklista — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-checklist-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-checklist-minimal",
+    "name": "Bonus checklista — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-checklist-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-checklist-sticker",
+    "name": "Bonus checklista — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-checklist-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-checklist-neon",
+    "name": "Bonus checklista — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-checklist-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-checklist-stamp",
+    "name": "Bonus checklista — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-checklist-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-consult-seal",
+    "name": "Konsultacja w bonusie — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-consult-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-consult-shield",
+    "name": "Konsultacja w bonusie — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-consult-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-consult-minimal",
+    "name": "Konsultacja w bonusie — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-consult-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-consult-sticker",
+    "name": "Konsultacja w bonusie — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-consult-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-consult-neon",
+    "name": "Konsultacja w bonusie — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-consult-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-consult-stamp",
+    "name": "Konsultacja w bonusie — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-consult-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-community-seal",
+    "name": "Dostęp do grupy — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-community-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-community-shield",
+    "name": "Dostęp do grupy — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-community-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-community-minimal",
+    "name": "Dostęp do grupy — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-community-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-community-sticker",
+    "name": "Dostęp do grupy — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-community-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-community-neon",
+    "name": "Dostęp do grupy — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-community-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-community-stamp",
+    "name": "Dostęp do grupy — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-community-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-bundle-seal",
+    "name": "Pakiet 5 bonusów — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-bundle-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-bundle-shield",
+    "name": "Pakiet 5 bonusów — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-bundle-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-bundle-minimal",
+    "name": "Pakiet 5 bonusów — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-bundle-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-bundle-sticker",
+    "name": "Pakiet 5 bonusów — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-bundle-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-bundle-neon",
+    "name": "Pakiet 5 bonusów — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-bundle-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-bundle-stamp",
+    "name": "Pakiet 5 bonusów — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-bundle-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-updates-seal",
+    "name": "Aktualizacje gratis — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-updates-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-updates-shield",
+    "name": "Aktualizacje gratis — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-updates-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-updates-minimal",
+    "name": "Aktualizacje gratis — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-updates-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-updates-sticker",
+    "name": "Aktualizacje gratis — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-updates-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-updates-neon",
+    "name": "Aktualizacje gratis — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-updates-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-updates-stamp",
+    "name": "Aktualizacje gratis — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Bonusy",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-updates-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-offer-seal",
+    "name": "Oferta limitowana — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-offer-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-offer-shield",
+    "name": "Oferta limitowana — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-offer-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-offer-minimal",
+    "name": "Oferta limitowana — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-offer-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-offer-sticker",
+    "name": "Oferta limitowana — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-offer-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-offer-neon",
+    "name": "Oferta limitowana — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-offer-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-offer-stamp",
+    "name": "Oferta limitowana — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-offer-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-early-seal",
+    "name": "Cena przedsprzedażowa — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-early-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-early-shield",
+    "name": "Cena przedsprzedażowa — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-early-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-early-minimal",
+    "name": "Cena przedsprzedażowa — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-early-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-early-sticker",
+    "name": "Cena przedsprzedażowa — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-early-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-early-neon",
+    "name": "Cena przedsprzedażowa — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-early-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-early-stamp",
+    "name": "Cena przedsprzedażowa — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-early-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-best-seal",
+    "name": "Bestseller — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-best-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-best-shield",
+    "name": "Bestseller — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-best-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-best-minimal",
+    "name": "Bestseller — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-best-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-best-sticker",
+    "name": "Bestseller — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-best-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-best-neon",
+    "name": "Bestseller — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-best-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-best-stamp",
+    "name": "Bestseller — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-best-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-new-seal",
+    "name": "Nowość w ofercie — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-new-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-new-shield",
+    "name": "Nowość w ofercie — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-new-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-new-minimal",
+    "name": "Nowość w ofercie — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-new-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-new-sticker",
+    "name": "Nowość w ofercie — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-new-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-new-neon",
+    "name": "Nowość w ofercie — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-new-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-new-stamp",
+    "name": "Nowość w ofercie — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-new-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-pack-seal",
+    "name": "W pakiecie taniej — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-pack-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-pack-shield",
+    "name": "W pakiecie taniej — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-pack-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-pack-minimal",
+    "name": "W pakiecie taniej — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-pack-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-pack-sticker",
+    "name": "W pakiecie taniej — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-pack-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-pack-neon",
+    "name": "W pakiecie taniej — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-pack-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-pack-stamp",
+    "name": "W pakiecie taniej — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-pack-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-two-seal",
+    "name": "Kup 2 zapłać za 1 — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-two-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-two-shield",
+    "name": "Kup 2 zapłać za 1 — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-two-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-two-minimal",
+    "name": "Kup 2 zapłać za 1 — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-two-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-two-sticker",
+    "name": "Kup 2 zapłać za 1 — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-two-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-two-neon",
+    "name": "Kup 2 zapłać za 1 — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-two-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-two-stamp",
+    "name": "Kup 2 zapłać za 1 — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-two-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-discount-seal",
+    "name": "Rabat minus 20 procent — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-discount-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-discount-shield",
+    "name": "Rabat minus 20 procent — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-discount-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-discount-minimal",
+    "name": "Rabat minus 20 procent — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-discount-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-discount-sticker",
+    "name": "Rabat minus 20 procent — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-discount-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-discount-neon",
+    "name": "Rabat minus 20 procent — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-discount-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-discount-stamp",
+    "name": "Rabat minus 20 procent — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-discount-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-delivery-seal",
+    "name": "Darmowa dostawa — złota pieczęć",
+    "description": "Złota pieczęć · Złoty / granatowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Złota pieczęć",
+    "color": "Złoty / granatowy",
+    "src": "/badges/sales-v1/sales-v1-delivery-seal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-delivery-shield",
+    "name": "Darmowa dostawa — metaliczna tarcza",
+    "description": "Metaliczna tarcza · Srebrny / niebieski · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Metaliczna tarcza",
+    "color": "Srebrny / niebieski",
+    "src": "/badges/sales-v1/sales-v1-delivery-shield.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-delivery-minimal",
+    "name": "Darmowa dostawa — minimalistyczny",
+    "description": "Minimalistyczny · Zielony / miętowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Minimalistyczny",
+    "color": "Zielony / miętowy",
+    "src": "/badges/sales-v1/sales-v1-delivery-minimal.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-delivery-sticker",
+    "name": "Darmowa dostawa — kolorowa naklejka",
+    "description": "Kolorowa naklejka · Fioletowy / żółty · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Kolorowa naklejka",
+    "color": "Fioletowy / żółty",
+    "src": "/badges/sales-v1/sales-v1-delivery-sticker.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-delivery-neon",
+    "name": "Darmowa dostawa — neon",
+    "description": "Neon · Czarny / turkusowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Neon",
+    "color": "Czarny / turkusowy",
+    "src": "/badges/sales-v1/sales-v1-delivery-neon.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  },
+  {
+    "id": "sales-v1-delivery-stamp",
+    "name": "Darmowa dostawa — stempel retro",
+    "description": "Stempel retro · Czerwony / kremowy · PNG 1000 px, przezroczyste tło",
+    "category": "Elementy sprzedażowe",
+    "style": "Stempel retro",
+    "color": "Czerwony / kremowy",
+    "src": "/badges/sales-v1/sales-v1-delivery-stamp.png",
+    "addedAt": "2026-11-01T00:00:00Z"
+  }
+]

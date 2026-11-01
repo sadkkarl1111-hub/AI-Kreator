@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { AppLayout } from '@/components/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -22,6 +22,8 @@ type BadgeItem = {
   category: string;
   src: string;
   addedAt?: string;
+  style?: string;
+  color?: string;
 };
 
 type BadgeAccessEntry = {
@@ -50,6 +52,8 @@ const BadgeLibrary = () => {
   const view = params.get('view');
   const onlyFavorites = view === 'favorites', onlyNew = view === 'new';
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeStyle, setActiveStyle] = useState('');
+  const [activeColor, setActiveColor] = useState('');
   const [allBadges, setAllBadges] = useState<BadgeItem[]>([]);
   const [loadingBadges, setLoadingBadges] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -104,6 +108,8 @@ const BadgeLibrary = () => {
   }, []);
 
   const categories = [...new Set(allBadges.map(b => b.category))];
+  const styles = [...new Set(allBadges.map(b => b.style).filter(Boolean))];
+  const colors = [...new Set(allBadges.map(b => b.color).filter(Boolean))];
 
   const isBadgeLocked = (badgeId: string): boolean => {
     const accessEntries = badgeAccess.filter(a => a.badge_key === badgeId);
@@ -120,14 +126,14 @@ const BadgeLibrary = () => {
   };
 
   const filtered = allBadges.filter(b => {
-    const matchSearch = normalizeSvgSearch(search).split(/\s+/).every(word => normalizeSvgSearch(`${b.name} ${b.description} ${b.category}`).includes(word));
+    const matchSearch = normalizeSvgSearch(search).split(/\s+/).every(word => normalizeSvgSearch(`${b.name} ${b.description} ${b.category} ${b.style || ''} ${b.color || ''}`).includes(word));
     const matchCat = !activeCategory || b.category === activeCategory;
-    return matchSearch && matchCat && (!onlyFavorites || favorites.has(b.id)) && (!onlyNew || badgeIsNew(b));
+    return matchSearch && matchCat && (!activeStyle || b.style === activeStyle) && (!activeColor || b.color === activeColor) && (!onlyFavorites || favorites.has(b.id)) && (!onlyNew || badgeIsNew(b));
   });
   const newCount = allBadges.filter(badge => badgeIsNew(badge)).length;
   const chooseView = (next: 'all' | 'new' | 'favorites') => {
     setParams(next === 'all' ? {} : { view: next }, { replace: true });
-    setSearch(''); setActiveCategory(null);
+    setSearch(''); setActiveCategory(null); setActiveStyle(''); setActiveColor('');
   };
 
   const handleDownload = async (badge: BadgeItem) => {
@@ -184,7 +190,7 @@ const BadgeLibrary = () => {
           <Button variant={onlyNew ? 'default' : 'outline'} size="sm" aria-pressed={onlyNew} onClick={() => chooseView(onlyNew ? 'all' : 'new')}><Sparkles className="mr-1 h-4 w-4"/>Nowe<span aria-hidden="true" className="ml-1">({newCount})</span></Button>
           <Button variant={onlyFavorites ? 'default' : 'outline'} size="sm" aria-pressed={onlyFavorites} onClick={() => chooseView(onlyFavorites ? 'all' : 'favorites')}><Star className="mr-1 h-4 w-4"/>Ulubione</Button>
           <Button
-            variant={!activeCategory && !onlyFavorites && !onlyNew && !search ? 'default' : 'outline'}
+            variant={!activeCategory && !activeStyle && !activeColor && !onlyFavorites && !onlyNew && !search ? 'default' : 'outline'}
             size="sm"
             onClick={() => chooseView('all')}
           >
@@ -206,9 +212,14 @@ const BadgeLibrary = () => {
           ))}
         </div>
 
+        {(styles.length > 0 || colors.length > 0) && <div className="grid gap-3 sm:grid-cols-2" aria-label="Wygląd badge’ów">
+          <label className="min-w-0 space-y-1 text-sm font-medium"><span>Styl</span><select aria-label="Styl badge’ów" value={activeStyle} onChange={event => setActiveStyle(event.target.value)} className="h-11 w-full min-w-0 rounded-md border bg-background px-3 text-sm"><option value="">Wszystkie style</option>{styles.map(style => <option key={style} value={style}>{style}</option>)}</select></label>
+          <label className="min-w-0 space-y-1 text-sm font-medium"><span>Kolor</span><select aria-label="Kolor badge’ów" value={activeColor} onChange={event => setActiveColor(event.target.value)} className="h-11 w-full min-w-0 rounded-md border bg-background px-3 text-sm"><option value="">Wszystkie kolory</option>{colors.map(color => <option key={color} value={color}>{color}</option>)}</select></label>
+        </div>}
+
         <p className="text-xs text-muted-foreground">Kliknij gwiazdkę, aby zapisać ulubione na tym urządzeniu. Badge’e wstawisz też w kreatorze karuzel: Media → Badge’e.</p>
 
-        {!loadingBadges && !loadError && <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border bg-card p-3"><p role="status" className="text-sm">W bibliotece: <strong>{allBadges.length}</strong>. Wyświetlono: <strong>{filtered.length}</strong>. <span className="text-muted-foreground">Najnowsze są na początku. Cała lista poniżej.</span></p><div className="flex flex-wrap gap-2">{(search || activeCategory || onlyFavorites || onlyNew) && <Button variant="outline" size="sm" className="h-10" onClick={() => chooseView('all')}>Pokaż wszystkie badge’e</Button>}<Button variant="ghost" size="sm" className="h-10 gap-1" onClick={() => setReloadKey(key => key + 1)}><RefreshCw className="h-4 w-4"/>Odśwież listę</Button></div></div>}
+        {!loadingBadges && !loadError && <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border bg-card p-3"><p role="status" className="text-sm">W bibliotece: <strong>{allBadges.length}</strong>. Wyświetlono: <strong>{filtered.length}</strong>. <span className="text-muted-foreground">Najnowsze są na początku. Cała lista poniżej.</span></p><div className="flex flex-wrap gap-2">{(search || activeCategory || activeStyle || activeColor || onlyFavorites || onlyNew) && <Button variant="outline" size="sm" className="h-10" onClick={() => chooseView('all')}>Pokaż wszystkie badge’e</Button>}<Button variant="ghost" size="sm" className="h-10 gap-1" onClick={() => setReloadKey(key => key + 1)}><RefreshCw className="h-4 w-4"/>Odśwież listę</Button></div></div>}
 
         {loadingBadges && <p role="status" className="text-center text-muted-foreground py-8">Ładowanie badge’ów...</p>}
         {loadError && (
