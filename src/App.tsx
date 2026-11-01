@@ -27,6 +27,7 @@ const StyleTransfer = lazy(() => import("./pages/StyleTransfer"));
 const TextOverlay = lazy(() => import("./pages/TextOverlay"));
 const Collage = lazy(() => import("./pages/Collage"));
 const EmojiLibrary = lazy(() => import("./pages/EmojiLibrary"));
+const GifLibrary = lazy(() => import("./pages/GifLibrary"));
 const BadgeLibrary = lazy(() => import("./pages/BadgeLibrary"));
 const SvgGenerator = lazy(() => import("./pages/SvgGenerator"));
 const SvgLibrary = lazy(() => import("./pages/SvgLibrary"));
@@ -171,6 +172,7 @@ function AppRoutes() {
         <Route path="/tools/text" element={<TextOverlay />} />
         <Route path="/tools/collage" element={<Collage />} />
         <Route path="/tools/emoji" element={<EmojiLibrary />} />
+        <Route path="/tools/gifs" element={<GifLibrary />} />
         <Route path="/tools/badges" element={<BadgeLibrary />} />
         <Route path="/tools/svg-generator" element={<SvgGenerator />} />
         <Route path="/tools/svg-library" element={<SvgLibrary />} />

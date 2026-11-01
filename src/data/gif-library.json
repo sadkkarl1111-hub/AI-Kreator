@@ -1,0 +1,200 @@
+[
+  {
+    "id": "hej",
+    "title": "Hej!",
+    "category": "Pozdrowienia",
+    "keywords": "cześć czesc hello powitanie",
+    "src": "/gifs/v1/hej.gif",
+    "poster": "/gifs/v1/hej.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 95134
+  },
+  {
+    "id": "dzien-dobry",
+    "title": "Dzień dobry!",
+    "category": "Pozdrowienia",
+    "keywords": "dzien dobry rano kawa",
+    "src": "/gifs/v1/dzien-dobry.gif",
+    "poster": "/gifs/v1/dzien-dobry.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 133919
+  },
+  {
+    "id": "dobranoc",
+    "title": "Dobranoc!",
+    "category": "Pozdrowienia",
+    "keywords": "sen noc spij słodkich snów",
+    "src": "/gifs/v1/dobranoc.gif",
+    "poster": "/gifs/v1/dobranoc.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 131413
+  },
+  {
+    "id": "dzieki",
+    "title": "Dzięki!",
+    "category": "Pozdrowienia",
+    "keywords": "dziekuje dziękuję thanks podziękowanie",
+    "src": "/gifs/v1/dzieki.gif",
+    "poster": "/gifs/v1/dzieki.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 105820
+  },
+  {
+    "id": "przytulam",
+    "title": "Przytulam!",
+    "category": "Pozdrowienia",
+    "keywords": "uścisk uscisk wsparcie hug",
+    "src": "/gifs/v1/przytulam.gif",
+    "poster": "/gifs/v1/przytulam.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 121270
+  },
+  {
+    "id": "kawa",
+    "title": "Kawa?",
+    "category": "Pozdrowienia",
+    "keywords": "przerwa kawka spotkanie",
+    "src": "/gifs/v1/kawa.gif",
+    "poster": "/gifs/v1/kawa.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 123841
+  },
+  {
+    "id": "super",
+    "title": "Super!",
+    "category": "Świętowanie",
+    "keywords": "świetnie swietnie sukces",
+    "src": "/gifs/v1/super.gif",
+    "poster": "/gifs/v1/super.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 110877
+  },
+  {
+    "id": "brawo",
+    "title": "Brawo!",
+    "category": "Świętowanie",
+    "keywords": "gratulacje brawa oklaski",
+    "src": "/gifs/v1/brawo.gif",
+    "poster": "/gifs/v1/brawo.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 109385
+  },
+  {
+    "id": "udalo-sie",
+    "title": "Udało się!",
+    "category": "Świętowanie",
+    "keywords": "udalo sukces gotowe zrobione",
+    "src": "/gifs/v1/udalo-sie.gif",
+    "poster": "/gifs/v1/udalo-sie.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 126659
+  },
+  {
+    "id": "sto-lat",
+    "title": "Sto lat!",
+    "category": "Świętowanie",
+    "keywords": "urodziny życzenia zyczenia impreza",
+    "src": "/gifs/v1/sto-lat.gif",
+    "poster": "/gifs/v1/sto-lat.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 110259
+  },
+  {
+    "id": "piateczka",
+    "title": "Piąteczka!",
+    "category": "Świętowanie",
+    "keywords": "piatka piąteczka razem drużyna",
+    "src": "/gifs/v1/piateczka.gif",
+    "poster": "/gifs/v1/piateczka.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 129434
+  },
+  {
+    "id": "lecimy",
+    "title": "Lecimy!",
+    "category": "Świętowanie",
+    "keywords": "start rakieta jazda jedziemy",
+    "src": "/gifs/v1/lecimy.gif",
+    "poster": "/gifs/v1/lecimy.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 120047
+  },
+  {
+    "id": "haha",
+    "title": "Haha!",
+    "category": "Reakcje",
+    "keywords": "śmiech smiech zabawne lol radość",
+    "src": "/gifs/v1/haha.gif",
+    "poster": "/gifs/v1/haha.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 109381
+  },
+  {
+    "id": "wow",
+    "title": "Wow!",
+    "category": "Reakcje",
+    "keywords": "zaskoczenie niesamowite zachwyt",
+    "src": "/gifs/v1/wow.gif",
+    "poster": "/gifs/v1/wow.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 102033
+  },
+  {
+    "id": "kocham-to",
+    "title": "Kocham to!",
+    "category": "Reakcje",
+    "keywords": "miłość milosc love serce",
+    "src": "/gifs/v1/kocham-to.gif",
+    "poster": "/gifs/v1/kocham-to.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 124925
+  },
+  {
+    "id": "jasne",
+    "title": "Jasne!",
+    "category": "Reakcje",
+    "keywords": "tak okej ok zgoda dobrze",
+    "src": "/gifs/v1/jasne.gif",
+    "poster": "/gifs/v1/jasne.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 112554
+  },
+  {
+    "id": "chwila",
+    "title": "Chwila…",
+    "category": "Reakcje",
+    "keywords": "czekaj zaraz moment przerwa",
+    "src": "/gifs/v1/chwila.gif",
+    "poster": "/gifs/v1/chwila.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 120906
+  },
+  {
+    "id": "dasz-rade",
+    "title": "Dasz radę!",
+    "category": "Reakcje",
+    "keywords": "motywacja wsparcie powodzenia dasz rade",
+    "src": "/gifs/v1/dasz-rade.gif",
+    "poster": "/gifs/v1/dasz-rade.png",
+    "width": 360,
+    "height": 280,
+    "bytes": 137752
+  }
+]

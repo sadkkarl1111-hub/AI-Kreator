@@ -11,6 +11,7 @@ import {
   FileText,
   FileType,
   FlipHorizontal2,
+  Film,
   Heart,
   Hexagon,
   Image as ImageIcon,
@@ -41,6 +42,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { vpsPublicFetch } from '@/lib/vpsApi';
 
 const tools = [
+  { to: '/tools/gifs', icon: Film, label: 'Animowane GIF-y', desc: 'Polskie reakcje i pozdrowienia do czatów. Kopiuj linki lub pobieraj animowane pliki GIF.', color: 'from-pink-500 to-violet-600', credits: false },
   { to: '/tools/batch-images', icon: Copy, label: 'Edycja wielu zdjęć', desc: 'Kompresja, zmiana formatu oraz znak wodny z tekstu lub logo dla całej paczki. Pobierz ZIP.', color: 'from-cyan-500 to-blue-600', credits: false },
   { to: '/tools/carousel', icon: LayoutGrid, label: 'Kreator karuzel', desc: 'Dodaj logo marki, tła i style: gazeta, 3D, magazyn. Pobierz slajdy jako PNG, ZIP lub PDF.', color: 'from-violet-500 to-indigo-600', credits: false },
   { to: '/tools/print-preparation', icon: FileText, label: 'Przygotowanie do druku', desc: 'Ustaw rozmiar w milimetrach, spady i znaczniki cięcia. Sprawdź jakość i pobierz PDF.', color: 'from-sky-500 to-teal-600', credits: false },

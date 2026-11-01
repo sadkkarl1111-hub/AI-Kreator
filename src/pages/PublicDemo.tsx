@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Box, Image as ImageIcon, Megaphone, PenLine, Sparkles, Wand2, X } from 'lucide-react';
+import { ArrowRight, Box, Film, Image as ImageIcon, Megaphone, PenLine, Sparkles, Wand2, X } from 'lucide-react';
 import { AppLayout } from '@/components/AppLayout';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
@@ -121,10 +121,16 @@ const PublicDemo = () => {
                 Darmowe narzędzia są dostępne od razu
               </p>
               <p className="text-sm text-muted-foreground">
-                Możesz tworzyć prompty do reklam i mockupów, kadrować, kompresować, konwertować formaty, robić QR, PDF, mockupy i resize pod social media.
+                Pobieraj animowane GIF-y do czatów, twórz prompty do reklam i mockupów, kadruj, kompresuj i konwertuj grafiki. Bezpłatnie i od razu.
               </p>
             </div>
-            <div className="grid gap-2 sm:grid-cols-3 md:w-auto">
+            <div className="grid gap-2 sm:grid-cols-2 md:w-auto">
+              <Link to="/tools/gifs">
+                <Button variant="outline" className="w-full gap-2">
+                  <Film className="h-4 w-4" />
+                  Animowane GIF-y
+                </Button>
+              </Link>
               <Link to="/tools/prompt-generator">
                 <Button variant="outline" className="w-full gap-2">
                   <PenLine className="h-4 w-4" />

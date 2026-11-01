@@ -43,6 +43,18 @@ npm run dev
 .\scripts\deploy-vps.ps1 -IdentityFile "$env:USERPROFILE\.ssh\id_ed25519" -RestartBackend -ReloadNginx
 ```
 
+## Darmowa galeria GIF-ów
+
+`/tools/gifs` udostępnia 18 autorskich animacji z polskimi napisami, wyszukiwarkę,
+kategorie, kopiowanie publicznych linków i pobieranie plików. Nie wymaga konta ani API.
+Podglądy można zatrzymać; preferencja ograniczenia ruchu w systemie włącza statyczne obrazy.
+
+Pliki są w `public/gifs/v1/`, a katalog w `src/data/gif-library.json`.
+Odtwarzanie kolekcji: `node scripts/generate-gif-library.mjs` (Sharp + gifenc).
+Po zmianie grafiki opublikuj nową wersję katalogu, aby zachować wcześniej udostępnione linki.
+Normalny build korzysta z gotowych plików. Przy wdrożeniu nowej trasy trzeba także
+zaktualizować generowane HTML `_seo/`, mapę strony i reguły Apache zgodnie z `vps/README.md`.
+
 ## Wymagane klucze API
 
 - `OPENAI_API_KEY`
