@@ -113,6 +113,37 @@ Ta kontrola nie obejmowała niezależnej kopii zawartości R2.
 Generowanie nowych ilustracji biblioteki w imagegen nie zmienia lokalizacji,
 z której strona je udostępnia: wybrane PNG są kopiowane do projektu i wdrażane na VPS.
 
+## Gotowe widżety HTML
+
+`/tools/widgets` to darmowy konfigurator bez konta: odliczanie do wydarzenia,
+wolne miejsca i pasek postępu. Podgląd uruchamia dokładnie ten sam samodzielny
+runtime co eksport. Kod nie pobiera bibliotek, fontów ani danych z AI Kreatora.
+Można wkleić kilka bloków na jedną stronę; custom element z Shadow DOM izoluje
+style i stan każdej instancji. „Pobierz plik HTML” daje kompletny dokument.
+Docelowy edytor i polityka CSP muszą pozwalać na własny JavaScript.
+
+Wartości można ustawić ręcznie, zmieniać codziennie o wybranej godzinie,
+rozpisać do 30 etapów z datą albo odczytywać co minutę z własnego adresu HTTPS.
+Harmonogram dzienny liczy dni kalendarzowe w wybranej strefie, także przy
+zmianie czasu; pierwsza zmiana następuje dzień po początku harmonogramu.
+Wynik jest ograniczony do 0–maksimum. Harmonogram nie odczytuje zakupów.
+Licznik czasu korzysta ze stałego terminu i po zakończeniu nie resetuje się.
+Pasek może też pokazywać upływ czasu pomiędzy dwiema datami.
+
+Źródło JSON musi udostępniać liczby `total` i `remaining` (miejsca) albo
+`total` i `current` (postęp). Odczyt wymaga CORS; podgląd w izolowanej ramce
+ma origin `null`, więc publiczny serwer musi pozwalać na odczyt z dowolnego
+origin. Zapytania nie wysyłają cookies ani danych uwierzytelniania.
+Po błędzie zostaje ostatni poprawny odczyt z komunikatem o braku aktualizacji;
+przed pierwszym udanym odczytem wyświetlana jest kreska, nie fikcyjna liczba.
+
+Źródła: `src/pages/EmbedWidgets.tsx`, `src/lib/embedWidgets.ts`,
+`src/lib/embedWidgetRuntime.js`. Runtime jest importowany jako surowy tekst,
+aby pobrany skrypt nie zależał od bundlera. Daty mają jawne strefy IANA;
+nieistniejące godziny blokują eksport, a powtórzona godzina pozwala wybrać
+pierwsze lub drugie wystąpienie. Teksty są renderowane jako tekst, kolory
+ograniczone do HEX. Ruch uwzględnia `prefers-reduced-motion`.
+
 ## Wymagane klucze API
 
 - `OPENAI_API_KEY`

@@ -25,6 +25,7 @@ const page = (path: string, heading: string, description: string): SeoPage => ({
 export const PUBLIC_SEO_PAGES: SeoPage[] = [
   page('/', 'Generator grafik AI i darmowe narzędzia graficzne', 'Twórz grafiki reklamowe i mockupy z AI. Korzystaj z darmowego kreatora karuzel, generatora promptów, ikon i edycji zdjęć online. Generowanie obrazów AI jest płatne.'),
   page('/tools', 'Darmowe narzędzia graficzne online i narzędzia AI', 'Edytuj zdjęcia, twórz karuzele, napisy, kody QR i pliki SVG w przeglądarce. Zobacz darmowe narzędzia oraz funkcje AI rozliczane kredytami.'),
+  page('/tools/widgets', 'Liczniki i paski postępu na stronę — generator kodu HTML', 'Stwórz odliczanie do webinaru, licznik wolnych miejsc i animowany pasek postępu. Ustaw datę, kolory i harmonogram codziennych zmian. Skopiuj gotowy kod HTML.'),
   page('/galeria-publiczna', 'Galeria grafik AI i inspiracje reklamowe', 'Zobacz przykładowe grafiki reklamowe, mockupy i obrazy wygenerowane przez AI. Znajdź inspiracje do własnych reklam i postów w mediach społecznościowych.'),
   page('/tools/carousel', 'Darmowy kreator karuzel na Instagram', 'Twórz karuzele z własnym logo, tekstem, zdjęciami i naklejkami. Wybieraj szablony i pobieraj slajdy jako PNG, ZIP lub PDF. Dodatkowe generowanie AI jest płatne.'),
   page('/tools/prompt-generator', 'Darmowy Generator Promptów Pro do grafik AI', 'Zbuduj prompt do reklamy, mockupu ebooka, okładki, posta lub miniatury YouTube. Generator działa bez kredytów; tworzenie obrazów AI rozliczane jest osobno.'),
