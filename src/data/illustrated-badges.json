@@ -262,5 +262,137 @@
     "color": "Fioletowy / różowy",
     "src": "/badges/illustrated-v1/bonus5-neon.png",
     "addedAt": "2026-11-01T00:02:00Z"
+  },
+  {
+    "id": "webinar-v1-ticket-gold-3d",
+    "name": "Wejściówka na webinar — bilet 3D",
+    "description": "Gotowa wstawka: WEJŚCIÓWKA · NA WEBINAR · przezroczyste tło",
+    "category": "Webinar",
+    "style": "3D",
+    "look": "3d",
+    "color": "Niebieski / złoty",
+    "src": "/badges/webinar-v1/ticket-gold-3d.png",
+    "addedAt": "2026-11-01T00:03:00Z"
+  },
+  {
+    "id": "webinar-v1-reservation-pencil",
+    "name": "Rezerwuj miejsce — szkic ołówkiem",
+    "description": "Gotowa wstawka: REZERWUJ · MIEJSCE · przezroczyste tło",
+    "category": "Webinar",
+    "style": "Ołówkowy",
+    "look": "drawn",
+    "color": "Grafitowy / żółty",
+    "src": "/badges/webinar-v1/reservation-pencil.png",
+    "addedAt": "2026-11-01T00:03:00Z"
+  },
+  {
+    "id": "webinar-v1-webinar-neon",
+    "name": "Wejściówka na webinar — neon",
+    "description": "Gotowa wstawka: WEBINAR · przezroczyste tło",
+    "category": "Webinar",
+    "style": "Neon",
+    "look": "neon",
+    "color": "Fioletowy / różowy",
+    "src": "/badges/webinar-v1/webinar-neon.png",
+    "addedAt": "2026-11-01T00:03:00Z"
+  },
+  {
+    "id": "webinar-v1-reserved-3d",
+    "name": "Miejsce zarezerwowane — karta 3D",
+    "description": "Gotowa wstawka: MIEJSCE · ZAREZERWOWANE · przezroczyste tło",
+    "category": "Webinar",
+    "style": "3D",
+    "look": "3d",
+    "color": "Zielony / złoty",
+    "src": "/badges/webinar-v1/reserved-3d.png",
+    "addedAt": "2026-11-01T00:03:00Z"
+  },
+  {
+    "id": "webinar-v1-refund30-3d",
+    "name": "30 dni na zwrot pieniędzy — 3D",
+    "description": "Gotowa wstawka: 30 DNI · NA ZWROT · przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "3D",
+    "look": "3d",
+    "color": "Zielony / srebrny",
+    "src": "/badges/webinar-v1/refund30-3d.png",
+    "addedAt": "2026-11-01T00:03:00Z"
+  },
+  {
+    "id": "webinar-v1-refund14-pencil",
+    "name": "14 dni na zwrot — szkic ołówkiem",
+    "description": "Gotowa wstawka: 14 DNI · NA ZWROT · przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Ołówkowy",
+    "look": "drawn",
+    "color": "Grafitowy / niebieski",
+    "src": "/badges/webinar-v1/refund14-pencil.png",
+    "addedAt": "2026-11-01T00:03:00Z"
+  },
+  {
+    "id": "webinar-v1-refund100-3d",
+    "name": "100% zwrotu pieniędzy — pieczęć 3D",
+    "description": "Gotowa wstawka: 100% · ZWROTU · przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "3D",
+    "look": "3d",
+    "color": "Czerwony / złoty",
+    "src": "/badges/webinar-v1/refund100-3d.png",
+    "addedAt": "2026-11-01T00:03:00Z"
+  },
+  {
+    "id": "webinar-v1-refund-neon",
+    "name": "Gwarancja zwrotu — neon",
+    "description": "Gotowa wstawka: GWARANCJA · ZWROTU · przezroczyste tło",
+    "category": "Gwarancje",
+    "style": "Neon",
+    "look": "neon",
+    "color": "Zielony / turkusowy",
+    "src": "/badges/webinar-v1/refund-neon.png",
+    "addedAt": "2026-11-01T00:03:00Z"
+  },
+  {
+    "id": "webinar-v1-seats20-pencil",
+    "name": "20 miejsc — szkic ołówkiem",
+    "description": "Gotowe oznaczenie limitu: 20 · MIEJSC · przezroczyste tło",
+    "category": "Liczba miejsc",
+    "style": "Ołówkowy",
+    "look": "drawn",
+    "color": "Grafitowy / czerwony",
+    "src": "/badges/webinar-v1/seats20-pencil.png",
+    "addedAt": "2026-11-01T00:03:00Z"
+  },
+  {
+    "id": "webinar-v1-seats50-neon",
+    "name": "50 miejsc — neon",
+    "description": "Gotowe oznaczenie limitu: 50 · MIEJSC · przezroczyste tło",
+    "category": "Liczba miejsc",
+    "style": "Neon",
+    "look": "neon",
+    "color": "Niebieski / fioletowy",
+    "src": "/badges/webinar-v1/seats50-neon.png",
+    "addedAt": "2026-11-01T00:03:00Z"
+  },
+  {
+    "id": "webinar-v1-last-seats-pencil",
+    "name": "Ostatnie miejsca — szkic ołówkiem",
+    "description": "Gotowe oznaczenie limitu: OSTATNIE · MIEJSCA · przezroczyste tło",
+    "category": "Liczba miejsc",
+    "style": "Ołówkowy",
+    "look": "drawn",
+    "color": "Grafitowy / pomarańczowy",
+    "src": "/badges/webinar-v1/last-seats-pencil.png",
+    "addedAt": "2026-11-01T00:03:00Z"
+  },
+  {
+    "id": "webinar-v1-seats-limit-neon",
+    "name": "Limit miejsc — neon",
+    "description": "Gotowe oznaczenie limitu: LIMIT · MIEJSC · przezroczyste tło",
+    "category": "Liczba miejsc",
+    "style": "Neon",
+    "look": "neon",
+    "color": "Pomarańczowy / różowy",
+    "src": "/badges/webinar-v1/seats-limit-neon.png",
+    "addedAt": "2026-11-01T00:03:00Z"
   }
 ]

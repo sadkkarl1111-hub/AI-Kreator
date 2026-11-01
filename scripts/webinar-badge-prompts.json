@@ -1,0 +1,134 @@
+[
+  {
+    "id": "ticket-gold-3d",
+    "style": "3D",
+    "color": "Niebieski / złoty",
+    "category": "Webinar",
+    "name": "Wejściówka na webinar — bilet 3D",
+    "label": "WEJŚCIÓWKA / NA WEBINAR",
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish webinar or sales badge. A luxurious realistic 3D deep blue webinar admission ticket with a thick gold edge, perforated ends, small gold play symbol and attached short satin ribbon. Exact large Polish text in two lines: WEJŚCIÓWKA then NA WEBINAR. Straight readable front face, premium metallic and paper materials. Single centered complete isolated object on a square canvas. Keep all text large, Polish diacritics correct, no added wording. Text verbatim: \"WEJŚCIÓWKA; NA WEBINAR\". Transparent RGBA background outside the artwork with generous transparent safe padding. No watermark, no brand logos. Premium production-quality illustration, not a UI mockup.",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "id": "reservation-pencil",
+    "style": "Ołówkowy",
+    "color": "Grafitowy / żółty",
+    "category": "Webinar",
+    "name": "Rezerwuj miejsce — szkic ołówkiem",
+    "label": "REZERWUJ / MIEJSCE",
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish webinar or sales badge. A charming graphite pencil drawing of a paper admission ticket with a calendar icon, little star and a pencil underline. Bold readable handwritten block letters in two lines exactly REZERWUJ then MIEJSCE. Yellow colored pencil accents, visible crosshatching and tactile paper edges. No paper sheet or rectangular background behind the drawing. Single centered complete isolated object on a square canvas. Keep all text large, Polish diacritics correct, no added wording. Text verbatim: \"REZERWUJ; MIEJSCE\". Transparent RGBA background outside the artwork with generous transparent safe padding. No watermark, no brand logos. Premium production-quality illustration, not a UI mockup.",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "id": "webinar-neon",
+    "style": "Neon",
+    "color": "Fioletowy / różowy",
+    "category": "Webinar",
+    "name": "Wejściówka na webinar — neon",
+    "label": "WEBINAR",
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish webinar or sales badge. A premium neon glass tube admission ticket outline with exact large word WEBINAR across it, small play button above. Electric violet and hot pink tubes, bright white cores, realistic luminous glass construction. Entire compact design. Glow fades into alpha transparency, no dark rectangle or backdrop. Single centered complete isolated object on a square canvas. Keep all text large, Polish diacritics correct, no added wording. Text verbatim: \"WEBINAR\". Transparent RGBA background outside the artwork with generous transparent safe padding. No watermark, no brand logos. Premium production-quality illustration, not a UI mockup.",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "id": "reserved-3d",
+    "style": "3D",
+    "color": "Zielony / złoty",
+    "category": "Webinar",
+    "name": "Miejsce zarezerwowane — karta 3D",
+    "label": "MIEJSCE / ZAREZERWOWANE",
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish webinar or sales badge. A realistic premium emerald green 3D admission card with a large gold checkmark and a curled gold ribbon. Exact large centered Polish text on two lines MIEJSCE then ZAREZERWOWANE. Beautiful sculpted bevels and glossy enamel, readable nearly front facing design, complete isolated object. Single centered complete isolated object on a square canvas. Keep all text large, Polish diacritics correct, no added wording. Text verbatim: \"MIEJSCE; ZAREZERWOWANE\". Transparent RGBA background outside the artwork with generous transparent safe padding. No watermark, no brand logos. Premium production-quality illustration, not a UI mockup.",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "id": "refund30-3d",
+    "style": "3D",
+    "color": "Zielony / srebrny",
+    "category": "Gwarancje",
+    "name": "30 dni na zwrot pieniędzy — 3D",
+    "label": "30 DNI / NA ZWROT",
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish webinar or sales badge. A premium realistic 3D teal and silver money-back guarantee shield with a raised circular return arrow around a small coin. Exact large Polish wording on the front: 30 DNI then NA ZWROT. Thick brushed silver bevel, green enamel, dimensional folded ribbons, clear typography and full isolated silhouette. Single centered complete isolated object on a square canvas. Keep all text large, Polish diacritics correct, no added wording. Text verbatim: \"30 DNI; NA ZWROT\". Transparent RGBA background outside the artwork with generous transparent safe padding. No watermark, no brand logos. Premium production-quality illustration, not a UI mockup.",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "id": "refund14-pencil",
+    "style": "Ołówkowy",
+    "color": "Grafitowy / niebieski",
+    "category": "Gwarancje",
+    "name": "14 dni na zwrot — szkic ołówkiem",
+    "label": "14 DNI / NA ZWROT",
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish webinar or sales badge. A real graphite pencil illustration of a guarantee seal with a hand sketched circular return arrow and a ribbon. Exact big readable Polish text: 14 DNI then NA ZWROT. Blue colored pencil details, hand drawn hatching, no background paper page or rectangle. Single centered complete isolated object on a square canvas. Keep all text large, Polish diacritics correct, no added wording. Text verbatim: \"14 DNI; NA ZWROT\". Transparent RGBA background outside the artwork with generous transparent safe padding. No watermark, no brand logos. Premium production-quality illustration, not a UI mockup.",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "id": "refund100-3d",
+    "style": "3D",
+    "color": "Czerwony / złoty",
+    "category": "Gwarancje",
+    "name": "100% zwrotu pieniędzy — pieczęć 3D",
+    "label": "100% / ZWROTU",
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish webinar or sales badge. A luxurious realistic ruby red 3D money back guarantee medallion with thick gold scalloped rim, shiny gold circular return arrow and a curled red ribbon. Exact huge text 100% and below it exact text ZWROTU. Rich dimensional material surfaces, readable front face, full isolated badge. Single centered complete isolated object on a square canvas. Keep all text large, Polish diacritics correct, no added wording. Text verbatim: \"100%; ZWROTU\". Transparent RGBA background outside the artwork with generous transparent safe padding. No watermark, no brand logos. Premium production-quality illustration, not a UI mockup.",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "id": "refund-neon",
+    "style": "Neon",
+    "color": "Zielony / turkusowy",
+    "category": "Gwarancje",
+    "name": "Gwarancja zwrotu — neon",
+    "label": "GWARANCJA / ZWROTU",
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish webinar or sales badge. A polished realistic neon glass guarantee seal, circular green and cyan return arrow outline around exact two-line large readable text GWARANCJA then ZWROTU. Bright white tube cores, green turquoise glow and real glass details, soft glow fades into transparent alpha, no black rectangle. Single centered complete isolated object on a square canvas. Keep all text large, Polish diacritics correct, no added wording. Text verbatim: \"GWARANCJA; ZWROTU\". Transparent RGBA background outside the artwork with generous transparent safe padding. No watermark, no brand logos. Premium production-quality illustration, not a UI mockup.",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "id": "seats20-pencil",
+    "style": "Ołówkowy",
+    "color": "Grafitowy / czerwony",
+    "category": "Liczba miejsc",
+    "name": "20 miejsc — szkic ołówkiem",
+    "label": "20 / MIEJSC",
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish webinar or sales badge. A charming graphite sketch of a small row of auditorium chairs and an illustrated paper placard. Exact huge number 20 and exact large word MIEJSC on the placard. Restrained red pencil accents and energetic little sketch lines, real pencil texture and crosshatching. No background page or rectangle. Single centered complete isolated object on a square canvas. Keep all text large, Polish diacritics correct, no added wording. Text verbatim: \"20; MIEJSC\". Transparent RGBA background outside the artwork with generous transparent safe padding. No watermark, no brand logos. Premium production-quality illustration, not a UI mockup.",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "id": "seats50-neon",
+    "style": "Neon",
+    "color": "Niebieski / fioletowy",
+    "category": "Liczba miejsc",
+    "name": "50 miejsc — neon",
+    "label": "50 / MIEJSC",
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish webinar or sales badge. A premium realistic neon glass sign with a compact ticket outline, a tiny chair icon and very large exact number 50 above exact word MIEJSC. Electric blue and violet glass tubes, white bright cores, beautiful glow on transparent alpha background. No backdrop or black rectangular panel. Single centered complete isolated object on a square canvas. Keep all text large, Polish diacritics correct, no added wording. Text verbatim: \"50; MIEJSC\". Transparent RGBA background outside the artwork with generous transparent safe padding. No watermark, no brand logos. Premium production-quality illustration, not a UI mockup.",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "id": "last-seats-pencil",
+    "style": "Ołówkowy",
+    "color": "Grafitowy / pomarańczowy",
+    "category": "Liczba miejsc",
+    "name": "Ostatnie miejsca — szkic ołówkiem",
+    "label": "OSTATNIE / MIEJSCA",
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish webinar or sales badge. A lively graphite pencil cutout sales sticker shaped like an irregular paper banner with a small alarm clock and bold exact two-line handwritten block lettering OSTATNIE then MIEJSCA. Orange pencil underline and accents, real crosshatching and pencil strokes. No page or background rectangle. Single centered complete isolated object on a square canvas. Keep all text large, Polish diacritics correct, no added wording. Text verbatim: \"OSTATNIE; MIEJSCA\". Transparent RGBA background outside the artwork with generous transparent safe padding. No watermark, no brand logos. Premium production-quality illustration, not a UI mockup.",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "id": "seats-limit-neon",
+    "style": "Neon",
+    "color": "Pomarańczowy / różowy",
+    "category": "Liczba miejsc",
+    "name": "Limit miejsc — neon",
+    "label": "LIMIT / MIEJSC",
+    "prompt": "Use case: ads-marketing. Asset type: a standalone downloadable Polish webinar or sales badge. A premium realistic neon glass ticket-shaped sign with a tiny hourglass outline above exact large two-line text LIMIT then MIEJSC. Orange and hot pink glowing glass tubes, bright white cores, compact readable design. Soft bloom into alpha transparency, no dark rectangle or background. Single centered complete isolated object on a square canvas. Keep all text large, Polish diacritics correct, no added wording. Text verbatim: \"LIMIT; MIEJSC\". Transparent RGBA background outside the artwork with generous transparent safe padding. No watermark, no brand logos. Premium production-quality illustration, not a UI mockup.",
+    "tool": "imagegen",
+    "transparent_background": true
+  }
+]

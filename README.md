@@ -91,6 +91,13 @@ Kolekcja 24 ilustracji (8 × 3D, 8 × ołówkowe, 8 × neonowe) jest w
 Grafiki przygotowano w imagegen; opisy do ponownego wygenerowania są w
 `scripts/illustrated-badge-prompts.json`. Zachowuj przezroczystość PNG i istniejące adresy.
 
+Dodatkowa kolekcja webinarowa w `public/badges/webinar-v1/` obejmuje 12 ilustracji:
+wejściówki, rezerwacje, gwarancje zwrotu i oznaczenia limitu miejsc.
+Jej wpisy są w tym samym katalogu `src/data/illustrated-badges.json`, a prompty
+w `scripts/webinar-badge-prompts.json`. Oznaczenia „20 miejsc”, „50 miejsc”
+i „Ostatnie miejsca” są gotowymi grafikami, nie licznikiem zapisów.
+W bibliotece mają kategorie „Webinar”, „Gwarancje” i „Liczba miejsc”.
+
 ## Gdzie są przechowywane dane — kontrola 1.11.2026
 
 | Zawartość | Lokalizacja |
