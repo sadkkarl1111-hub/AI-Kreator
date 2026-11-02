@@ -5,9 +5,10 @@ from pathlib import Path
 import tarfile
 import tempfile
 import unittest
-from release_tool import allowed, extract, verify_checksum, verify_compose
+from release_tool import allowed, extract, frontend_assets, verify_checksum, verify_compose
 
 COMMIT = 'a' * 40
+INDEX_HTML = '<!doctype html><script type="module" src="/assets/app.js"></script><link rel="stylesheet" href="/assets/app.css">'
 
 
 class ReleaseTests(unittest.TestCase):
@@ -19,7 +20,7 @@ class ReleaseTests(unittest.TestCase):
 
     def package(self, root, extra=None, commit=COMMIT):
         archive = root / 'release.tar.gz'
-        files = {'release.json': json.dumps({'format': 1, 'commit': commit}), 'dist/index.html': 'HTML', 'dist/assets/app.js': 'JS', 'dist/_seo/index.html': 'SEO', 'vps/server/.gitignore': 'node_modules\ndist\n.env\n', 'vps/server/Dockerfile': 'FROM node:24-alpine', 'vps/server/package.json': '{}', 'vps/server/package-lock.json': '{}', 'vps/server/tsconfig.json': '{}', 'vps/docker-compose.yml': 'services:', 'vps/apache/seo-routes.conf': 'config'}
+        files = {'release.json': json.dumps({'format': 1, 'commit': commit}), 'dist/index.html': INDEX_HTML, 'dist/assets/app.js': 'JS', 'dist/assets/app.css': 'CSS', 'dist/_seo/index.html': 'SEO', 'vps/server/.gitignore': 'node_modules\ndist\n.env\n', 'vps/server/Dockerfile': 'FROM node:24-alpine', 'vps/server/package.json': '{}', 'vps/server/package-lock.json': '{}', 'vps/server/tsconfig.json': '{}', 'vps/docker-compose.yml': 'services:', 'vps/apache/seo-routes.conf': 'config'}
         with tarfile.open(archive, 'w:gz') as target:
             for name, text in files.items():
                 data = text.encode()
@@ -34,7 +35,12 @@ class ReleaseTests(unittest.TestCase):
             root = Path(directory); output = root / 'output'; output.mkdir()
             archive = self.package(root)
             self.assertEqual(extract(archive, output, COMMIT)['commit'], COMMIT)
-            self.assertEqual((output / 'dist/index.html').read_text(), 'HTML')
+            self.assertEqual((output / 'dist/index.html').read_text(), INDEX_HTML)
+
+    def test_frontend_checks_actual_javascript_and_css_not_only_html(self):
+        self.assertEqual(frontend_assets(INDEX_HTML), ['/assets/app.css', '/assets/app.js'])
+        with self.assertRaises(ValueError): frontend_assets('<html>No application bundle</html>')
+        with self.assertRaises(ValueError): frontend_assets('<script src="/assets/../secret.js"></script>')
 
     def test_checks_entire_archive_before_writing_anything(self):
         for name, kind in [('dist/link', tarfile.SYMTYPE), ('dist/hard', tarfile.LNKTYPE), ('../escape', tarfile.REGTYPE), ('dist/.env', tarfile.REGTYPE), ('dist/index.html', tarfile.REGTYPE)]:

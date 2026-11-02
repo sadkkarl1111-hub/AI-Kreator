@@ -2,6 +2,7 @@
 """Validate a deployment before root extraction: no secrets, traversal or links."""
 import argparse
 import hashlib
+from html.parser import HTMLParser
 import json
 from pathlib import Path, PurePosixPath
 import re
@@ -87,16 +88,39 @@ def verify_compose(value):
         raise ValueError("A major database version change requires a separate migration")
 
 
+def frontend_assets(html):
+    class Assets(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.paths = set()
+
+        def handle_starttag(self, tag, attributes):
+            attrs = dict(attributes)
+            value = attrs.get('src') if tag == 'script' else attrs.get('href') if tag == 'link' and attrs.get('rel') in {'stylesheet', 'modulepreload'} else None
+            if value and value.startswith('/assets/'):
+                if not re.fullmatch(r'/assets/[A-Za-z0-9._-]+\.(js|css)', value):
+                    raise ValueError('Unexpected frontend asset path')
+                self.paths.add(value)
+    parser = Assets()
+    parser.feed(html)
+    if not any(path.endswith('.js') for path in parser.paths):
+        raise ValueError('Frontend HTML does not reference an application bundle')
+    return sorted(parser.paths)
+
+
 if __name__ == "__main__":
     import sys
     parser = argparse.ArgumentParser()
-    parser.add_argument("operation", choices=["extract", "compose"])
+    parser.add_argument("operation", choices=["extract", "compose", "assets"])
     parser.add_argument("arguments", nargs="*")
     args = parser.parse_args()
     try:
         if args.operation == "compose":
             verify_compose(json.load(sys.stdin))
             print("Compose ports and database major versions verified")
+        elif args.operation == "assets":
+            for asset in frontend_assets(Path(args.arguments[0]).read_text(encoding='utf-8')):
+                print(asset)
         else:
             archive, checksum, destination, commit = args.arguments
             verify_checksum(archive, checksum)

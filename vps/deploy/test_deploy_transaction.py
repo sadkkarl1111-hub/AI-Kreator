@@ -98,7 +98,10 @@ elif name=='backup':
             self.assertEqual((root / 'webroot/assets/old.js').read_text(), 'OLD HASHED ASSET')
             if scenario == 'success':
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                self.assertEqual((root / 'webroot/index.html').read_text(), 'HTML')
+                self.assertEqual((root / 'webroot/index.html').read_text(), fixtures.INDEX_HTML)
+                self.assertEqual((root / 'webroot/assets/app.js').stat().st_mode & 0o777, 0o644)
+                self.assertEqual((root / 'webroot/assets/app.css').stat().st_mode & 0o777, 0o644)
+                self.assertEqual((root / 'webroot/assets').stat().st_mode & 0o777, 0o755)
                 self.assertEqual(json.loads((root / 'webroot/deployment-check.json').read_text())['commit'], COMMIT)
                 self.assertFalse(uploaded.exists())
             else:

@@ -39,7 +39,7 @@ restore_release() {
   if [[ -f "$backup/applied-source" ]]; then
     restore=$(mktemp -d "$BASE/work/restore.XXXXXX")
     tar -xzf "$backup/server.tgz" -C "$restore" || return 1
-    rsync -r --delete --exclude=node_modules --exclude=dist --exclude='.env*' "$restore/server/" "$SOURCE/server/" || return 1
+    rsync -r --perms --owner --group --delete --exclude=node_modules --exclude=dist --exclude='.env*' "$restore/server/" "$SOURCE/server/" || return 1
     rm -rf -- "$restore"
   fi
   if [[ -f "$backup/applied-api" ]]; then
@@ -48,7 +48,7 @@ restore_release() {
     wait_api || return 1
   fi
   if [[ -f "$backup/applied-web" ]]; then
-    rsync -r --chown=root:www-data --chmod=D755,F644 "$backup/webroot/" "$WEBROOT/" || return 1
+    rsync -r --perms --owner --group --chown=root:www-data --chmod=D755,F644 "$backup/webroot/" "$WEBROOT/" || return 1
     install -m 644 -o root -g www-data "$backup/index.html" "$WEBROOT/.index-rollback.new" || return 1
     mv -f "$WEBROOT/.index-rollback.new" "$WEBROOT/index.html" || return 1
     if [[ -f "$backup/deployment-check.json" ]]; then install -m 644 -o root -g www-data "$backup/deployment-check.json" "$WEBROOT/deployment-check.json" || return 1; fi
@@ -137,7 +137,7 @@ if (( API_CHANGED )); then
   docker rm -f "$CANDIDATE" >/dev/null
   CANDIDATE=""
   touch "$BACKUP/applied-source"
-  rsync -r --delete --exclude=node_modules --exclude=dist --exclude='.env*' --chown=root:root --chmod=D755,F644 "$PACKAGE/vps/server/" "$SOURCE/server/"
+  rsync -r --perms --owner --group --delete --exclude=node_modules --exclude=dist --exclude='.env*' --chown=root:root --chmod=D755,F644 "$PACKAGE/vps/server/" "$SOURCE/server/"
   touch "$BACKUP/applied-api"
   docker tag "$IMAGE" vps-api
   compose up -d --no-deps --no-build api
@@ -145,7 +145,7 @@ if (( API_CHANGED )); then
 fi
 # Back up overwritten files, retain older hashed assets, switch index last.
 touch "$BACKUP/applied-web"
-rsync -r --checksum --backup --backup-dir="$BACKUP/webroot" --exclude=index.html --chown=root:www-data --chmod=D755,F644 "$PACKAGE/dist/" "$WEBROOT/"
+rsync -r --perms --owner --group --checksum --backup --backup-dir="$BACKUP/webroot" --exclude=index.html --chown=root:www-data --chmod=D755,F644 "$PACKAGE/dist/" "$WEBROOT/"
 if ! cmp -s "$PACKAGE/vps/apache/seo-routes.conf" "$SEO_CONF"; then
   touch "$BACKUP/applied-apache"
   install -m 644 -o root -g root "$PACKAGE/vps/apache/seo-routes.conf" "$SEO_CONF"
@@ -154,6 +154,8 @@ if ! cmp -s "$PACKAGE/vps/apache/seo-routes.conf" "$SEO_CONF"; then
 fi
 install -m 644 -o root -g www-data "$PACKAGE/dist/index.html" "$WEBROOT/.index-release.new"
 mv -f "$WEBROOT/.index-release.new" "$WEBROOT/index.html"
+ASSETS=$(python3 "$HELPER" assets "$WEBROOT/index.html")
+while IFS= read -r asset; do check_http "https://ai-kreator.pl$asset" || fail "Public asset check failed: $asset"; done <<< "$ASSETS"
 for url in https://ai-kreator.pl/ https://ai-kreator.pl/api/health 'https://ai-kreator.pl/api/public/ai-models?purpose=editing' https://ai-kreator.pl/tools/widgets; do
   check_http "$url" || fail "Public check failed: $url"
 done
