@@ -20,8 +20,9 @@ export function badgeEditInstruction(value: unknown, prompt: string): string {
       return `Change only the color of ${text("target", 180)} to ${text("color", 80)}. Preserve all lettering verbatim, shapes, texture, pencil strokes, materials, highlights, shadows and opacity. Recolor the existing artwork without redrawing it.`;
     case "remove-element":
       return `Remove only ${text("target", 180)}. Reconstruct the underlying surface using the original texture and shading. Keep all other objects and inscriptions unchanged.`;
+    case "describe":
     case "custom":
-      if (!prompt || prompt.length > 1000) throw new ImageEditInputError("Opisz zmianę w zaznaczonym obszarze.");
+      if (!prompt || prompt.length > 1000) throw new ImageEditInputError("Opisz, co chcesz zmienić w badge’u.");
       return prompt;
     default:
       throw new ImageEditInputError("Wybierz rodzaj zmiany badge’a.");
@@ -34,10 +35,53 @@ export function preservingEditPrompt(instruction: string, masked: boolean): stri
     "Apply only the requested change. Preserve the exact original illustration technique: pencil must stay pencil, sketch must stay sketch, flat must stay flat, 3D must stay 3D. Do not beautify, polish, modernize, restyle or redesign the image.",
     "Preserve composition, framing, perspective, geometry, palette, texture, stroke quality, materials, lighting, shadows, background and alpha transparency except where the requested change strictly requires it.",
     "A text-only request changes only the specified lettering. A color-only request changes only the specified color and keeps every inscription verbatim. Do not add icons, stars, decorations, objects or text. Do not move or resize existing objects.",
+    "When asked to change an existing color into another color, replace that source color wherever it occurs in the artwork, retaining its original texture, shading and highlights. Recolor existing shapes; never paint new brush strokes, scribbles, marker lines or patches over the image. Keep black outlines and other colors unchanged unless explicitly requested. When the user names only the new color, recolor the main colored accents, preserving the background, lettering and outlines.",
     "For a text-only request, keep the same surface behind and between the new glyphs. Never add a panel, rectangle, banner or solid fill behind the replacement text, and never invert the text and surface colors.",
     masked ? "The mask defines the only editable area. All pixels outside it are locked. Keep the original canvas and object positions, including within the mask. The mask is a guide and must not appear in the output." : "Preserve every element that the request does not explicitly change.",
     `Requested change: ${instruction}`,
   ].join(" ");
+}
+
+export type BadgeSource = { width: number; height: number; pixels: Buffer; base64: string; transparent: boolean };
+
+export async function prepareBadgeSource(base64: string): Promise<BadgeSource> {
+  try {
+    const source = await sharp(Buffer.from(base64, "base64"), inputOptions).rotate().toColourspace("srgb").ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const { width, height } = source.info;
+    let transparent = false;
+    for (let i = 3; i < source.data.length; i += 4) if (source.data[i] === 0) { transparent = true; break; }
+    const png = await sharp(source.data, { raw: { width, height, channels: 4 } }).png().toBuffer();
+    return { width, height, pixels: source.data, base64: png.toString("base64"), transparent };
+  } catch { throw new ImageEditInputError("Nie udało się odczytać badge’a. Wgraj obraz ponownie."); }
+}
+
+export function isBadgeRecolor(instruction: string): boolean {
+  const text = instruction.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l").toLowerCase();
+  if (/\b(dodaj|usun|add|remove|background|tlo|ksztalt|shape|rozmiar)\b/.test(text)) return false;
+  const color = "(?:zol\\w*|zielon\\w*|czerwon\\w*|niebies\\w*|granat\\w*|fiolet\\w*|pomarancz\\w*|rozow\\w*|bial\\w*|czarn\\w*|red|green|yellow|blue|purple|white|black)";
+  return /\b(kolor\w*|colou?r|recolou?r)\b/.test(text) || new RegExp(color + "\\s+(?:na|to)\\s+" + color).test(text);
+}
+
+export async function finishBadgeEdit(base64: string, source: BadgeSource, preserveShape = false): Promise<{ base64: string; mimeType: string }> {
+  const edited = await sharp(Buffer.from(base64, "base64"), inputOptions).rotate().resize(source.width, source.height, { fit: "fill" }).toColourspace("srgb").ensureAlpha().raw().toBuffer();
+  // Some providers return an opaque canvas. Preserve the original cutout in
+  // that case, without ever supplying a painted selection to the model.
+  let hasTransparency = false;
+  for (let i = 3; i < edited.length; i += 4) if (edited[i] === 0) { hasTransparency = true; break; }
+  if (source.transparent && (preserveShape || !hasTransparency)) {
+    for (let i = 0; i < edited.length; i += 4) {
+      edited[i + 3] = source.pixels[i + 3];
+      if (!edited[i + 3]) source.pixels.copy(edited, i, i, i + 3);
+    }
+  }
+  return { base64: (await sharp(edited, { raw: { width: source.width, height: source.height, channels: 4 } }).png().toBuffer()).toString("base64"), mimeType: "image/png" };
+}
+
+export async function prepareEditInput(imageBase64: string, maskBase64: string | undefined, badgeEdit: unknown) {
+  // Badge edits are semantic changes to the whole original. Ignore even legacy
+  // masks so they cannot become colored strokes or restrict a global recolor.
+  if (badgeEdit !== undefined) return { badgeSource: await prepareBadgeSource(imageBase64), editMask: undefined };
+  return { badgeSource: undefined, editMask: maskBase64 ? await prepareEditMask(imageBase64, maskBase64) : undefined };
 }
 
 export type PreparedEditMask = {

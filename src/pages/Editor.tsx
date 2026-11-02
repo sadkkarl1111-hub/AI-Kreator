@@ -10,7 +10,6 @@ import {
   Paintbrush,
   Search,
   Scissors,
-  Type,
   Undo2,
   Upload,
 } from 'lucide-react';
@@ -43,8 +42,6 @@ type EditorProps = {
   mode?: 'general' | 'badge';
 };
 
-type BadgeEditAction = 'replace-text' | 'change-color' | 'remove-element' | 'custom';
-
 type BadgeEditorLibraryResponse = {
   badges?: BadgeCatalogItem[];
   hiddenKeys?: string[];
@@ -64,15 +61,9 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
     selectedModel,
     selectedModelOption,
     setSelectedModel,
-  } = useAiModels({ purpose: 'editing' });
+  } = useAiModels({ purpose: 'editing', preferredModelId: isBadgeEditor ? 'openai-gpt-image-2.5-sunburst' : undefined });
 
   const [prompt, setPrompt] = useState('');
-  const [badgeEditAction, setBadgeEditAction] = useState<BadgeEditAction>('replace-text');
-  const [oldText, setOldText] = useState('');
-  const [newText, setNewText] = useState('');
-  const [colorTarget, setColorTarget] = useState('');
-  const [targetColor, setTargetColor] = useState('');
-  const [elementToRemove, setElementToRemove] = useState('');
   const [badgeSearch, setBadgeSearch] = useState('');
   const [availableBadges, setAvailableBadges] = useState<BadgeCatalogItem[]>(isBadgeEditor ? [] : BADGE_CATALOG);
   const [badgeCatalogLoading, setBadgeCatalogLoading] = useState(isBadgeEditor);
@@ -111,15 +102,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
     || badge.description.toLowerCase().includes(normalizedBadgeSearch)
     || badge.category.toLowerCase().includes(normalizedBadgeSearch)
   ));
-  const hasEditDescription = isBadgeEditor
-    ? badgeEditAction === 'replace-text'
-      ? Boolean(oldText.trim() && newText.trim())
-      : badgeEditAction === 'change-color'
-        ? Boolean(colorTarget.trim() && targetColor.trim())
-        : badgeEditAction === 'remove-element'
-          ? Boolean(elementToRemove.trim())
-          : Boolean(prompt.trim())
-    : Boolean(prompt.trim());
+  const hasEditDescription = Boolean(prompt.trim());
 
   const resetEditor = useCallback(() => {
     setSourceImage(null);
@@ -375,37 +358,8 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
     return outputCanvas.toDataURL('image/png').split(',')[1];
   };
 
-  const getBadgeEditInstruction = () => {
-    if (badgeEditAction === 'replace-text') {
-      if (!oldText.trim() || !newText.trim()) return '';
-      return [
-        `Replace only the exact visible text "${oldText.trim()}" with "${newText.trim()}" inside the marked area.`,
-        `The final text must be spelled exactly as: "${newText.trim()}".`,
-        'Preserve the original font style, size, alignment, perspective, material, lighting, shadows, colors and the transparent background.',
-        'Do not change anything outside the marked area.',
-      ].join(' ');
-    }
-
-    if (badgeEditAction === 'remove-element') {
-      if (!elementToRemove.trim()) return '';
-      return [
-        `Remove ${elementToRemove.trim()} from the marked area.`,
-        'Reconstruct the underlying badge surface naturally, matching the nearby texture, color, lighting and shadows.',
-        'Keep the transparent background and do not change anything outside the marked area.',
-      ].join(' ');
-    }
-
-    if (badgeEditAction === 'change-color') {
-      return colorTarget.trim() && targetColor.trim()
-        ? `Change only the color of ${colorTarget.trim()} to ${targetColor.trim()}. Keep all lettering, texture, shapes and the original illustration style unchanged.`
-        : '';
-    }
-
-    return prompt.trim();
-  };
-
   const handleEdit = async () => {
-    const editInstruction = isBadgeEditor ? getBadgeEditInstruction() : prompt.trim();
+    const editInstruction = prompt.trim();
 
     if (!editInstruction) {
       toast.error(isBadgeEditor ? 'Uzupełnij dane zmiany' : 'Wpisz co chcesz zmienić');
@@ -417,17 +371,11 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
       return;
     }
 
-    if (isBadgeEditor && !hasMask) {
-      toast.error('Zaznacz pędzlem tekst lub element, który chcesz zmienić');
-      return;
-    }
-
     setEditing(true);
     setResultImage(null);
 
     try {
-      const maskBase64 = getMaskBase64();
-      if (isBadgeEditor && !maskBase64) throw new Error('Zaznacz pędzlem napis lub element do zmiany.');
+      const maskBase64 = isBadgeEditor ? undefined : getMaskBase64();
 
       const data = await vpsFetch<{ imageUrl?: string; error?: string }>('/ai/edit-image', {
         method: 'POST',
@@ -436,13 +384,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
           imageBase64: sourceBase64,
           imageMimeType: sourceMime,
           maskBase64,
-          badgeEdit: isBadgeEditor ? {
-            action: badgeEditAction,
-            oldText: oldText.trim(),
-            newText: newText.trim(),
-            target: badgeEditAction === 'change-color' ? colorTarget.trim() : elementToRemove.trim(),
-            color: targetColor.trim(),
-          } : undefined,
+          badgeEdit: isBadgeEditor ? { action: 'describe' } : undefined,
           model: selectedModel,
           parentGraphicId: sourceGraphicId,
         }),
@@ -590,7 +532,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
           </h1>
           <p className="text-muted-foreground mt-1">
             {isBadgeEditor
-              ? 'Wybierz badge, zaznacz napis lub element i zleć AI precyzyjną zmianę.'
+              ? 'Wybierz badge i opisz, co chcesz zmienić. AI edytuje oryginalną grafikę.'
               : 'Zamaluj pędzlem obszar do zmiany, wpisz co chcesz zmienić, a AI zrobi resztę.'}
           </p>
         </div>
@@ -688,7 +630,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div>
                   <p className="text-sm font-medium">
-                    {isBadgeEditor ? 'Zaznacz napis lub element do zmiany' : 'Zamaluj obszar do zmiany (opcjonalnie)'}
+                    {isBadgeEditor ? 'Wybrany badge' : 'Zamaluj obszar do zmiany (opcjonalnie)'}
                   </p>
                   {sourceLabel && <p className="text-xs text-muted-foreground mt-0.5">Wybrano: {sourceLabel}</p>}
                 </div>
@@ -697,12 +639,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                 </Button>
               </div>
 
-              {isBadgeEditor && (
-                <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-sm text-muted-foreground">
-                  Zaznacz tylko napis albo fragment do zmiany, z małym marginesem. Poza zaznaczeniem zachowamy oryginalne piksele. Styl wewnątrz zaznaczenia AI dopasuje do oryginału.
-                </div>
-              )}
-
+              {!isBadgeEditor && <>
               <div className="flex items-center gap-4 flex-wrap">
                 <div className="flex items-center gap-2 flex-1 min-w-[200px]">
                   <Paintbrush className="w-4 h-4 text-muted-foreground" />
@@ -762,104 +699,26 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                 />
               </div>
 
+              </>}
+
               {isBadgeEditor ? (
-                <div className="space-y-3">
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
-                    <Button
-                      type="button"
-                      variant={badgeEditAction === 'replace-text' ? 'default' : 'outline'}
-                      onClick={() => setBadgeEditAction('replace-text')}
-                      className="gap-1.5"
-                    >
-                      <Type className="w-4 h-4" /> Zmień napis
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={badgeEditAction === 'change-color' ? 'default' : 'outline'}
-                      onClick={() => setBadgeEditAction('change-color')}
-                      className="gap-1.5"
-                    >
-                      <Paintbrush className="w-4 h-4" /> Zmień kolor
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={badgeEditAction === 'remove-element' ? 'default' : 'outline'}
-                      onClick={() => setBadgeEditAction('remove-element')}
-                      className="gap-1.5"
-                    >
-                      <Eraser className="w-4 h-4" /> Usuń element
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={badgeEditAction === 'custom' ? 'default' : 'outline'}
-                      onClick={() => setBadgeEditAction('custom')}
-                      className="gap-1.5"
-                    >
-                      <Paintbrush className="w-4 h-4" /> Własna zmiana
-                    </Button>
+                <div className="space-y-4">
+                  <div className="rounded-lg border bg-muted/30 p-4">
+                    <img src={`data:${sourceMime};base64,${sourceBase64}`} alt="Oryginalny badge" className="mx-auto max-h-[28rem] w-full object-contain" />
                   </div>
-
-                  {badgeEditAction === 'replace-text' && (
-                    <div className="grid sm:grid-cols-2 gap-3">
-                      <div className="space-y-1.5">
-                        <label className="text-sm font-medium" htmlFor="badge-old-text">Stary napis</label>
-                        <Input
-                          id="badge-old-text"
-                          value={oldText}
-                          onChange={(event) => setOldText(event.target.value)}
-                          placeholder="np. BONUS DO KURSU"
-                          maxLength={120}
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-sm font-medium" htmlFor="badge-new-text">Nowy napis</label>
-                        <Input
-                          id="badge-new-text"
-                          value={newText}
-                          onChange={(event) => setNewText(event.target.value)}
-                          placeholder="np. PREZENT DLA CIEBIE"
-                          maxLength={120}
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {badgeEditAction === 'change-color' && (
-                    <div className="grid sm:grid-cols-2 gap-3">
-                      <div className="space-y-1.5">
-                        <label className="text-sm font-medium" htmlFor="badge-color-target">Co przemalować?</label>
-                        <Input id="badge-color-target" value={colorTarget} onChange={(event) => setColorTarget(event.target.value)} placeholder="np. czerwony nagłówek kalendarza" maxLength={180} />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-sm font-medium" htmlFor="badge-target-color">Nowy kolor</label>
-                        <Input id="badge-target-color" value={targetColor} onChange={(event) => setTargetColor(event.target.value)} placeholder="np. granatowy lub #2048A0" maxLength={80} />
-                      </div>
-                    </div>
-                  )}
-
-                  {badgeEditAction === 'remove-element' && (
-                    <div className="space-y-1.5">
-                      <label className="text-sm font-medium" htmlFor="badge-remove-element">Co usunąć?</label>
-                      <Input
-                        id="badge-remove-element"
-                        value={elementToRemove}
-                        onChange={(event) => setElementToRemove(event.target.value)}
-                        placeholder="np. ikonę PDF, kokardę albo cały napis"
-                        maxLength={180}
-                      />
-                    </div>
-                  )}
-
-                  {badgeEditAction === 'custom' && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium" htmlFor="badge-edit-description">Opisz zmianę</label>
                     <Textarea
-                      placeholder="Opisz dokładnie zmianę w zaznaczonym obszarze..."
-                      aria-label="Opis zmiany badge’a"
+                      id="badge-edit-description"
+                      placeholder="Np. Zmień żółty kolor na zielony. Albo: Zmień napis NA ŻYWO na LIVE."
                       value={prompt}
                       onChange={(event) => setPrompt(event.target.value)}
-                      className="min-h-[80px] resize-none"
+                      className="min-h-24 resize-y"
                       maxLength={1000}
+                      disabled={editing}
                     />
-                  )}
+                    <p className="text-xs text-muted-foreground">Opisz kolor, napis lub element do zmiany. Pozostały wygląd badge’a AI dopasuje do oryginału.</p>
+                  </div>
                 </div>
               ) : (
                 <Textarea
@@ -881,6 +740,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                     aiModels.map((model) => (
                       <Button
                         key={model.id}
+                        disabled={editing}
                         variant={selectedModel === model.id ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => setSelectedModel(model.id)}
@@ -917,7 +777,8 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                 disabled={
                   editing
                   || !hasEditDescription
-                  || (isBadgeEditor && !hasMask)
+                  || modelsLoading
+                  || !selectedModel
                   || (!isAdmin && (balance ?? 0) < currentModelCost)
                 }
                 className="w-full gradient-bg hover:opacity-90 transition-opacity"
@@ -933,22 +794,12 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                 ) : (
                   <>
                     {isBadgeEditor ? <BadgeCheck className="w-4 h-4" /> : <Paintbrush className="w-4 h-4" />}
-                    {isBadgeEditor
-                      ? badgeEditAction === 'replace-text'
-                        ? 'Zmień napis'
-                        : badgeEditAction === 'remove-element'
-                          ? 'Usuń element'
-                          : badgeEditAction === 'change-color'
-                            ? 'Zmień kolor'
-                            : 'Edytuj badge'
-                      : hasMask ? 'Edytuj zaznaczony obszar' : 'Edytuj cały obraz'}{' '}
+                    {isBadgeEditor ? 'Edytuj' : hasMask ? 'Edytuj zaznaczony obszar' : 'Edytuj cały obraz'}{' '}
                     ({currentModelCost} kr)
                   </>
                 )}
               </Button>
-              {isBadgeEditor && !hasMask && (
-                <p className="text-xs text-center text-muted-foreground">Przycisk uaktywni się po zaznaczeniu obszaru pędzlem.</p>
-              )}
+
             </CardContent>
           </Card>
         )}

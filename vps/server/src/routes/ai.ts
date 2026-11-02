@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import { Router, type RequestHandler } from "express";
 import { createCarouselImageRouter } from "./carouselImage.js";
 import sharp from "sharp";
-import { applyEditMask, badgeEditInstruction, ImageEditInputError, prepareEditMask, preservingEditPrompt, type PreparedEditMask } from "../lib/imageEditing.js";
+import { applyEditMask, badgeEditInstruction, finishBadgeEdit, ImageEditInputError, isBadgeRecolor, prepareEditInput, preservingEditPrompt, type PreparedEditMask } from "../lib/imageEditing.js";
 import { AD_IMAGE_QUALITY_LOCK, AD_REFERENCE_INSTRUCTIONS, isCompiledAdPrompt } from "../lib/adCreative.js";
 import { env } from "../config/env.js";
 import { deleteGraphicFile } from "../lib/graphics.js";
@@ -1201,6 +1201,8 @@ export const editWithOpenAI = async (params: {
   imageMimeType: string;
   editMask?: PreparedEditMask;
   dimensions?: string;
+  preserveCanvas?: boolean;
+  transparentBackground?: boolean;
   apiModel: string;
   apiKey: string | null;
 }): Promise<GeneratedImageResult> => {
@@ -1214,12 +1216,13 @@ export const editWithOpenAI = async (params: {
   const formData = new FormData();
   formData.append("model", params.apiModel);
   formData.append("prompt", strictPrompt);
-  formData.append("size", params.editMask ? "auto" : getOpenAIImageSize(params.dimensions, params.apiModel));
+  formData.append("size", params.editMask || params.preserveCanvas ? "auto" : getOpenAIImageSize(params.dimensions, params.apiModel));
   if (params.apiModel === "gpt-image-1" || params.apiModel === "gpt-image-1.5") {
     formData.append("input_fidelity", "high");
   }
   formData.append("output_format", "png");
   formData.append("quality", getOpenAIImageQuality(params.apiModel));
+  if (params.transparentBackground) formData.append("background", "transparent");
   formData.append(
     "image[]",
     new Blob([base64ToUint8Array(params.editMask?.sourceBase64 ?? params.imageBase64)], { type: params.editMask ? "image/png" : params.imageMimeType }),
@@ -1257,6 +1260,8 @@ export const editWithGemini = async (params: {
   imageMimeType: string;
   editMask?: PreparedEditMask;
   dimensions?: string;
+  preserveCanvas?: boolean;
+  transparentBackground?: boolean;
   apiModel: string;
   apiKey: string | null;
 }): Promise<GeneratedImageResult> => {
@@ -1542,7 +1547,7 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
       (typeof body.imageMimeType === "string" && body.imageMimeType) ||
       (typeof body.mimeType === "string" && body.mimeType) ||
       "image/png";
-    const maskBase64 = typeof body.maskBase64 === "string" && body.maskBase64 ? body.maskBase64 : undefined;
+    const maskBase64 = body.badgeEdit === undefined && typeof body.maskBase64 === "string" && body.maskBase64 ? body.maskBase64 : undefined;
     const dimensions = typeof body.dimensions === "string" ? body.dimensions : undefined;
     const selectedModelId = body.model || "gemini-25-flash-image";
 
@@ -1557,8 +1562,7 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
     }
     validateBase64ImageInput(imageBase64);
     if (maskBase64) validateBase64ImageInput(maskBase64);
-    if (body.badgeEdit !== undefined && !maskBase64) throw new ImageEditInputError("Zaznacz pędzlem napis lub element do zmiany.");
-    const editMask = maskBase64 ? await prepareEditMask(imageBase64, maskBase64) : undefined;
+    const { badgeSource, editMask } = await prepareEditInput(imageBase64, maskBase64, body.badgeEdit);
     if (dimensions && !ALLOWED_IMAGE_DIMENSIONS.includes(dimensions as (typeof ALLOWED_IMAGE_DIMENSIONS)[number])) {
       jsonError(response, "Invalid dimensions", 400);
       return;
@@ -1592,26 +1596,30 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
       modelProvider === "openai"
         ? await editWithOpenAI({
             prompt,
-            imageBase64,
-            imageMimeType,
+            imageBase64: badgeSource?.base64 ?? imageBase64,
+            imageMimeType: badgeSource ? "image/png" : imageMimeType,
             editMask,
-            dimensions: editMask ? undefined : dimensions,
+            dimensions: editMask || badgeSource ? undefined : dimensions,
+            preserveCanvas: Boolean(badgeSource),
+            transparentBackground: badgeSource?.transparent,
             apiModel,
             apiKey,
           })
         : await editWithGemini({
             prompt,
-            imageBase64,
-            imageMimeType,
+            imageBase64: badgeSource?.base64 ?? imageBase64,
+            imageMimeType: badgeSource ? "image/png" : imageMimeType,
             editMask,
-            dimensions: editMask ? undefined : dimensions,
+            dimensions: editMask || badgeSource ? undefined : dimensions,
+            preserveCanvas: Boolean(badgeSource),
+            transparentBackground: badgeSource?.transparent,
             apiModel,
             apiKey,
           });
 
-    const badgeAction = (body.badgeEdit as { action?: string } | undefined)?.action;
-    const preserveAlpha = badgeAction === "replace-text" || badgeAction === "change-color";
-    const finalResult = editMask ? await applyEditMask(result.base64, editMask, preserveAlpha) : result;
+    const finalResult = badgeSource
+      ? await finishBadgeEdit(result.base64, badgeSource, isBadgeRecolor(prompt))
+      : editMask ? await applyEditMask(result.base64, editMask) : result;
     const saved = await saveGeneratedGraphicToStorage({
       userId: user.id,
       base64: finalResult.base64,
@@ -1619,7 +1627,7 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
       prompt: `[Edycja] ${prompt}`,
       style: "realistic",
       type: "edited",
-      dimensions: editMask ? null : dimensions ?? null,
+      dimensions: badgeSource || editMask ? null : dimensions ?? null,
       parentGraphicId: body.parentGraphicId ?? null,
     });
 

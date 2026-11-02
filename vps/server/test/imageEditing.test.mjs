@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
-import { applyEditMask, badgeEditInstruction, prepareEditMask, preservingEditPrompt } from '../dist/lib/imageEditing.js';
+import { applyEditMask, badgeEditInstruction, finishBadgeEdit, isBadgeRecolor, prepareBadgeSource, prepareEditInput, prepareEditMask, preservingEditPrompt } from '../dist/lib/imageEditing.js';
 import { editWithOpenAI, editWithGemini } from '../dist/routes/ai.js';
 
 const png = async (pixels, width, height) => (await sharp(pixels, { raw: { width, height, channels: 4 } }).png().toBuffer()).toString('base64');
@@ -132,4 +132,60 @@ test('Gemini receives the original and separate source-sized red guide with the 
     assert.equal(parts[0].inlineData.data, mask.sourceBase64); assert.equal(parts[1].inlineData.data, mask.redMaskBase64);
     assert.match(parts[2].text, /pencil must stay pencil/); assert.match(parts[2].text, /White regions are locked/);
   } finally { globalThis.fetch = oldFetch; }
+});
+
+test('badge descriptions require no selection and discard even an invalid legacy mask', async () => {
+  const { original } = await fixture();
+  const prompt = 'Zmień żółty na zielony';
+  assert.equal(badgeEditInstruction({ action: 'describe' }, prompt), prompt);
+  assert.throws(() => badgeEditInstruction({ action: 'describe' }, ''), /Opisz/);
+  const input = await prepareEditInput(original, 'invalid-legacy-brush-mask', { action: 'describe' });
+  assert.equal(input.editMask, undefined); assert.equal(input.badgeSource.width, 8); assert.equal(input.badgeSource.height, 12);
+  assert.match(preservingEditPrompt(prompt, false), /replace that source color wherever it occurs/);
+  assert.match(preservingEditPrompt(prompt, false), /never paint new brush strokes/);
+});
+
+test('badge requests send just the original reference to both providers, with no mask or guide', async () => {
+  const { original } = await fixture(), source = await prepareBadgeSource(original), oldFetch = globalThis.fetch;
+  const requests = [];
+  globalThis.fetch = async (url, request) => {
+    requests.push({ url, request });
+    return new Response(JSON.stringify(url.includes('openai.com') ? { data: [{ b64_json: original }] } : { candidates: [{ content: { parts: [{ inlineData: { data: original, mimeType: 'image/png' } }] } }] }));
+  };
+  try {
+    const params = { prompt: 'Zmień żółty na zielony', imageBase64: source.base64, imageMimeType: 'image/png', preserveCanvas: true, transparentBackground: true, apiKey: 'test-only' };
+    await editWithOpenAI({ ...params, apiModel: 'gpt-image-2.5-sunburst' });
+    const form = requests[0].request.body;
+    assert.equal(form.has('mask'), false); assert.equal(form.getAll('image[]').length, 1); assert.equal(form.get('size'), 'auto'); assert.equal(form.get('background'), 'transparent');
+    await editWithGemini({ ...params, apiModel: 'gemini-3.1-flash-image' });
+    const parts = JSON.parse(requests[1].request.body).contents[0].parts;
+    assert.equal(parts.filter(part => part.inlineData).length, 1);
+    assert.equal(parts[0].inlineData.data, source.base64);
+    assert.doesNotMatch(parts.at(-1).text, /red-on-white mask/);
+  } finally { globalThis.fetch = oldFetch; }
+});
+
+test('full badge output uses the original canvas and restores a cutout when a provider returns opaque output', async () => {
+  const original = await png(Buffer.from([0, 0, 0, 0, 255, 220, 0, 255, 0, 0, 0, 0]), 3, 1);
+  const source = await prepareBadgeSource(original);
+  const edited = await png(Buffer.from([0, 180, 0, 255, 0, 180, 0, 255, 0, 180, 0, 255]), 3, 1);
+  const result = await raw((await finishBadgeEdit(edited, source)).base64);
+  assert.equal(result.info.width, 3); assert.equal(result.info.height, 1);
+  assert.deepEqual([...result.data], [0, 0, 0, 0, 0, 180, 0, 255, 0, 0, 0, 0]);
+});
+
+test('native transparent output may change text silhouettes without clipping new letters to the old glyphs', async () => {
+  const original = await png(Buffer.from([0, 0, 0, 0, 255, 220, 0, 255, 0, 0, 0, 0]), 3, 1);
+  const edited = await png(Buffer.from([0, 180, 0, 255, 0, 180, 0, 255, 0, 0, 0, 0]), 3, 1);
+  const result = await raw((await finishBadgeEdit(edited, await prepareBadgeSource(original))).base64);
+  assert.equal(result.data[3], 255); assert.equal(result.data[11], 0);
+});
+
+test('color-only edits preserve the original silhouette even if the model introduces edge halos', async () => {
+  for (const prompt of ['Zmień kolor żółty na zielony', 'zmien zołty na zielony', 'żółty na zielony', 'Change yellow to green']) assert.equal(isBadgeRecolor(prompt), true, prompt);
+  for (const prompt of ['Zmień napis NA ŻYWO na LIVE', 'Dodaj zieloną gwiazdę', 'Usuń zielone tło']) assert.equal(isBadgeRecolor(prompt), false, prompt);
+  const original = await png(Buffer.from([0, 0, 0, 0, 255, 220, 0, 255, 0, 0, 0, 0]), 3, 1);
+  const edited = await png(Buffer.from([255, 255, 255, 255, 0, 180, 0, 255, 0, 0, 0, 0]), 3, 1);
+  const result = await raw((await finishBadgeEdit(edited, await prepareBadgeSource(original), true)).base64);
+  assert.deepEqual([...result.data], [0, 0, 0, 0, 0, 180, 0, 255, 0, 0, 0, 0]);
 });

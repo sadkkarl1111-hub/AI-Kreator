@@ -14,6 +14,7 @@ export type AiModelOption = {
 
 type UseAiModelsOptions = {
   purpose?: 'generation' | 'editing';
+  preferredModelId?: string;
 };
 
 type AiModelsResponse = {
@@ -61,7 +62,7 @@ function normalizeModel(model: any): AiModelOption {
   };
 }
 
-export function useAiModels({ purpose }: UseAiModelsOptions = {}) {
+export function useAiModels({ purpose, preferredModelId }: UseAiModelsOptions = {}) {
   const [aiModels, setAiModels] = useState<AiModelOption[]>([]);
   const [selectedModel, setSelectedModel] = useState('');
   const [loading, setLoading] = useState(true);
@@ -89,7 +90,7 @@ export function useAiModels({ purpose }: UseAiModelsOptions = {}) {
           return current;
         }
 
-        return pickDefaultModel(loaded)?.id || '';
+        return loaded.find((model: AiModelOption) => model.id === preferredModelId)?.id || pickDefaultModel(loaded)?.id || '';
       });
       setLoading(false);
     };
@@ -104,7 +105,7 @@ export function useAiModels({ purpose }: UseAiModelsOptions = {}) {
     return () => {
       cancelled = true;
     };
-  }, [purpose]);
+  }, [purpose, preferredModelId]);
 
   const selectedModelOption = useMemo(
     () => aiModels.find((model) => model.id === selectedModel) ?? null,
