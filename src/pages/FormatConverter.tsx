@@ -17,11 +17,15 @@ import {
 import { AppLayout } from '@/components/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { vpsFetch } from '@/lib/vpsApi';
 
 type Format = 'png' | 'jpeg' | 'webp';
 type ConversionStatus = 'idle' | 'converting' | 'done' | 'error';
+type Dimensions = { width: number; height: number };
+type ResizeLimits = { width?: number; height?: number };
+type ConversionResult = Dimensions & { url: string; size: number };
 
 type ImageItem = {
   id: string;
@@ -29,8 +33,8 @@ type ImageItem = {
   originalSize: number;
   sourceFormat: string;
   preview: string;
-  resultUrl: string | null;
-  resultSize: number | null;
+  dimensions: Dimensions | null;
+  result: ConversionResult | null;
   status: ConversionStatus;
 };
 
@@ -124,11 +128,29 @@ const formatSize = (bytes: number) => {
 
 const getTargetFormat = (targetFormat: Format) => FORMATS.find((format) => format.value === targetFormat) || FORMATS[0];
 
-const convertImage = async (item: ImageItem, targetFormat: Format, quality: number) => {
+const parseLimit = (value: string) => {
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  const limit = Number(trimmed);
+  return /^\d+$/.test(trimmed) && Number.isSafeInteger(limit) && limit > 0 ? limit : NaN;
+};
+
+const fitDimensions = ({ width, height }: Dimensions, limits: ResizeLimits): Dimensions => {
+  const scale = Math.min(1, (limits.width ?? width) / width, (limits.height ?? height) / height);
+  return {
+    width: Math.max(1, Math.round(width * scale)),
+    height: Math.max(1, Math.round(height * scale)),
+  };
+};
+
+const formatDimensions = ({ width, height }: Dimensions) => `${width} × ${height} px`;
+
+const convertImage = async (item: ImageItem, targetFormat: Format, quality: number, limits: ResizeLimits): Promise<ConversionResult> => {
   const image = await loadImage(item.preview);
+  const dimensions = fitDimensions({ width: image.naturalWidth, height: image.naturalHeight }, limits);
   const canvas = document.createElement('canvas');
-  canvas.width = image.naturalWidth;
-  canvas.height = image.naturalHeight;
+  canvas.width = dimensions.width;
+  canvas.height = dimensions.height;
 
   const context = canvas.getContext('2d');
   if (!context) {
@@ -140,16 +162,19 @@ const convertImage = async (item: ImageItem, targetFormat: Format, quality: numb
     context.fillRect(0, 0, canvas.width, canvas.height);
   }
 
-  context.drawImage(image, 0, 0);
+  context.imageSmoothingQuality = 'high';
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
 
   const format = getTargetFormat(targetFormat);
-  const resultUrl = canvas.toDataURL(format.mime, quality / 100);
-  const base64 = resultUrl.split(',')[1] || '';
+  const url = canvas.toDataURL(format.mime, quality / 100);
+  const prefix = `data:${format.mime};base64,`;
+  if (!url.startsWith(prefix) || url.length === prefix.length) {
+    throw new Error('Przeglądarka nie zapisała obrazu w wybranym formacie.');
+  }
+  const base64 = url.slice(prefix.length);
+  const padding = base64.endsWith('==') ? 2 : base64.endsWith('=') ? 1 : 0;
 
-  return {
-    resultUrl,
-    resultSize: Math.round((base64.length * 3) / 4),
-  };
+  return { ...dimensions, url, size: (base64.length * 3) / 4 - padding };
 };
 
 const downloadDataUrl = (url: string, fileName: string, targetFormat: Format) => {
@@ -166,15 +191,23 @@ const FormatConverter = () => {
   const [items, setItems] = useState<ImageItem[]>([]);
   const [targetFormat, setTargetFormat] = useState<Format>('png');
   const [quality, setQuality] = useState(92);
+  const [maxWidth, setMaxWidth] = useState('');
+  const [maxHeight, setMaxHeight] = useState('');
   const [converting, setConverting] = useState(false);
+  const [readingFiles, setReadingFiles] = useState(false);
   const [packageFileLimit, setPackageFileLimit] = useState(STANDARD_FILE_LIMIT);
   const [packageLimitLoading, setPackageLimitLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fileLimit = isAdmin ? ADMIN_FILE_LIMIT : packageFileLimit;
   const limitLoading = adminLoading || packageLimitLoading;
-  const convertedItems = items.filter((item) => item.resultUrl);
-  const canConvert = items.length > 0 && !converting;
+  const convertedItems = items.filter((item) => item.result);
+  const limits = { width: parseLimit(maxWidth), height: parseLimit(maxHeight) };
+  const invalidWidth = Number.isNaN(limits.width);
+  const invalidHeight = Number.isNaN(limits.height);
+  const validLimits = !invalidWidth && !invalidHeight;
+  const canConvert = items.length > 0 && !converting && !readingFiles && validLimits;
+  const canAddFiles = !converting && !readingFiles && !limitLoading && items.length < fileLimit;
 
   useEffect(() => {
     if (adminLoading) return;
@@ -218,6 +251,10 @@ const FormatConverter = () => {
     setItems((currentItems) => currentItems.map((item) => (item.id === id ? { ...item, ...patch } : item)));
   };
 
+  const clearResults = () => {
+    setItems((currentItems) => currentItems.map((item) => ({ ...item, result: null, status: 'idle' })));
+  };
+
   const handleFiles = async (fileList: FileList | null) => {
     const imageFiles = Array.from(fileList || []).filter((file) => file.type.startsWith('image/'));
     if (!imageFiles.length) return;
@@ -233,6 +270,7 @@ const FormatConverter = () => {
       toast.warning(`Możesz wybrać maksymalnie ${getImageLimitLabel(fileLimit)} naraz.`);
     }
 
+    setReadingFiles(true);
     try {
       const nextItems = await Promise.all(
         selectedFiles.map(async (file) => ({
@@ -241,8 +279,8 @@ const FormatConverter = () => {
           originalSize: file.size,
           sourceFormat: getSourceFormat(file),
           preview: await readFileAsDataUrl(file),
-          resultUrl: null,
-          resultSize: null,
+          dimensions: null,
+          result: null,
           status: 'idle' as ConversionStatus,
         })),
       );
@@ -256,6 +294,7 @@ const FormatConverter = () => {
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Nie udało się wczytać zdjęć.');
     } finally {
+      setReadingFiles(false);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -263,20 +302,20 @@ const FormatConverter = () => {
   };
 
   const handleConvertAll = async () => {
-    if (!items.length) return;
+    if (!canConvert) return;
 
     setConverting(true);
     let failed = 0;
 
     for (const item of items) {
-      updateItem(item.id, { status: 'converting', resultUrl: null, resultSize: null });
+      updateItem(item.id, { status: 'converting', result: null });
 
       try {
-        const result = await convertImage(item, targetFormat, quality);
-        updateItem(item.id, { ...result, status: 'done' });
+        const result = await convertImage(item, targetFormat, quality, limits);
+        updateItem(item.id, { result, status: 'done' });
       } catch {
         failed += 1;
-        updateItem(item.id, { status: 'error', resultUrl: null, resultSize: null });
+        updateItem(item.id, { status: 'error', result: null });
       }
     }
 
@@ -293,8 +332,8 @@ const FormatConverter = () => {
   const handleDownloadAll = () => {
     convertedItems.forEach((item, index) => {
       window.setTimeout(() => {
-        if (item.resultUrl) {
-          downloadDataUrl(item.resultUrl, item.fileName, targetFormat);
+        if (item.result) {
+          downloadDataUrl(item.result.url, item.fileName, targetFormat);
         }
       }, index * 120);
     });
@@ -324,10 +363,10 @@ const FormatConverter = () => {
           </Link>
           <div className="min-w-0">
             <h1 className="flex items-center gap-2 text-2xl font-bold">
-              <FileType className="h-6 w-6 text-primary" /> Zmiana formatu
+              <FileType className="h-6 w-6 shrink-0 text-primary" /> Zmiana formatu i rozmiaru
             </h1>
             <p className="text-sm text-muted-foreground">
-              Konwertuj obrazy między PNG, JPG i WebP. Standardowo 2 zdjęcia, w pakietach 5 lub 10.
+              Konwertuj obrazy między PNG, JPG i WebP i opcjonalnie zmniejsz ich wymiary.
             </p>
           </div>
         </div>
@@ -340,6 +379,7 @@ const FormatConverter = () => {
               accept="image/*"
               multiple={fileLimit > 1}
               className="hidden"
+              disabled={!canAddFiles}
               onChange={(event) => handleFiles(event.target.files)}
             />
 
@@ -365,7 +405,7 @@ const FormatConverter = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => fileInputRef.current?.click()}
-                disabled={limitLoading}
+                disabled={!canAddFiles}
               >
                 <Upload className="mr-2 h-4 w-4" />
                 Wybierz zdjęcia
@@ -377,7 +417,7 @@ const FormatConverter = () => {
                 type="button"
                 className="w-full rounded-xl border-2 border-dashed p-12 text-center transition-colors hover:border-primary/50"
                 onClick={() => fileInputRef.current?.click()}
-                disabled={limitLoading}
+                disabled={!canAddFiles}
               >
                 <Images className="mx-auto mb-3 h-10 w-10 text-muted-foreground" />
                 <p className="font-medium">Kliknij, aby wgrać zdjęcia</p>
@@ -387,46 +427,84 @@ const FormatConverter = () => {
               </button>
             ) : (
               <div className="space-y-5">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="text-sm text-muted-foreground">Format wynikowy</span>
-                  <div className="flex gap-2">
-                    {FORMATS.map((format) => (
-                      <Button
-                        key={format.value}
-                        type="button"
-                        size="sm"
-                        variant={targetFormat === format.value ? 'default' : 'outline'}
-                        onClick={() => {
-                          setTargetFormat(format.value);
-                          setItems((currentItems) =>
-                            currentItems.map((item) => ({ ...item, resultUrl: null, resultSize: null, status: 'idle' })),
-                          );
-                        }}
-                      >
-                        {format.label}
-                      </Button>
-                    ))}
+                <fieldset disabled={converting} className="min-w-0 space-y-4">
+                  <legend className="sr-only">Ustawienia konwersji</legend>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="text-sm text-muted-foreground">Format wynikowy</span>
+                    <div className="flex gap-2">
+                      {FORMATS.map((format) => (
+                        <Button
+                          key={format.value}
+                          type="button"
+                          size="sm"
+                          aria-pressed={targetFormat === format.value}
+                          variant={targetFormat === format.value ? 'default' : 'outline'}
+                          onClick={() => {
+                            if (targetFormat === format.value) return;
+                            setTargetFormat(format.value);
+                            clearResults();
+                          }}
+                        >
+                          {format.label}
+                        </Button>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                {targetFormat !== 'png' && (
-                  <div className="space-y-1">
-                    <label className="text-sm text-muted-foreground">Jakość: {quality}%</label>
-                    <input
-                      type="range"
-                      min={10}
-                      max={100}
-                      value={quality}
-                      onChange={(event) => {
-                        setQuality(Number(event.target.value));
-                        setItems((currentItems) =>
-                          currentItems.map((item) => ({ ...item, resultUrl: null, resultSize: null, status: 'idle' })),
-                        );
-                      }}
-                      className="w-full"
-                    />
+                  {targetFormat !== 'png' && (
+                    <div className="space-y-1">
+                      <label htmlFor="format-quality" className="text-sm text-muted-foreground">Jakość {quality}%</label>
+                      <input
+                        id="format-quality"
+                        type="range"
+                        min={10}
+                        max={100}
+                        value={quality}
+                        onChange={(event) => {
+                          setQuality(Number(event.target.value));
+                          clearResults();
+                        }}
+                        className="w-full"
+                      />
+                    </div>
+                  )}
+
+                  <div className="space-y-3 rounded-xl border bg-muted/20 p-4">
+                    <div className="space-y-1">
+                      <h2 className="text-sm font-medium">Zmniejsz wymiary (opcjonalnie)</h2>
+                      <p id="format-resize-help" className="text-sm text-muted-foreground">
+                        Podaj jeden lub oba limity dla wszystkich zdjęć. Zachowamy proporcje i oryginalny rozmiar mniejszych zdjęć.
+                      </p>
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {[
+                        { id: 'format-width', label: 'Maks. szerokość (px)', value: maxWidth, setValue: setMaxWidth, invalid: invalidWidth },
+                        { id: 'format-height', label: 'Maks. wysokość (px)', value: maxHeight, setValue: setMaxHeight, invalid: invalidHeight },
+                      ].map(({ id, label, value, setValue, invalid }) => (
+                        <div key={id} className="space-y-1">
+                          <label htmlFor={id} className="text-sm font-medium">{label}</label>
+                          <Input
+                            id={id}
+                            inputMode="numeric"
+                            placeholder="Bez limitu"
+                            value={value}
+                            aria-invalid={invalid}
+                            aria-describedby={invalid ? 'format-resize-help format-resize-error' : 'format-resize-help'}
+                            onChange={(event) => {
+                              setValue(event.target.value);
+                              clearResults();
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    {!validLimits && (
+                      <p id="format-resize-error" role="alert" className="text-sm text-destructive">
+                        Wpisz dodatnią liczbę całkowitą albo zostaw pole puste.
+                      </p>
+                    )}
                   </div>
-                )}
+                </fieldset>
 
                 <div className="flex flex-wrap gap-3">
                   <Button type="button" onClick={handleConvertAll} disabled={!canConvert} className="gap-2">
@@ -437,11 +515,11 @@ const FormatConverter = () => {
                     type="button"
                     variant="outline"
                     onClick={() => fileInputRef.current?.click()}
-                    disabled={converting || limitLoading || items.length >= fileLimit}
+                    disabled={!canAddFiles}
                   >
                     Dodaj zdjęcia
                   </Button>
-                  <Button type="button" variant="outline" onClick={clearItems} disabled={converting}>
+                  <Button type="button" variant="outline" onClick={clearItems} disabled={converting || readingFiles}>
                     Wyczyść
                   </Button>
                   {convertedItems.length > 1 && (
@@ -455,7 +533,15 @@ const FormatConverter = () => {
                 <div className="grid gap-3">
                   {items.map((item) => (
                     <div key={item.id} className="grid gap-3 rounded-xl border bg-background p-3 sm:grid-cols-[88px,1fr,auto]">
-                      <img src={item.preview} alt={item.fileName} className="h-20 w-20 rounded-lg object-cover" />
+                      <img
+                        src={item.preview}
+                        alt={item.fileName}
+                        className="h-20 w-20 rounded-lg object-cover"
+                        onLoad={(event) => {
+                          const { naturalWidth, naturalHeight } = event.currentTarget;
+                          updateItem(item.id, { dimensions: { width: naturalWidth, height: naturalHeight } });
+                        }}
+                      />
                       <div className="min-w-0 space-y-2">
                         <div className="flex flex-wrap items-center gap-2">
                           <p className="max-w-full truncate text-sm font-medium">{item.fileName}</p>
@@ -468,8 +554,12 @@ const FormatConverter = () => {
                           </span>
                         </div>
                         <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                          <span>Oryginał: {formatSize(item.originalSize)}</span>
-                          {item.resultSize && <span>Wynik: {formatSize(item.resultSize)}</span>}
+                          <span>Oryginał · {item.dimensions && `${formatDimensions(item.dimensions)} · `}{formatSize(item.originalSize)}</span>
+                          {item.result ? (
+                            <span>Wynik · {formatDimensions(item.result)} · {formatSize(item.result.size)}</span>
+                          ) : item.dimensions && validLimits && (limits.width || limits.height) ? (
+                            <span>Po konwersji · {formatDimensions(fitDimensions(item.dimensions, limits))}</span>
+                          ) : null}
                           {item.status === 'converting' && <span>Konwertuję...</span>}
                           {item.status === 'done' && (
                             <span className="inline-flex items-center gap-1 text-emerald-600">
@@ -481,11 +571,11 @@ const FormatConverter = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-2 sm:justify-end">
-                        {item.resultUrl && (
+                        {item.result && (
                           <Button
                             type="button"
                             size="sm"
-                            onClick={() => downloadDataUrl(item.resultUrl!, item.fileName, targetFormat)}
+                            onClick={() => downloadDataUrl(item.result!.url, item.fileName, targetFormat)}
                             className="gap-2"
                           >
                             <Download className="h-4 w-4" />
@@ -497,7 +587,7 @@ const FormatConverter = () => {
                           variant="ghost"
                           size="icon"
                           onClick={() => removeItem(item.id)}
-                          disabled={converting}
+                          disabled={converting || readingFiles}
                           aria-label={`Usuń ${item.fileName}`}
                         >
                           <Trash2 className="h-4 w-4" />

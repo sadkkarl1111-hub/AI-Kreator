@@ -47,7 +47,7 @@ export const PUBLIC_SEO_PAGES: SeoPage[] = [
   page('/tools/mockup', 'Darmowy generator mockupów online', 'Umieść własną grafikę na mockupie telefonu, laptopa, koszulki lub innego nośnika. Przygotuj podgląd projektu bez generowania obrazów AI.'),
   page('/tools/social-resize', 'Zmiana rozmiaru grafik do social mediów', 'Dopasuj grafikę do formatów Instagram, YouTube, LinkedIn i innych platform. Przygotuj kilka rozmiarów do swoich postów i materiałów reklamowych.'),
   page('/tools/color-palette', 'Generator palety kolorów ze zdjęcia', 'Wczytaj zdjęcie i odczytaj jego dominujące kolory. Przygotuj paletę do grafik reklamowych, marki, strony internetowej lub prezentacji.'),
-  page('/tools/format', 'Konwerter PNG, JPG i WebP online', 'Zmieniaj format zdjęć i grafik między PNG, JPG oraz WebP. Wczytaj własny plik, wybierz format wyjściowy i pobierz skonwertowany obraz.'),
+  page('/tools/format', 'Zmiana formatu i rozmiaru zdjęć online', 'Konwertuj zdjęcia między PNG, JPG i WebP oraz zmniejszaj ich wymiary w pikselach. Ustaw maksymalną szerokość lub wysokość i zachowaj proporcje.'),
   page('/tools/compress', 'Darmowa kompresja zdjęć online', 'Zmniejsz rozmiar zdjęcia z regulacją jakości i podglądem efektu. Przygotuj lżejsze pliki do strony internetowej, sklepu lub publikacji.'),
   page('/tools/pdf', 'Zdjęcia do PDF — darmowy konwerter online', 'Połącz wiele zdjęć w jeden dokument PDF. Wczytaj obrazy, ustaw ich kolejność i pobierz gotowy plik bez kredytów AI.'),
   page('/tools/flip', 'Odbicie lustrzane zdjęcia online', 'Odbij zdjęcie poziomo lub pionowo w przeglądarce. Przygotuj lustrzaną wersję obrazu i pobierz plik bez kredytów AI.'),

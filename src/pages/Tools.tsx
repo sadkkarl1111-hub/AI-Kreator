@@ -74,7 +74,7 @@ const tools = [
   { to: '/tools/mockup', icon: Monitor, label: 'Mockup Generator', desc: 'Nałóż grafikę na mockupy telefonu, laptopa, koszulki i innych nośników.', color: 'from-purple-500 to-indigo-600', credits: false },
   { to: '/tools/social-resize', icon: LayoutGrid, label: 'Smart Resize Social', desc: 'Dopasuj jedną grafikę do formatów Instagram, YouTube, LinkedIn i innych.', color: 'from-orange-500 to-amber-600', credits: false },
   { to: '/tools/color-palette', icon: Pipette, label: 'Paleta kolorów', desc: 'Wyciągnij dominujące kolory ze zdjęcia.', color: 'from-rose-500 to-pink-600', credits: false },
-  { to: '/tools/format', icon: FileType, label: 'Zmiana formatu', desc: 'Konwertuj obrazy między PNG, JPG i WebP.', color: 'from-green-500 to-emerald-600', credits: false },
+  { to: '/tools/format', icon: FileType, label: 'Zmiana formatu i rozmiaru', desc: 'Konwertuj PNG, JPG i WebP oraz zmniejszaj wymiary obrazów.', color: 'from-green-500 to-emerald-600', credits: false },
   { to: '/tools/compress', icon: Minimize2, label: 'Kompresja obrazu', desc: 'Zmniejsz rozmiar pliku z regulacją jakości.', color: 'from-blue-500 to-indigo-500', credits: false },
   { to: '/tools/pdf', icon: FileText, label: 'Obrazy do PDF', desc: 'Połącz wiele zdjęć w jeden plik PDF.', color: 'from-red-500 to-rose-600', credits: false },
   { to: '/tools/flip', icon: FlipHorizontal2, label: 'Odbicie (Flip)', desc: 'Odbij obraz w pionie lub poziomie. Darmowe.', color: 'from-cyan-500 to-teal-600', credits: false },
