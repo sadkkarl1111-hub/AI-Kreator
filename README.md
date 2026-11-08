@@ -43,6 +43,15 @@ npm run dev
 .\scripts\deploy-vps.ps1 -IdentityFile "$env:USERPROFILE\.ssh\id_ed25519" -RestartBackend -ReloadNginx
 ```
 
+## Darmowe narzędzia do zdjęć
+
+- `/tools/rounded-corners`: zaokrąglenie rogów lub centralny kadr kołowy, eksport PNG z przezroczystością.
+- `/tools/photo-frame`: kolorowy margines i opcjonalny miękki cień, eksport PNG.
+- `/tools/image-tiles`: siatka od 1 do 6 wierszy i kolumn, eksport numerowanych PNG w ZIP bez linii podglądu.
+
+Narzędzia są publiczne i nie korzystają z API ani kredytów. Obsługują PNG,
+JPG i WebP do 20 MB; maksymalny bok obrazu roboczego wynosi 2400 px.
+
 ## Zdjęcia produktowe AI
 
 `/tools/product-photos` jest dostępne po zalogowaniu z listy narzędzi.

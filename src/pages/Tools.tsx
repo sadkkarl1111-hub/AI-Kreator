@@ -43,6 +43,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { vpsPublicFetch } from '@/lib/vpsApi';
 
 const tools = [
+  { to: '/tools/rounded-corners', icon: ImageIcon, label: 'Zaokrąglanie rogów', desc: 'Zaokrąglij zdjęcie lub wytnij je w koło. Pobierz PNG z przezroczystym tłem.', color: 'from-sky-500 to-cyan-600', credits: false },
+  { to: '/tools/photo-frame', icon: ImageIcon, label: 'Cień i ramka', desc: 'Dodaj kolorową ramkę, margines i miękki cień do zdjęcia lub zrzutu ekranu.', color: 'from-violet-500 to-indigo-600', credits: false },
+  { to: '/tools/image-tiles', icon: LayoutGrid, label: 'Podziel zdjęcie na kafelki', desc: 'Podziel zdjęcie na siatkę i pobierz ponumerowane kafelki PNG w ZIP.', color: 'from-emerald-500 to-teal-600', credits: false },
   { to: '/tools/product-photos', icon: ImageIcon, label: 'Zdjęcia produktowe AI', desc: 'Wgraj produkt i wybierz studio, marmur, naturę lub inną scenerię. Wygeneruj zdjęcie do sklepu i reklamy.', color: 'from-sky-500 to-indigo-600', credits: true },
   { to: '/tools/widgets', icon: Code2, label: 'Liczniki i paski na stronę', desc: 'Odliczanie do wydarzenia, wolne miejsca i postęp. Ustaw harmonogram i skopiuj gotowy kod HTML.', color: 'from-cyan-500 to-violet-600', credits: false },
   { to: '/tools/gifs', icon: Film, label: 'Animowane GIF-y i emoji', desc: 'Ruchome emoji i polskie reakcje. Pobierz MP4 do WhatsApp lub GIF z animacją.', color: 'from-pink-500 to-violet-600', credits: false },

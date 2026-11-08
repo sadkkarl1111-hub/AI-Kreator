@@ -51,6 +51,7 @@ const LogoMaker = lazy(() => import("./pages/LogoMaker"));
 const QrCodeGenerator = lazy(() => import("./pages/QrCodeGenerator"));
 const OcrTool = lazy(() => import("./pages/OcrTool"));
 const FlipTool = lazy(() => import("./pages/FlipTool"));
+const FreePhotoTools = lazy(() => import("./pages/FreePhotoTools"));
 const ImageToPrompt = lazy(() => import("./pages/ImageToPrompt"));
 const PromptGeneratorPro = lazy(() => import("./pages/PromptGeneratorPro"));
 const AdPromptGenerator = lazy(() => import("./pages/AdPromptGenerator"));
@@ -197,6 +198,9 @@ function AppRoutes() {
         <Route path="/tools/qrcode" element={<QrCodeGenerator />} />
         <Route path="/tools/ocr" element={<ProtectedRoute><OcrTool /></ProtectedRoute>} />
         <Route path="/tools/flip" element={<FlipTool />} />
+        <Route path="/tools/rounded-corners" element={<FreePhotoTools key="rounded" mode="rounded" />} />
+        <Route path="/tools/photo-frame" element={<FreePhotoTools key="frame" mode="frame" />} />
+        <Route path="/tools/image-tiles" element={<FreePhotoTools key="tiles" mode="tiles" />} />
         <Route path="/tools/image-to-prompt" element={<ProtectedRoute><ImageToPrompt /></ProtectedRoute>} />
         <Route path="/tools/prompt-generator" element={<PromptGeneratorPro />} />
         <Route path="/generator-reklam" element={<ProtectedRoute><AdPromptGenerator /></ProtectedRoute>} />

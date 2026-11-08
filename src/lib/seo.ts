@@ -23,6 +23,9 @@ const page = (path: string, heading: string, description: string): SeoPage => ({
 
 // Only pages that a guest can actually open belong in the sitemap.
 export const PUBLIC_SEO_PAGES: SeoPage[] = [
+  page('/tools/rounded-corners', 'Zaokrąglanie rogów zdjęcia online', 'Zaokrąglij rogi zdjęcia lub wytnij je w koło i pobierz PNG z przezroczystym tłem. Darmowo, bez konta i kredytów.'),
+  page('/tools/photo-frame', 'Cień i ramka do zdjęcia online', 'Dodaj kolorową ramkę, margines i miękki cień do zdjęcia lub zrzutu ekranu. Pobierz PNG bez konta i kredytów.'),
+  page('/tools/image-tiles', 'Dzielenie zdjęcia na kafelki online', 'Podziel całe zdjęcie na siatkę i pobierz ponumerowane kafelki PNG w archiwum ZIP. Darmowo w przeglądarce.'),
   page('/', 'Generator grafik AI i darmowe narzędzia graficzne', 'Twórz grafiki reklamowe i mockupy z AI. Korzystaj z darmowego kreatora karuzel, generatora promptów, ikon i edycji zdjęć online. Generowanie obrazów AI jest płatne.'),
   page('/tools', 'Darmowe narzędzia graficzne online i narzędzia AI', 'Edytuj zdjęcia, twórz karuzele, napisy, kody QR i pliki SVG w przeglądarce. Zobacz darmowe narzędzia oraz funkcje AI rozliczane kredytami.'),
   page('/tools/widgets', 'Liczniki i paski postępu na stronę — generator kodu HTML', 'Stwórz odliczanie do webinaru, licznik wolnych miejsc i animowany pasek postępu. Ustaw datę, kolory i harmonogram codziennych zmian. Skopiuj gotowy kod HTML.'),
