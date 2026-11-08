@@ -202,6 +202,7 @@ function AppRoutes() {
         <Route path="/generator-reklam" element={<ProtectedRoute><AdPromptGenerator /></ProtectedRoute>} />
         <Route path="/tools/social-resize" element={<SocialResize />} />
         <Route path="/tools/background-replace" element={<ProtectedRoute><BackgroundReplace /></ProtectedRoute>} />
+        <Route path="/tools/product-photos" element={<ProtectedRoute><BackgroundReplace key="product-photos" productMode /></ProtectedRoute>} />
         <Route path="/editor" element={<Navigate to="/tools/editor" replace />} />
         <Route path="/templates" element={<ProtectedRoute><Templates /></ProtectedRoute>} />
         <Route path="/company-assistant" element={<AdminOnlyRoute><CompanyAssistant /></AdminOnlyRoute>} />

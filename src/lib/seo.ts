@@ -66,7 +66,7 @@ export const PRIVATE_PATHS = [
   '/auth', '/auth/callback', '/reset-password', '/dashboard', '/generator',
   '/tools/editor', '/tools/badge-editor', '/tools/remove-bg', '/tools/upscale',
   '/tools/style', '/tools/colorize', '/tools/outpainting', '/tools/variants',
-  '/tools/logo', '/tools/ocr', '/tools/image-to-prompt', '/tools/background-replace',
+  '/tools/logo', '/tools/ocr', '/tools/image-to-prompt', '/tools/background-replace', '/tools/product-photos',
   '/generator-reklam', '/editor', '/templates', '/company-assistant', '/gallery',
   '/credits', '/whatsapp', '/admin', '/profile',
 ];

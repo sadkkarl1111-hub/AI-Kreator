@@ -14,6 +14,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { vpsFetch } from '@/lib/vpsApi';
+import { PRODUCT_SCENES, buildProductPhotoPrompt } from '@/lib/productPhotography';
 import {
   type GalleryToolImage,
   type SelectedToolImage,
@@ -61,7 +62,7 @@ const AI_IMAGE_PREP = {
   quality: 0.9,
 } as const;
 
-const BackgroundReplace = () => {
+const BackgroundReplace = ({ productMode = false }: { productMode?: boolean }) => {
   const { user } = useAuth();
   const { balance, loading: creditsLoading, refetch: refetchCredits } = useCredits();
   const { isAdmin } = useIsAdmin();
@@ -71,14 +72,15 @@ const BackgroundReplace = () => {
   const [selectedImage, setSelectedImage] = useState<SelectedToolImage | null>(null);
   const [galleryImages, setGalleryImages] = useState<GalleryToolImage[]>([]);
   const [showGallery, setShowGallery] = useState(false);
-  const [selectedPresetId, setSelectedPresetId] = useState<(typeof BACKGROUND_PRESETS)[number]['id']>('studio-white');
+  const [selectedPresetId, setSelectedPresetId] = useState<string>('studio-white');
   const [extraNotes, setExtraNotes] = useState('');
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const modelCost = selectedModelOption?.cost ?? 50;
-  const toolCost = configuredCost ?? modelCost;
-  const selectedPreset = BACKGROUND_PRESETS.find((preset) => preset.id === selectedPresetId) ?? BACKGROUND_PRESETS[0];
+  const toolCost = productMode ? modelCost : configuredCost ?? modelCost;
+  const presets = productMode ? PRODUCT_SCENES : BACKGROUND_PRESETS;
+  const selectedPreset = presets.find((preset) => preset.id === selectedPresetId) ?? presets[0];
 
   const handleFileUpload = async (file: File) => {
     try {
@@ -93,9 +95,13 @@ const BackgroundReplace = () => {
 
   const loadGallery = useCallback(async () => {
     if (!user) return;
-    const images = await loadUserGalleryImages(null, user.id, 24);
-    setGalleryImages(images);
-    setShowGallery(true);
+    try {
+      const images = await loadUserGalleryImages(null, user.id, 24);
+      setGalleryImages(images);
+      setShowGallery(true);
+    } catch {
+      toast.error('Nie udało się wczytać galerii. Spróbuj ponownie.');
+    }
   }, [user]);
 
   const selectFromGallery = async (url: string) => {
@@ -113,11 +119,11 @@ const BackgroundReplace = () => {
     if (!selectedImage) return;
 
     if (!isAdmin && (balance ?? 0) < toolCost) {
-      toast.error('Masz za mało kredytów na podmianę tła');
+      toast.error('Masz za mało kredytów na wygenerowanie zdjęcia');
       return;
     }
 
-    const prompt = [
+    const prompt = productMode ? buildProductPhotoPrompt(selectedPreset.prompt, extraNotes) : [
       'Replace only the background of this image.',
       'Keep the main subject exactly the same: same face, body, pose, clothing, product details, colors, proportions, perspective, and subject lighting.',
       'Do not alter the subject and do not add extra objects touching the subject.',
@@ -137,15 +143,16 @@ const BackgroundReplace = () => {
           imageBase64: selectedImage.base64,
           imageMimeType: selectedImage.mimeType,
           model: selectedModel,
-          toolId: 'background-replace',
+          toolId: productMode ? 'product-photos' : 'background-replace',
         }),
       });
 
       if (data?.error) throw new Error(data.error);
 
-      setResultImage(data.imageUrl || null);
+      if (!data.imageUrl) throw new Error('Nie otrzymano zdjęcia. Spróbuj ponownie.');
+      setResultImage(data.imageUrl);
       refetchCredits();
-      toast.success('Tło zostało podmienione');
+      toast.success(productMode ? 'Zdjęcie produktowe jest gotowe. Znajdziesz je także w galerii.' : 'Tło zostało podmienione');
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Nie udało się podmienić tła');
     } finally {
@@ -158,11 +165,12 @@ const BackgroundReplace = () => {
 
     try {
       const response = await fetch(resultImage);
+      if (!response.ok) throw new Error('Download failed');
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `background-replace-${Date.now()}.png`;
+      link.download = `${productMode ? 'zdjecie-produktowe' : 'background-replace'}-${Date.now()}.${blob.type === 'image/jpeg' ? 'jpg' : blob.type === 'image/webp' ? 'webp' : 'png'}`;
       link.click();
       URL.revokeObjectURL(url);
     } catch {
@@ -181,10 +189,10 @@ const BackgroundReplace = () => {
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
-              <ImageIcon className="w-6 h-6 text-primary" /> Background Replace
+              <ImageIcon className="w-6 h-6 text-primary" /> {productMode ? 'Zdjęcia produktowe AI' : 'Background Replace'}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Podmień samo tło bez zmieniania osoby, produktu albo głównego obiektu na zdjęciu.
+              {productMode ? 'Wgraj zdjęcie produktu, wybierz scenerię i przygotuj fotografię do sklepu lub reklamy.' : 'Podmień samo tło bez zmieniania osoby, produktu albo głównego obiektu na zdjęciu.'}
             </p>
           </div>
         </div>
@@ -192,18 +200,19 @@ const BackgroundReplace = () => {
         <Alert>
           <Sparkles className="w-4 h-4" />
           <AlertDescription>
-            Narzędzie najlepiej działa dla portretów, zdjęć produktowych i grafik z wyraźnym głównym obiektem.
+            {productMode ? 'Najlepsze efekty daje ostre zdjęcie jednego produktu widocznego w całości. Po generowaniu sprawdź logo, napisy i detale produktu.' : 'Narzędzie najlepiej działa dla portretów, zdjęć produktowych i grafik z wyraźnym głównym obiektem.'}
           </AlertDescription>
         </Alert>
 
         <Alert>
           <AlertDescription>
-            Obraz jest automatycznie zmniejszany przed wysyłką do AI, żeby ograniczyć błędy przy większych plikach.
+            {productMode ? 'Wybierz plik do 20 MB. Gotowe zdjęcie zostanie również zapisane w Twojej galerii.' : 'Obraz jest automatycznie zmniejszany przed wysyłką do AI, żeby ograniczyć błędy przy większych plikach.'}
           </AlertDescription>
         </Alert>
 
         <Card>
           <CardContent className="pt-6 space-y-5">
+            <fieldset disabled={loading} className="space-y-5 min-w-0">
             {!selectedImage ? (
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-3">
@@ -219,7 +228,7 @@ const BackgroundReplace = () => {
                       }}
                     />
                     <Button asChild variant="outline" className="gap-2 cursor-pointer">
-                      <span><Upload className="w-4 h-4" /> Wgraj obraz</span>
+                      <span><Upload className="w-4 h-4" /> {productMode ? 'Wgraj zdjęcie produktu' : 'Wgraj obraz'}</span>
                     </Button>
                   </label>
                   <Button onClick={loadGallery} variant="outline" className="gap-2">
@@ -271,12 +280,13 @@ const BackgroundReplace = () => {
             <div className="space-y-3">
               <label className="text-sm font-medium">Scena docelowa</label>
               <div className="flex flex-wrap gap-2">
-                {BACKGROUND_PRESETS.map((preset) => (
+                {presets.map((preset) => (
                   <Button
                     key={preset.id}
                     variant={selectedPresetId === preset.id ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setSelectedPresetId(preset.id)}
+                    aria-pressed={selectedPresetId === preset.id}
                     className={selectedPresetId === preset.id ? 'gradient-bg' : ''}
                   >
                     {preset.label}
@@ -290,7 +300,7 @@ const BackgroundReplace = () => {
               <Textarea
                 value={extraNotes}
                 onChange={(event) => setExtraNotes(event.target.value)}
-                placeholder="Np. tło ma być bardzo jasne, bardziej premium, bardziej naturalne, bez ludzi w tle..."
+                placeholder={productMode ? 'Np. ciepłe światło z lewej strony, minimalistyczna kompozycja, dużo wolnego miejsca wokół produktu...' : 'Np. tło ma być bardzo jasne, bardziej premium, bardziej naturalne, bez ludzi w tle...'}
                 className="min-h-[120px]"
               />
             </div>
@@ -323,17 +333,17 @@ const BackgroundReplace = () => {
 
             <Button
               onClick={replaceBackground}
-              disabled={!selectedImage || loading}
+              disabled={!selectedImage || loading || !selectedModelOption || creditsLoading}
               className="w-full gap-2"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-              {loading ? 'Podmieniam tło...' : 'Podmień tło'}
+              {loading ? (productMode ? 'Tworzę zdjęcie produktowe...' : 'Podmieniam tło...') : (productMode ? 'Wygeneruj zdjęcie produktowe' : 'Podmień tło')}
             </Button>
 
             {resultImage && (
               <div className="space-y-4">
                 <div className="rounded-xl border overflow-hidden bg-muted/20">
-                  <img src={resultImage} alt="Wynik podmiany tła" className="w-full max-h-[420px] object-contain" />
+                  <img src={resultImage} alt={productMode ? 'Gotowe zdjęcie produktowe' : 'Wynik podmiany tła'} className="w-full max-h-[420px] object-contain" />
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <Button onClick={downloadResult} variant="outline" className="gap-2">
@@ -345,6 +355,7 @@ const BackgroundReplace = () => {
                 </div>
               </div>
             )}
+            </fieldset>
           </CardContent>
         </Card>
       </motion.div>

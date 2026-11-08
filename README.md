@@ -43,6 +43,15 @@ npm run dev
 .\scripts\deploy-vps.ps1 -IdentityFile "$env:USERPROFILE\.ssh\id_ed25519" -RestartBackend -ReloadNginx
 ```
 
+## Zdjęcia produktowe AI
+
+`/tools/product-photos` jest dostępne po zalogowaniu z listy narzędzi.
+Użytkownik wgrywa zdjęcie produktu lub wybiera je z galerii, ustawia jedną
+z sześciu scenerii i opcjonalne wskazówki. Edycja korzysta z istniejącego
+`/ai/edit-image`, zapisuje wynik w galerii i rozlicza kredyty według modelu.
+Instrukcje zachowania produktu i etykiet są w `src/lib/productPhotography.ts`.
+Po generowaniu należy sprawdzić napisy i szczegóły produktu.
+
 ## Darmowa galeria GIF-ów
 
 `/tools/gifs` udostępnia 34 autorskie animacje: 16 emoji z przezroczystym tłem
