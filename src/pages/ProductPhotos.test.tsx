@@ -28,6 +28,7 @@ it('sends the product reference and selected scene, uses model pricing and displ
   await uploadProduct();
   expect(screen.getByText('60 kr')).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: 'Marmur' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Na leżąco' }));
   fireEvent.click(screen.getByRole('button', { name: 'Wygeneruj zdjęcie produktowe' }));
   await screen.findByAltText('Gotowe zdjęcie produktowe');
   const [endpoint, options] = mocks.fetch.mock.calls[0];
@@ -36,6 +37,8 @@ it('sends the product reference and selected scene, uses model pricing and displ
   expect(body).toMatchObject({ imageBase64: 'c291cmNl', imageMimeType: 'image/png', model: 'editing-model', toolId: 'product-photos' });
   expect(body.prompt).toContain('marble tabletop');
   expect(body.prompt).toContain('all existing label text');
+  expect(body.prompt).toContain('Lay the product horizontally');
+  expect(body.prompt).toContain('Do not merely paste the original cutout');
   expect(mocks.refetch).toHaveBeenCalledOnce();
 });
 

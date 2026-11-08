@@ -14,7 +14,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { vpsFetch } from '@/lib/vpsApi';
-import { PRODUCT_SCENES, buildProductPhotoPrompt } from '@/lib/productPhotography';
+import { PRODUCT_SCENES, PRODUCT_POSES, buildProductPhotoPrompt } from '@/lib/productPhotography';
 import {
   type GalleryToolImage,
   type SelectedToolImage,
@@ -74,6 +74,7 @@ const BackgroundReplace = ({ productMode = false }: { productMode?: boolean }) =
   const [showGallery, setShowGallery] = useState(false);
   const [selectedPresetId, setSelectedPresetId] = useState<string>('studio-white');
   const [extraNotes, setExtraNotes] = useState('');
+  const [poseId, setPoseId] = useState<string>('angle');
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -123,7 +124,8 @@ const BackgroundReplace = ({ productMode = false }: { productMode?: boolean }) =
       return;
     }
 
-    const prompt = productMode ? buildProductPhotoPrompt(selectedPreset.prompt, extraNotes) : [
+    const pose = PRODUCT_POSES.find((item) => item.id === poseId) ?? PRODUCT_POSES[0];
+    const prompt = productMode ? buildProductPhotoPrompt(selectedPreset.prompt, extraNotes, pose.prompt) : [
       'Replace only the background of this image.',
       'Keep the main subject exactly the same: same face, body, pose, clothing, product details, colors, proportions, perspective, and subject lighting.',
       'Do not alter the subject and do not add extra objects touching the subject.',
@@ -294,6 +296,21 @@ const BackgroundReplace = ({ productMode = false }: { productMode?: boolean }) =
                 ))}
               </div>
             </div>
+
+            {productMode && (
+              <div className="space-y-3">
+                <h2 className="text-sm font-medium">Pozycja produktu i perspektywa</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {PRODUCT_POSES.map((pose) => (
+                    <Button key={pose.id} variant={poseId === pose.id ? 'default' : 'outline'}
+                      aria-pressed={poseId === pose.id} onClick={() => setPoseId(pose.id)}>
+                      {pose.label}
+                    </Button>
+                  ))}
+                </div>
+                <p className="text-sm text-muted-foreground">Każde generowanie tworzy jedno ujęcie. Wybierz kolejną pozycję, aby przygotować serię zdjęć. AI odtwarza niewidoczne powierzchnie, więc sprawdź zgodność detali z produktem.</p>
+              </div>
+            )}
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Dodatkowe wskazówki</label>
