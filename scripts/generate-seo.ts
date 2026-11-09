@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { getToolGuide } from '../src/content/toolGuides.ts';
 import {
   DEFAULT_IMAGE, PRIVATE_PATHS, PUBLIC_SEO_PAGES, SEO_ALIASES,
   seoStructuredData, SITE_NAME, SITE_URL, type SeoPage,
@@ -39,9 +40,17 @@ export function renderInitialContent(entry?: SeoPage) {
   if (!entry) return '';
   const link = (href: string, label: string) => `<a href="${escapeHtml(href)}">${escapeHtml(label)}</a>`;
   const article = entry.article;
+  const guide = getToolGuide(entry.path);
   const body = article ? [
     ...article.intro.map((text) => `<p>${escapeHtml(text)}</p>`),
     ...article.sections.map((section) => `<section><h2>${escapeHtml(section.title)}</h2>${section.paragraphs.map((text) => `<p>${escapeHtml(text)}</p>`).join('')}${section.table ? `<table>${section.table.caption ? `<caption>${escapeHtml(section.table.caption)}</caption>` : ''}<thead><tr>${section.table.headers.map((cell) => `<th>${escapeHtml(cell)}</th>`).join('')}</tr></thead><tbody>${section.table.rows.map((row) => `<tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table>` : ''}${section.links?.map((entry) => `<p>${link(entry.href, entry.label)}</p>`).join('') || ''}</section>`),
+  ].join('') : guide ? [
+    '<section aria-labelledby="tool-guide-title">',
+    `<h2 id="tool-guide-title">${escapeHtml(guide.title)}</h2><p>${escapeHtml(guide.intro)}</p>`,
+    `<ol>${guide.steps.map(step => `<li>${escapeHtml(step)}</li>`).join('')}</ol>`,
+    `<p>${escapeHtml(guide.tip)}</p>`,
+    `<nav aria-label="Powiązane narzędzia"><ul>${guide.related.map(item => `<li>${link(item.href, item.label)}</li>`).join('')}</ul></nav>`,
+    '</section>',
   ].join('') : '';
   const related = PUBLIC_SEO_PAGES.filter((item) => {
     if (entry.path === '/blog') return !!item.article;

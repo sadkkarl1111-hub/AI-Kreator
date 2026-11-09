@@ -22,6 +22,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { WhatsAppIcon } from '@/components/WhatsAppIcon';
+import { ToolGuide } from '@/components/ToolGuide';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
@@ -270,6 +271,7 @@ export function AppLayout({ children, wide = false }: { children: ReactNode; wid
 
       <main className={cn('flex-1 w-full min-w-0 mx-auto px-4 overflow-x-clip', wide ? 'max-w-none py-3' : 'max-w-[1400px] py-6')}>
         {children}
+        <ToolGuide pathname={location.pathname} />
       </main>
 
       {user && (

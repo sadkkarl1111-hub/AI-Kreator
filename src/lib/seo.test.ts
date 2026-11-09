@@ -62,6 +62,17 @@ describe('public indexing boundaries', () => {
     expect(JSON.parse(html.querySelector('script')!.textContent!)['@graph'][2].description).toBe(entry.description);
   });
 
+  it.each(['mockup', 'collage', 'text-effects', 'compress', 'meme', 'svg-library'])('includes the %s guide and public related links in the initial HTML', (slug) => {
+    const entry = getSeoPage(`/tools/${slug}`);
+    const html = new DOMParser().parseFromString(renderInitialContent(entry), 'text/html');
+    const guide = html.querySelector('[aria-labelledby="tool-guide-title"]');
+    expect(guide?.querySelector('h2')?.textContent).toMatch(/^Jak /);
+    expect(guide?.querySelectorAll('ol li')).toHaveLength(3);
+    const links = Array.from(guide?.querySelectorAll('a[href]') ?? []);
+    expect(links.length).toBeGreaterThan(0);
+    for (const link of links) expect(getSeoPage(link.getAttribute('href')!)).toBeDefined();
+  });
+
   it('generates internal routes, legal redirects, private noindex shell and real 404 rules', () => {
     const apache = renderApacheRoutes();
     expect(apache).toContain('RewriteRule ^tools/carousel$ /_seo/tools/carousel.html [END]');
