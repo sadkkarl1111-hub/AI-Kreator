@@ -165,6 +165,28 @@ test('badge requests send just the original reference to both providers, with no
   } finally { globalThis.fetch = oldFetch; }
 });
 
+test('product photography permits a new composition on both providers', async () => {
+  const { original } = await fixture();
+  const oldFetch = globalThis.fetch;
+  const requests = [];
+  globalThis.fetch = async (url, request) => {
+    requests.push(request.body);
+    return new Response(JSON.stringify(url.includes('openai.com')
+      ? { data: [{ b64_json: original }] }
+      : { candidates: [{ content: { parts: [{ inlineData: { data: original, mimeType: 'image/png' } }] } }] }));
+  };
+  try {
+    const prompt = 'Photograph the same product from directly overhead.';
+    const params = { prompt, allowRecomposition: true, dimensions: '1024x1536', imageBase64: original, imageMimeType: 'image/png', apiKey: 'test-only' };
+    await editWithOpenAI({ ...params, apiModel: 'gpt-image-2.5-sunburst' });
+    await editWithGemini({ ...params, apiModel: 'gemini-3.1-flash-image' });
+    assert.equal(requests[0].get('prompt'), prompt);
+    const geminiPrompt = JSON.parse(requests[1]).contents[0].parts.at(-1).text;
+    assert.ok(geminiPrompt.startsWith(prompt));
+    assert.doesNotMatch(geminiPrompt, /Edit the supplied original image in place/);
+  } finally { globalThis.fetch = oldFetch; }
+});
+
 test('full badge output uses the original canvas and restores a cutout when a provider returns opaque output', async () => {
   const original = await png(Buffer.from([0, 0, 0, 0, 255, 220, 0, 255, 0, 0, 0, 0]), 3, 1);
   const source = await prepareBadgeSource(original);

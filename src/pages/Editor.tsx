@@ -39,7 +39,7 @@ type GalleryImage = {
 };
 
 type EditorProps = {
-  mode?: 'general' | 'badge';
+  mode?: 'general' | 'badge' | 'object-removal' | 'product-recolor';
 };
 
 type BadgeEditorLibraryResponse = {
@@ -51,6 +51,9 @@ type BadgeEditorLibraryResponse = {
 
 const Editor = ({ mode = 'general' }: EditorProps) => {
   const isBadgeEditor = mode === 'badge';
+  const isObjectRemoval = mode === 'object-removal';
+  const isProductRecolor = mode === 'product-recolor';
+  const requiresMask = isObjectRemoval || isProductRecolor;
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const { balance, loading: creditsLoading, refetch: refetchCredits } = useCredits();
@@ -64,6 +67,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
   } = useAiModels({ purpose: 'editing', preferredModelId: isBadgeEditor ? 'openai-gpt-image-2.5-sunburst' : undefined });
 
   const [prompt, setPrompt] = useState('');
+  const [targetColor, setTargetColor] = useState('#3366cc');
   const [badgeSearch, setBadgeSearch] = useState('');
   const [availableBadges, setAvailableBadges] = useState<BadgeCatalogItem[]>(isBadgeEditor ? [] : BADGE_CATALOG);
   const [badgeCatalogLoading, setBadgeCatalogLoading] = useState(isBadgeEditor);
@@ -102,7 +106,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
     || badge.description.toLowerCase().includes(normalizedBadgeSearch)
     || badge.category.toLowerCase().includes(normalizedBadgeSearch)
   ));
-  const hasEditDescription = Boolean(prompt.trim());
+  const canSubmitEdit = requiresMask ? hasMask : Boolean(prompt.trim());
 
   const resetEditor = useCallback(() => {
     setSourceImage(null);
@@ -359,7 +363,11 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
   };
 
   const handleEdit = async () => {
-    const editInstruction = prompt.trim();
+    const editInstruction = isObjectRemoval
+      ? 'Remove the unwanted object covered by the editable mask completely, including any selected shadow or reflection. Fill the area with a natural continuation of the surrounding scene, matching perspective, texture, grain and lighting. Leave the repaired area opaque and do not add new objects.'
+      : isProductRecolor
+        ? `Recolor only the selected product material to base color ${targetColor}. Preserve its texture, weave, highlights, shadows, reflections, edges, shape, logos, labels and lettering. Leave surrounding background and unselected areas unchanged. Do not paint solid color over the material.`
+        : prompt.trim();
 
     if (!editInstruction) {
       toast.error(isBadgeEditor ? 'Uzupełnij dane zmiany' : 'Wpisz co chcesz zmienić');
@@ -376,6 +384,10 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
 
     try {
       const maskBase64 = isBadgeEditor ? undefined : getMaskBase64();
+      if (requiresMask && !maskBase64) {
+        toast.error('Zamaluj obszar, który chcesz zmienić.');
+        return;
+      }
 
       const data = await vpsFetch<{ imageUrl?: string; error?: string }>('/ai/edit-image', {
         method: 'POST',
@@ -395,9 +407,10 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
         return;
       }
 
+      if (requiresMask && !data.imageUrl) throw new Error('AI nie zwróciło zdjęcia. Spróbuj ponownie.');
       setResultImage(data.imageUrl ?? null);
       refetchCredits();
-      toast.success(`${isBadgeEditor ? 'Badge' : 'Obraz'} edytowany i zapisany do galerii`);
+      toast.success(isObjectRemoval ? 'Zdjęcie po retuszu zapisano w galerii.' : `${isBadgeEditor ? 'Badge' : 'Obraz'} edytowany i zapisany do galerii`);
     } catch (error) {
       console.error('Edit error:', error);
       toast.error(error instanceof Error ? error.message : 'Nie udało się edytować obrazu');
@@ -527,13 +540,17 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
             ) : (
               <Paintbrush className="inline w-6 h-6 text-primary mr-2" />
             )}
-            {isBadgeEditor ? 'Edytor badge’ów ' : 'Edytor grafik '}
+            {isBadgeEditor ? 'Edytor badge’ów ' : isObjectRemoval ? 'Usuwanie obiektów ' : isProductRecolor ? 'Podmiana koloru produktu ' : 'Edytor grafik '}
             <span className="gradient-text">AI</span>
           </h1>
           <p className="text-muted-foreground mt-1">
             {isBadgeEditor
               ? 'Wybierz badge i opisz, co chcesz zmienić. AI edytuje oryginalną grafikę.'
-              : 'Zamaluj pędzlem obszar do zmiany, wpisz co chcesz zmienić, a AI zrobi resztę.'}
+              : isObjectRemoval
+                ? 'Zamaluj niechciany obiekt. AI uzupełni zaznaczone miejsce fragmentem pasującym do zdjęcia.'
+                : isProductRecolor
+                  ? 'Zamaluj materiał, wybierz nowy kolor i przygotuj wariant zdjęcia. Możesz wybrać kolejny kolor na tym samym oryginale.'
+                  : 'Zamaluj pędzlem obszar do zmiany, wpisz co chcesz zmienić, a AI zrobi resztę.'}
           </p>
         </div>
 
@@ -630,7 +647,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div>
                   <p className="text-sm font-medium">
-                    {isBadgeEditor ? 'Wybrany badge' : 'Zamaluj obszar do zmiany (opcjonalnie)'}
+                    {isBadgeEditor ? 'Wybrany badge' : isObjectRemoval ? 'Zamaluj cały obiekt do usunięcia' : isProductRecolor ? 'Zamaluj materiał do przemalowania' : 'Zamaluj obszar do zmiany (opcjonalnie)'}
                   </p>
                   {sourceLabel && <p className="text-xs text-muted-foreground mt-0.5">Wybrano: {sourceLabel}</p>}
                 </div>
@@ -660,7 +677,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                   <Button variant="outline" size="sm" onClick={clearMask} disabled={editing || !hasMask} className="gap-1">
                     <Eraser className="w-3.5 h-3.5" /> Wyczysc
                   </Button>
-                  {!isBadgeEditor && (
+                  {!requiresMask && (
                     <Button
                       variant="secondary"
                       size="sm"
@@ -720,6 +737,14 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                     <p className="text-xs text-muted-foreground">Opisz kolor, napis lub element do zmiany. Pozostały wygląd badge’a AI dopasuje do oryginału.</p>
                   </div>
                 </div>
+              ) : isObjectRemoval ? (
+                <p className="text-sm text-muted-foreground">Jeśli obiekt rzuca cień lub odbija się w tle, zamaluj również ten fragment. Możesz cofnąć ostatnie pociągnięcie pędzla.</p>
+              ) : isProductRecolor ? (
+                <label className="flex flex-wrap items-center gap-3 text-sm font-medium">
+                  Docelowy kolor materiału
+                  <input type="color" className="h-11 w-14" disabled={editing} value={targetColor} onChange={event => setTargetColor(event.target.value)} />
+                  <span className="font-mono text-muted-foreground">{targetColor.toUpperCase()}</span>
+                </label>
               ) : (
                 <Textarea
                   placeholder="Opisz co chcesz zmienić w zaznaczonym obszarze... np. 'Zamień tło na plażę o zachodzie słońca'"
@@ -776,7 +801,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                 onClick={handleEdit}
                 disabled={
                   editing
-                  || !hasEditDescription
+                  || !canSubmitEdit
                   || modelsLoading
                   || !selectedModel
                   || (!isAdmin && (balance ?? 0) < currentModelCost)
@@ -794,7 +819,7 @@ const Editor = ({ mode = 'general' }: EditorProps) => {
                 ) : (
                   <>
                     {isBadgeEditor ? <BadgeCheck className="w-4 h-4" /> : <Paintbrush className="w-4 h-4" />}
-                    {isBadgeEditor ? 'Edytuj' : hasMask ? 'Edytuj zaznaczony obszar' : 'Edytuj cały obraz'}{' '}
+                    {isBadgeEditor ? 'Edytuj' : isObjectRemoval ? 'Usuń zaznaczony obiekt' : isProductRecolor ? 'Utwórz wariant koloru' : hasMask ? 'Edytuj zaznaczony obszar' : 'Edytuj cały obraz'}{' '}
                     ({currentModelCost} kr)
                   </>
                 )}

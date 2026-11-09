@@ -17,6 +17,11 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const PublicDemo = lazy(() => import("./pages/PublicDemo"));
 const Generator = lazy(() => import("./pages/Generator"));
 const Editor = lazy(() => import("./pages/Editor"));
+const PhotoComparison = lazy(() => import("./pages/PhotoComparison"));
+const PhotoRedaction = lazy(() => import("./pages/PhotoRedaction"));
+const PhotoGifMaker = lazy(() => import("./pages/PhotoGifMaker"));
+const CanvasExtender = lazy(() => import("./pages/CanvasExtender"));
+const ShopPhotoAudit = lazy(() => import("./pages/ShopPhotoAudit"));
 const Tools = lazy(() => import("./pages/Tools"));
 const PublicGalleryPage = lazy(() => import("./pages/PublicGalleryPage"));
 const RemoveBg = lazy(() => import("./pages/RemoveBg"));
@@ -35,6 +40,7 @@ const SvgLibrary = lazy(() => import("./pages/SvgLibrary"));
 const ImageVectorizer = lazy(() => import("./pages/ImageVectorizer"));
 const TextEffects = lazy(() => import("./pages/TextEffects"));
 const CarouselMaker = lazy(() => import("./pages/CarouselMaker"));
+const CarouselPanorama = lazy(() => import("./pages/CarouselPanorama"));
 const BatchImageEditor = lazy(() => import("./pages/BatchImageEditor"));
 const PrintPreparation = lazy(() => import("./pages/PrintPreparation"));
 const ColorPalette = lazy(() => import("./pages/ColorPalette"));
@@ -165,6 +171,13 @@ function AppRoutes() {
         <Route path="/tools" element={<Tools />} />
         <Route path="/galeria-publiczna" element={<PublicGalleryPage />} />
         <Route path="/tools/editor" element={<ProtectedRoute><Editor /></ProtectedRoute>} />
+        <Route path="/tools/remove-object" element={<ProtectedRoute><Editor key="object-removal" mode="object-removal" /></ProtectedRoute>} />
+        <Route path="/tools/before-after" element={<PhotoComparison />} />
+        <Route path="/tools/photo-redaction" element={<PhotoRedaction />} />
+        <Route path="/tools/gif-maker" element={<PhotoGifMaker />} />
+        <Route path="/tools/product-recolor" element={<ProtectedRoute><Editor key="product-recolor" mode="product-recolor" /></ProtectedRoute>} />
+        <Route path="/tools/canvas-extender" element={<CanvasExtender />} />
+        <Route path="/tools/shop-photo-audit" element={<ShopPhotoAudit />} />
         <Route path="/tools/badge-editor" element={<ProtectedRoute><Editor mode="badge" /></ProtectedRoute>} />
         <Route path="/tools/remove-bg" element={<ProtectedRoute><RemoveBg /></ProtectedRoute>} />
         <Route path="/tools/upscale" element={<ProtectedRoute><Upscale /></ProtectedRoute>} />
@@ -201,12 +214,14 @@ function AppRoutes() {
         <Route path="/tools/rounded-corners" element={<FreePhotoTools key="rounded" mode="rounded" />} />
         <Route path="/tools/photo-frame" element={<FreePhotoTools key="frame" mode="frame" />} />
         <Route path="/tools/image-tiles" element={<FreePhotoTools key="tiles" mode="tiles" />} />
+        <Route path="/tools/carousel-panorama" element={<CarouselPanorama />} />
         <Route path="/tools/image-to-prompt" element={<ProtectedRoute><ImageToPrompt /></ProtectedRoute>} />
         <Route path="/tools/prompt-generator" element={<PromptGeneratorPro />} />
         <Route path="/generator-reklam" element={<ProtectedRoute><AdPromptGenerator /></ProtectedRoute>} />
         <Route path="/tools/social-resize" element={<SocialResize />} />
         <Route path="/tools/background-replace" element={<ProtectedRoute><BackgroundReplace /></ProtectedRoute>} />
         <Route path="/tools/product-photos" element={<ProtectedRoute><BackgroundReplace key="product-photos" productMode /></ProtectedRoute>} />
+        <Route path="/tools/ad-photo" element={<ProtectedRoute><BackgroundReplace key="ad-photo" productMode adMode /></ProtectedRoute>} />
         <Route path="/editor" element={<Navigate to="/tools/editor" replace />} />
         <Route path="/templates" element={<ProtectedRoute><Templates /></ProtectedRoute>} />
         <Route path="/company-assistant" element={<AdminOnlyRoute><CompanyAssistant /></AdminOnlyRoute>} />

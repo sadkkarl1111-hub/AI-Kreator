@@ -70,3 +70,36 @@ it('retains optional selection and complete undo in the general image editor', a
   fireEvent.click(screen.getByRole('button', { name: 'Cofnij' }));
   expect(screen.getByRole('button', { name: 'Wyczysc' })).toBeDisabled();
 });
+
+it('requires a painted selection before sending an object removal request', async () => {
+  const { container } = render(<MemoryRouter><Editor mode="object-removal" /></MemoryRouter>);
+  fireEvent.change(container.querySelector('input[type="file"]')!, { target: { files: [new File(['image'], 'source.png', { type: 'image/png' })] } });
+  const canvas = await screen.findByLabelText('Zaznaczenie obszaru do edycji');
+  const remove = screen.getByRole('button', { name: /Usuń zaznaczony obiekt/ });
+  expect(remove).toBeDisabled();
+  fireEvent.mouseDown(canvas, { clientX: 50, clientY: 50 });
+  fireEvent.mouseUp(canvas);
+  expect(remove).toBeEnabled();
+  fireEvent.click(remove);
+  await screen.findByRole('button', { name: 'Edytuj dalej' });
+  const request = JSON.parse(mocks.fetch.mock.calls.find(([path]) => path === '/ai/edit-image')![1].body);
+  expect(request.maskBase64).toBe('bWFzaw==');
+  expect(request.prompt).toContain('Remove the unwanted object');
+  expect(request).not.toHaveProperty('badgeEdit');
+});
+
+it('sends the selected target color together with the painted product area', async () => {
+  const { container } = render(<MemoryRouter><Editor mode="product-recolor" /></MemoryRouter>);
+  fireEvent.change(container.querySelector('input[type="file"]')!, { target: { files: [new File(['image'], 'source.png', { type: 'image/png' })] } });
+  const canvas = await screen.findByLabelText('Zaznaczenie obszaru do edycji');
+  const generate = screen.getByRole('button', { name: /Utwórz wariant koloru/ });
+  expect(generate).toBeDisabled();
+  fireEvent.change(screen.getByLabelText(/Docelowy kolor materiału/), { target: { value: '#ad1030' } });
+  fireEvent.mouseDown(canvas, { clientX: 50, clientY: 50 });
+  fireEvent.mouseUp(canvas);
+  fireEvent.click(generate);
+  await screen.findByRole('button', { name: 'Edytuj dalej' });
+  const request = JSON.parse(mocks.fetch.mock.calls.find(([path]) => path === '/ai/edit-image')![1].body);
+  expect(request.maskBase64).toBe('bWFzaw==');
+  expect(request.prompt).toContain('base color #ad1030');
+});

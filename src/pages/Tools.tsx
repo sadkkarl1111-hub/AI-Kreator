@@ -43,6 +43,15 @@ import { useAuth } from '@/hooks/useAuth';
 import { vpsPublicFetch } from '@/lib/vpsApi';
 
 const tools = [
+  { to: '/tools/product-recolor', icon: Palette, label: 'Podmiana koloru produktu AI', desc: 'Zamaluj materiał i przygotuj wariant kolorystyczny z zachowaniem faktury i cieni.', color: 'from-fuchsia-500 to-violet-600', credits: true },
+  { to: '/tools/ad-photo', icon: ImageIcon, label: 'Zdjęcie reklamowe z miejscem na tekst', desc: 'Wybierz scenerię i stronę na nagłówek oraz cenę. AI przygotuje zdjęcie produktu do reklamy.', color: 'from-indigo-500 to-blue-600', credits: true },
+  { to: '/tools/canvas-extender', icon: Expand, label: 'Rozszerzanie płótna zdjęcia', desc: 'Dopasuj zdjęcie do posta, relacji albo banera. Uzupełnij brzegi kolorem, rozmyciem lub przezroczystością.', color: 'from-teal-500 to-cyan-600', credits: false },
+  { to: '/tools/shop-photo-audit', icon: ScanText, label: 'Kontrola zdjęć do sklepu', desc: 'Sprawdź wymiary, proporcje i wagę paczki zdjęć według wymagań swojego sklepu.', color: 'from-emerald-500 to-teal-600', credits: false },
+  { to: '/tools/photo-redaction', icon: Lock, label: 'Zasłoń dane na zdjęciu', desc: 'Zasłoń adres, numer telefonu lub twarz pełnym kolorem i pobierz gotowy PNG.', color: 'from-slate-500 to-indigo-600', credits: false },
+  { to: '/tools/gif-maker', icon: Film, label: 'Kreator GIF ze zdjęć', desc: 'Ułóż do 12 zdjęć, ustaw tempo i pobierz zapętloną animację GIF.', color: 'from-pink-500 to-purple-600', credits: false },
+  { to: '/tools/remove-object', icon: Paintbrush, label: 'Usuwanie obiektów AI', desc: 'Zamaluj osobę lub przedmiot, a AI uzupełni zaznaczony fragment zdjęcia.', color: 'from-violet-500 to-indigo-600', credits: true },
+  { to: '/tools/before-after', icon: ImageIcon, label: 'Porównanie przed i po', desc: 'Porównaj dwa zdjęcia suwakiem i pobierz oba obok siebie jako PNG.', color: 'from-cyan-500 to-blue-600', credits: false },
+  { to: '/tools/carousel-panorama', icon: LayoutGrid, label: 'Karuzela z jednego zdjęcia', desc: 'Podziel panoramę na 2–6 ciągłych slajdów. Pobierz ZIP lub opcjonalnie poszerz zdjęcie z AI po zalogowaniu.', color: 'from-sky-500 to-violet-600', credits: false },
   { to: '/tools/rounded-corners', icon: ImageIcon, label: 'Zaokrąglanie rogów', desc: 'Zaokrąglij zdjęcie lub wytnij je w koło. Pobierz PNG z przezroczystym tłem.', color: 'from-sky-500 to-cyan-600', credits: false },
   { to: '/tools/photo-frame', icon: ImageIcon, label: 'Cień i ramka', desc: 'Dodaj kolorową ramkę, margines i miękki cień do zdjęcia lub zrzutu ekranu.', color: 'from-violet-500 to-indigo-600', credits: false },
   { to: '/tools/image-tiles', icon: LayoutGrid, label: 'Podziel zdjęcie na kafelki', desc: 'Podziel zdjęcie na siatkę i pobierz ponumerowane kafelki PNG w ZIP.', color: 'from-emerald-500 to-teal-600', credits: false },

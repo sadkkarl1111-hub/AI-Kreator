@@ -5,6 +5,15 @@ export const PRODUCT_SCENES = [
   { id: 'wood', label: 'Drewno', prompt: 'a warm oak tabletop, a calm neutral interior background and soft natural side lighting' },
   { id: 'premium', label: 'Ciemne studio', prompt: 'a charcoal studio backdrop and dark pedestal, controlled rim lighting, elegant highlights and realistic contact shadows' },
   { id: 'pastel', label: 'Pastelowy podest', prompt: 'a matte pastel beige podium with a muted blush backdrop, minimal geometric styling and soft studio shadows' },
+  { id: 'catalog', label: 'Katalog sklepu', prompt: 'a pure white seamless ecommerce background with neutral even lighting, centered product, generous white margins, no props and only a faint contact shadow' },
+  { id: 'kitchen', label: 'Jasna kuchnia', prompt: 'a light kitchen counter with a softly out-of-focus neutral interior and natural window light, keeping the surface around the product uncluttered' },
+] as const;
+
+export const PRODUCT_FORMATS = [
+  { value: '', label: 'Domyślny dla modelu' },
+  { value: '1024x1024', label: 'Kwadrat 1:1' },
+  { value: '1024x1536', label: 'Pion' },
+  { value: '1536x1024', label: 'Poziom' },
 ] as const;
 
 export const PRODUCT_POSES = [
@@ -16,7 +25,7 @@ export const PRODUCT_POSES = [
   { id: 'original', label: 'Jak na oryginale', prompt: 'Keep the product orientation and camera angle from the reference image while rebuilding its surroundings and lighting.' },
 ] as const;
 
-export function buildProductPhotoPrompt(scene: string, notes: string, pose: string = PRODUCT_POSES[0].prompt) {
+export function buildProductPhotoPrompt(scene: string, notes: string, pose: string = PRODUCT_POSES[0].prompt, copySpace?: 'left' | 'right') {
   return [
     'Create a photorealistic commercial product photograph using the product in the supplied image as the exact reference.',
     'Preserve the product identity, physical shape, proportions, materials, colors, packaging, logo and all existing label text. Never invent, rewrite or remove branding or product details.',
@@ -24,6 +33,7 @@ export function buildProductPhotoPrompt(scene: string, notes: string, pose: stri
     `Required product pose and camera view: ${pose}`,
     'Replace the original surroundings and staging. Keep the entire product visible, sharp and the clear focal point. Use physically plausible scale, lighting, contact shadows and reflections.',
     `Scene: ${scene}.`,
+    copySpace ? `Mandatory ad layout: keep the entire product within the ${copySpace === 'left' ? 'right' : 'left'} half with safe margins. Reserve the ${copySpace} 45% of the image as continuous, low-detail copy space for a headline and price to be placed later. Keep that space free of the product, props, harsh shadows and strong texture. Do not render any new lettering or graphic overlays.` : '',
     notes.trim() ? `Styling preferences: ${notes.trim()}. These must not change the product identity or its labels.` : '',
     'Do not add people, hands, duplicate products, promotional text, watermarks or extra branding. Deliver a finished product photograph, not a collage.',
   ].filter(Boolean).join(' ');

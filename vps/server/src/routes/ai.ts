@@ -68,6 +68,7 @@ type GenerateImageBody = {
 };
 
 type EditImageBody = {
+  expectedCreditCost?: number;
   badgeEdit?: unknown;
   prompt?: string;
   imageBase64?: string;
@@ -1196,6 +1197,7 @@ export const generateWithOpenAI = async (
 };
 
 export const editWithOpenAI = async (params: {
+  allowRecomposition?: boolean;
   prompt: string;
   imageBase64: string;
   imageMimeType: string;
@@ -1211,7 +1213,7 @@ export const editWithOpenAI = async (params: {
   if (!isOpenAIGptImageModel(params.apiModel) && params.apiModel !== "chatgpt-image-latest") {
     throw new ImageEditInputError("Ten model nie obsługuje edycji oryginalnego obrazu. Wybierz inny model.");
   }
-  const strictPrompt = preservingEditPrompt(params.prompt, Boolean(params.editMask));
+  const strictPrompt = params.allowRecomposition ? params.prompt : preservingEditPrompt(params.prompt, Boolean(params.editMask));
 
   const formData = new FormData();
   formData.append("model", params.apiModel);
@@ -1255,6 +1257,7 @@ export const editWithOpenAI = async (params: {
 };
 
 export const editWithGemini = async (params: {
+  allowRecomposition?: boolean;
   prompt: string;
   imageBase64: string;
   imageMimeType: string;
@@ -1273,7 +1276,7 @@ export const editWithGemini = async (params: {
     parts.push({ inlineData: { mimeType: "image/png", data: params.editMask.redMaskBase64 } });
   }
   parts.push({ text: [
-    preservingEditPrompt(params.prompt, Boolean(params.editMask)),
+    params.allowRecomposition ? params.prompt : preservingEditPrompt(params.prompt, Boolean(params.editMask)),
     params.editMask
       ? "The first image is the original. The second is a red-on-white mask: edit only RED regions of the FIRST image. White regions are locked. Return the edited original at its original aspect ratio, with no crop, padding or repositioning."
       : params.dimensions
@@ -1563,6 +1566,8 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
     validateBase64ImageInput(imageBase64);
     if (maskBase64) validateBase64ImageInput(maskBase64);
     const { badgeSource, editMask } = await prepareEditInput(imageBase64, maskBase64, body.badgeEdit);
+    const allowRecomposition = (body.toolId === "product-photos" || body.toolId === "carousel-panorama" || body.toolId === "ad-photo") &&
+      body.badgeEdit === undefined && !editMask;
     if (dimensions && !ALLOWED_IMAGE_DIMENSIONS.includes(dimensions as (typeof ALLOWED_IMAGE_DIMENSIONS)[number])) {
       jsonError(response, "Invalid dimensions", 400);
       return;
@@ -1578,6 +1583,9 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
     // Editing cost follows the selected server-side model. A client-controlled
     // tool id must not be able to lower or otherwise override that price.
     const editCost = modelConfig.credit_cost || 50;
+    if (allowRecomposition && body.expectedCreditCost !== undefined && body.expectedCreditCost !== editCost) {
+      throw new AiRouteError("Cena modelu się zmieniła. Odśwież stronę i sprawdź koszt.", 409);
+    }
 
     activeGenerationJobId = await reserveGenerationJob({
       userId: user.id,
@@ -1596,6 +1604,7 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
       modelProvider === "openai"
         ? await editWithOpenAI({
             prompt,
+            allowRecomposition,
             imageBase64: badgeSource?.base64 ?? imageBase64,
             imageMimeType: badgeSource ? "image/png" : imageMimeType,
             editMask,
@@ -1607,6 +1616,7 @@ aiRouter.post("/ai/edit-image", requireAuthenticatedUser, aiEditRateLimit, async
           })
         : await editWithGemini({
             prompt,
+            allowRecomposition,
             imageBase64: badgeSource?.base64 ?? imageBase64,
             imageMimeType: badgeSource ? "image/png" : imageMimeType,
             editMask,

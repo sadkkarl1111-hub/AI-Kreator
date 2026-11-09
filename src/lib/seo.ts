@@ -26,6 +26,12 @@ export const PUBLIC_SEO_PAGES: SeoPage[] = [
   page('/tools/rounded-corners', 'Zaokrąglanie rogów zdjęcia online', 'Zaokrąglij rogi zdjęcia lub wytnij je w koło i pobierz PNG z przezroczystym tłem. Darmowo, bez konta i kredytów.'),
   page('/tools/photo-frame', 'Cień i ramka do zdjęcia online', 'Dodaj kolorową ramkę, margines i miękki cień do zdjęcia lub zrzutu ekranu. Pobierz PNG bez konta i kredytów.'),
   page('/tools/image-tiles', 'Dzielenie zdjęcia na kafelki online', 'Podziel całe zdjęcie na siatkę i pobierz ponumerowane kafelki PNG w archiwum ZIP. Darmowo w przeglądarce.'),
+  page('/tools/carousel-panorama', 'Karuzela z jednego zdjęcia online', 'Przytnij panoramę do 2–6 ciągłych slajdów w formacie 4:5 lub 1:1. Pobierz darmowy ZIP. Opcjonalne poszerzenie zdjęcia z AI jest płatne.'),
+  page('/tools/before-after', 'Porównanie zdjęć przed i po online', 'Porównaj dwa zdjęcia suwakiem i pobierz oba obok siebie jako PNG. Darmowo, bez konta i wysyłania plików na serwer.'),
+  page('/tools/photo-redaction', 'Zasłoń dane na zdjęciu online', 'Zakryj adres, numer telefonu lub twarz pełnym kolorem i zapisz gotowy PNG. Darmowe narzędzie działające w przeglądarce.'),
+  page('/tools/gif-maker', 'Darmowy kreator GIF ze zdjęć', 'Zamień od 2 do 12 zdjęć w zapętloną animację GIF. Ustaw kolejność i tempo. Pobierz plik bez konta i kredytów.'),
+  page('/tools/canvas-extender', 'Rozszerzanie płótna zdjęcia online', 'Dopasuj całe zdjęcie do posta, relacji lub banera. Wypełnij wolne miejsce kolorem, rozmyciem lub przezroczystością i pobierz PNG.'),
+  page('/tools/shop-photo-audit', 'Kontrola zdjęć do sklepu online', 'Sprawdź wymiary, proporcje i rozmiar paczki zdjęć przed publikacją w sklepie. Ustal własne wymagania i zobacz, które zdjęcia trzeba poprawić.'),
   page('/', 'Generator grafik AI i darmowe narzędzia graficzne', 'Twórz grafiki reklamowe i mockupy z AI. Korzystaj z darmowego kreatora karuzel, generatora promptów, ikon i edycji zdjęć online. Generowanie obrazów AI jest płatne.'),
   page('/tools', 'Darmowe narzędzia graficzne online i narzędzia AI', 'Edytuj zdjęcia, twórz karuzele, napisy, kody QR i pliki SVG w przeglądarce. Zobacz darmowe narzędzia oraz funkcje AI rozliczane kredytami.'),
   page('/tools/widgets', 'Liczniki i paski postępu na stronę — generator kodu HTML', 'Stwórz odliczanie do webinaru, licznik wolnych miejsc i animowany pasek postępu. Ustaw datę, kolory i harmonogram codziennych zmian. Skopiuj gotowy kod HTML.'),
@@ -67,9 +73,9 @@ export const PUBLIC_SEO_PAGES: SeoPage[] = [
 
 export const PRIVATE_PATHS = [
   '/auth', '/auth/callback', '/reset-password', '/dashboard', '/generator',
-  '/tools/editor', '/tools/badge-editor', '/tools/remove-bg', '/tools/upscale',
+  '/tools/editor', '/tools/badge-editor', '/tools/remove-bg', '/tools/remove-object', '/tools/upscale',
   '/tools/style', '/tools/colorize', '/tools/outpainting', '/tools/variants',
-  '/tools/logo', '/tools/ocr', '/tools/image-to-prompt', '/tools/background-replace', '/tools/product-photos',
+  '/tools/logo', '/tools/ocr', '/tools/image-to-prompt', '/tools/background-replace', '/tools/product-photos', '/tools/product-recolor', '/tools/ad-photo',
   '/generator-reklam', '/editor', '/templates', '/company-assistant', '/gallery',
   '/credits', '/whatsapp', '/admin', '/profile',
 ];

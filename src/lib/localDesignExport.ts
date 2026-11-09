@@ -23,7 +23,7 @@ export async function readLocalDesignImage(file: File, maxEdge?: number) {
     const image = await decodeLocalImage(url);
     if (image.naturalWidth * image.naturalHeight > 40_000_000) throw new Error('Obraz może mieć maksymalnie 40 megapikseli.');
     const scale = maxEdge ? Math.min(1, maxEdge / Math.max(image.naturalWidth, image.naturalHeight)) : 1;
-    const canvas = document.createElement('canvas'); canvas.width = Math.round(image.naturalWidth * scale); canvas.height = Math.round(image.naturalHeight * scale);
+    const canvas = document.createElement('canvas'); canvas.width = Math.max(1, Math.round(image.naturalWidth * scale)); canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
     const context = canvas.getContext('2d'); if (!context) throw new Error('Nie udało się odczytać obrazu.');
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
     return { dataUrl: canvas.toDataURL('image/png'), width: image.naturalWidth, height: image.naturalHeight };
