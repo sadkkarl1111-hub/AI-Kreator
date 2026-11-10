@@ -8,10 +8,15 @@ import { Monitor, Upload, ArrowLeft, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { MOCKUPS, MOCKUP_CATEGORIES, type MockupTemplate } from '@/components/mockup/mockupTemplates';
 import { canvasPng, decodeLocalImage, fitImageRect, saveLocalBlob } from '@/lib/localDesignExport';
+import { drawStudioMockup, hasStudioMockup, STUDIO_BACKGROUNDS, studioViewsFor, type StudioBackground, type StudioView } from '@/lib/mockupStudio';
 
 type ImageFit = 'contain' | 'cover' | 'stretch';
 
-function drawMockup(canvas: HTMLCanvasElement, template: MockupTemplate, image: HTMLImageElement | null, fit: ImageFit) {
+function drawMockup(canvas: HTMLCanvasElement, template: MockupTemplate, image: HTMLImageElement | null, fit: ImageFit, view: StudioView, background: StudioBackground) {
+  if (hasStudioMockup(template.id)) {
+    drawStudioMockup(canvas, template.id, image, fit, view, background);
+    return;
+  }
   const { canvasW, canvasH, bgColor, imageArea, draw, drawOverlay } = template;
   canvas.width = canvasW;
   canvas.height = canvasH;
@@ -48,6 +53,9 @@ const MockupGenerator = () => {
   const [selectedMockup, setSelectedMockup] = useState(MOCKUPS[0]);
   const [userImage, setUserImage] = useState<HTMLImageElement | null>(null);
   const [fit, setFit] = useState<ImageFit>('contain');
+  const [view, setView] = useState<StudioView>('right');
+  const [background, setBackground] = useState<StudioBackground>('light');
+  const [allViews, setAllViews] = useState(false);
   const [reading, setReading] = useState(false);
   const [batchIds, setBatchIds] = useState<string[]>([]);
   const [packedCount, setPackedCount] = useState<number | null>(null);
@@ -55,6 +63,12 @@ const MockupGenerator = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const packing = packedCount !== null;
   const locked = reading || packing;
+  const studio = hasStudioMockup(selectedMockup.id);
+  const availableViews = studioViewsFor(selectedMockup.id);
+  const activeView = availableViews.find(option => option.id === view)?.id ?? availableViews[0].id;
+  const selectedBatch = MOCKUPS.filter(template => batchIds.includes(template.id));
+  const hasStudioInBatch = selectedBatch.some(template => hasStudioMockup(template.id));
+  const batchSize = selectedBatch.reduce((total, template) => total + (allViews && hasStudioMockup(template.id) ? studioViewsFor(template.id).length : 1), 0);
 
   const handleFile = async (file: File) => {
     setReading(true);
@@ -70,13 +84,13 @@ const MockupGenerator = () => {
   };
 
   useEffect(() => {
-    if (canvasRef.current) drawMockup(canvasRef.current, selectedMockup, userImage, fit);
-  }, [selectedMockup, userImage, fit]);
+    if (canvasRef.current) drawMockup(canvasRef.current, selectedMockup, userImage, fit, activeView, background);
+  }, [selectedMockup, userImage, fit, activeView, background]);
 
   const download = () => {
     if (!canvasRef.current) return;
     const link = document.createElement('a');
-    link.download = `mockup-${selectedMockup.id}.png`;
+    link.download = `mockup-${selectedMockup.id}${studio ? `-${activeView}` : ''}.png`;
     link.href = canvasRef.current.toDataURL('image/png');
     link.click();
     toast.success('Mockup pobrany!');
@@ -84,20 +98,26 @@ const MockupGenerator = () => {
 
   async function downloadBatch() {
     if (!userImage || locked || !batchIds.length) return;
-    const templates = MOCKUPS.filter(template => batchIds.includes(template.id));
     const canvas = document.createElement('canvas');
     setPackedCount(0);
     try {
       const { zipSync } = await import('fflate');
       const files: Record<string, Uint8Array> = {};
-      for (const [index, template] of templates.entries()) {
-        drawMockup(canvas, template, userImage, fit);
-        const png = await canvasPng(canvas);
-        files[`mockup-${template.id}.png`] = new Uint8Array(await png.arrayBuffer());
-        setPackedCount(index + 1);
+      let completed = 0;
+      for (const template of selectedBatch) {
+        const isStudio = hasStudioMockup(template.id);
+        const supported = studioViewsFor(template.id);
+        const defaultAngle = supported.find(option => option.id === activeView)?.id ?? supported[0].id;
+        const views = isStudio && allViews ? supported.map(option => option.id) : [defaultAngle];
+        for (const angle of views) {
+          drawMockup(canvas, template, userImage, fit, angle, background);
+          const png = await canvasPng(canvas);
+          files[`mockup-${template.id}${isStudio ? `-${angle}` : ''}.png`] = new Uint8Array(await png.arrayBuffer());
+          setPackedCount(++completed);
+        }
       }
       saveLocalBlob(new Blob([zipSync(files, { level: 0 })], { type: 'application/zip' }), 'paczka-mockupow.zip');
-      toast.success(`Paczka jest gotowa · ${templates.length} plików PNG.`);
+      toast.success(`Paczka jest gotowa · ${completed} plików PNG.`);
     } catch {
       toast.error('Nie udało się przygotować paczki. Spróbuj ponownie.');
     } finally {
@@ -155,7 +175,7 @@ const MockupGenerator = () => {
                           onClick={() => setSelectedMockup(m)}
                           className="text-xs"
                         >
-                          {m.emoji} {m.label}
+                          {m.label}{hasStudioMockup(m.id) && !m.label.endsWith('3D') && <span className="ml-1 text-xs opacity-75">3D</span>}
                         </Button>
                       ))}
                     </div>
@@ -164,7 +184,19 @@ const MockupGenerator = () => {
               })}
             </div>
 
-            <canvas ref={canvasRef} role="img" aria-label={`Podgląd mockupu: ${selectedMockup.label}`} className="max-w-full max-h-[520px] mx-auto rounded-lg border bg-muted" style={{ display: 'block' }} />
+            {studio && <fieldset disabled={locked} className="space-y-3 rounded-xl border p-4">
+              <legend className="px-2 text-sm font-semibold">Ujęcie w studiu 3D</legend>
+              <div className="flex flex-wrap gap-2">
+                {availableViews.map(option => <Button key={option.id} size="sm" variant={activeView === option.id ? 'default' : 'outline'} aria-pressed={activeView === option.id} onClick={() => setView(option.id)}>{option.label}</Button>)}
+              </div>
+              <label className="grid gap-2 text-sm font-medium sm:max-w-xs">
+                Tło studia
+                <select className="min-h-11 rounded-md border bg-background px-3" value={background} onChange={event => setBackground(event.target.value as StudioBackground)}>
+                  {Object.entries(STUDIO_BACKGROUNDS).map(([id, label]) => <option key={id} value={id}>{label}</option>)}
+                </select>
+              </label>
+            </fieldset>}
+            <canvas ref={canvasRef} role="img" aria-label={`Podgląd mockupu: ${selectedMockup.label}`} className="mx-auto block h-auto max-h-[620px] max-w-full rounded-xl border bg-muted object-contain" />
 
             <Button onClick={download} disabled={locked} className="gap-2"><Download className="w-4 h-4" /> Pobierz mockup</Button>
           </CardContent>
@@ -174,7 +206,7 @@ const MockupGenerator = () => {
           <CardContent className="space-y-4 pt-6">
             <div>
               <h2 className="text-lg font-semibold">Paczka mockupów</h2>
-              <p className="text-sm text-muted-foreground">Wybierz nośniki, na których chcesz pokazać tę samą grafikę. Paczka użyje wybranego wyżej dopasowania i zapisze każdy mockup jako osobny PNG.</p>
+              <p className="text-sm text-muted-foreground">Wybierz nośniki dla tej samej grafiki. Modele 3D użyją wybranego ujęcia i tła studia.</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <Button variant="outline" size="sm" disabled={locked || batchIds.length === MOCKUPS.length} onClick={() => setBatchIds(MOCKUPS.map(template => template.id))}>Zaznacz wszystkie</Button>
@@ -197,11 +229,15 @@ const MockupGenerator = () => {
                 </fieldset>
               ))}
             </div>
+            {hasStudioInBatch && <label className="flex min-h-10 items-center gap-2 text-sm">
+              <input type="checkbox" checked={allViews} className="size-4 accent-primary" disabled={locked} onChange={event => setAllViews(event.target.checked)} />
+              Dodaj wszystkie ujęcia modeli 3D
+            </label>}
             <Button onClick={downloadBatch} disabled={locked || !userImage || !batchIds.length} className="gap-2">
-              <Download className="h-4 w-4" /> Pobierz paczkę ZIP
+              <Download className="h-4 w-4" /> Pobierz paczkę ZIP{batchSize ? ` · ${batchSize} PNG` : ''}
             </Button>
             {!userImage && <p className="text-sm text-muted-foreground">Wgraj grafikę u góry, aby pobrać paczkę.</p>}
-            {packing && <p role="status" className="text-sm text-muted-foreground">Przygotowuję mockupy · {packedCount} z {batchIds.length}</p>}
+            {packing && <p role="status" className="text-sm text-muted-foreground">Przygotowuję mockupy · {packedCount} z {batchSize}</p>}
           </CardContent>
         </Card>
       </motion.div>

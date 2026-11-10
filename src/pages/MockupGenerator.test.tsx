@@ -36,7 +36,7 @@ it('exports only selected mockups with the current fit and preserves the single 
   mocks.png.mockImplementation(async (canvas: HTMLCanvasElement) => new NodeBlob([`${canvas.width}x${canvas.height}`]));
 
   render(<MemoryRouter><MockupGenerator /></MemoryRouter>);
-  const download = screen.getByRole('button', { name: 'Pobierz paczkę ZIP' });
+  const download = screen.getByRole('button', { name: /Pobierz paczkę ZIP/ });
   fireEvent.click(screen.getByRole('checkbox', { name: 'Telefon' }));
   fireEvent.click(screen.getByRole('checkbox', { name: 'Koszulka' }));
   expect(download).toBeDisabled();
@@ -53,4 +53,29 @@ it('exports only selected mockups with the current fit and preserves the single 
   expect(new TextDecoder().decode(entries['mockup-shirt.png'])).toBe('700x800');
   expect(drawImage.mock.calls).toEqual([[image, -600, 0, 1600, 800], [image, -140, 20, 600, 300]]);
   expect(screen.getByRole('img', { name: 'Podgląd mockupu: Telefon' })).toHaveAttribute('width', '500');
+});
+
+it('puts every available studio view in the ZIP without multiplying flat templates', async () => {
+  vi.stubGlobal('Blob', NodeBlob);
+  vi.stubGlobal('URL', { createObjectURL: () => 'blob:source', revokeObjectURL: vi.fn() });
+  const gradient = { addColorStop: vi.fn() };
+  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
+    fillRect: vi.fn(), fillText: vi.fn(), fill: vi.fn(), ellipse: vi.fn(), closePath: vi.fn(),
+    save: vi.fn(), restore: vi.fn(), beginPath: vi.fn(), rect: vi.fn(), clip: vi.fn(),
+    moveTo: vi.fn(), lineTo: vi.fn(), transform: vi.fn(), drawImage: vi.fn(),
+    createRadialGradient: () => gradient, createLinearGradient: () => gradient,
+  } as unknown as CanvasRenderingContext2D);
+  mocks.decode.mockResolvedValue({ naturalWidth: 400, naturalHeight: 200 });
+  mocks.png.mockResolvedValue(new NodeBlob(['png']));
+  render(<MemoryRouter><MockupGenerator /></MemoryRouter>);
+  fireEvent.change(screen.getByLabelText('Wgraj grafikę do mockupów'), { target: { files: [new File(['image'], 'logo.png', { type: 'image/png' })] } });
+  await screen.findByLabelText('Dopasowanie grafiki');
+  fireEvent.click(screen.getByRole('checkbox', { name: 'Kubek' }));
+  fireEvent.click(screen.getByRole('checkbox', { name: 'Koszulka' }));
+  fireEvent.click(screen.getByRole('checkbox', { name: 'Dodaj wszystkie ujęcia modeli 3D' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Pobierz paczkę ZIP · 6 PNG' }));
+  await waitFor(() => expect(mocks.save).toHaveBeenCalledOnce());
+  const [blob] = mocks.save.mock.calls[0];
+  const names = Object.keys(unzipSync(new Uint8Array(await blob.arrayBuffer())));
+  expect(names).toEqual(['mockup-shirt.png', 'mockup-mug-right.png', 'mockup-mug-front.png', 'mockup-mug-left.png', 'mockup-mug-above.png', 'mockup-mug-flat.png']);
 });
