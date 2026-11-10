@@ -13,7 +13,7 @@ const TOOL_GUIDES: Record<string, ToolGuide> = {
     steps: [
       'Wybierz nośnik, np. telefon, pudełko, plakat w ramie, koszulkę lub kubek.',
       'Wgraj grafikę. Wybierz „Cała grafika”, gdy ważne są krawędzie i napisy, albo „Wypełnij ramkę”, gdy projekt ma sięgać do jej brzegów.',
-      'Sprawdź podgląd i pobierz mockup jako PNG do prezentacji, portfolio lub oferty.',
+      'Pobierz jeden mockup jako PNG albo zaznacz kilka nośników w sekcji „Paczka mockupów” i pobierz je razem w ZIP-ie.',
     ],
     tip: 'Przy opakowaniu użyj płaskiej grafiki frontu. Do podglądu logo na koszulce najlepiej nadaje się PNG z przezroczystym tłem.',
     related: [{ href: '/tools/text-effects', label: 'Zaprojektuj napis do mockupu' }, { href: '/tools/canvas-extender', label: 'Dopasuj proporcje grafiki' }],

@@ -53,7 +53,7 @@ export const PUBLIC_SEO_PAGES: SeoPage[] = [
   page('/tools/collage', 'Kolaż zdjęć online – darmowy kreator', 'Połącz kilka zdjęć w jedną grafikę. Wybierz układ kolażu, ustaw odstępy i tło, a gotowy obraz pobierz jako PNG.'),
   page('/tools/watermark', 'Dodaj znak wodny do zdjęcia online', 'Zabezpiecz zdjęcie podpisem tekstowym lub graficznym znakiem wodnym. Dopasuj wygląd i położenie oznaczenia, a następnie pobierz plik.'),
   page('/tools/meme', 'Darmowy generator memów online', 'Stwórz mem z gotowego szablonu lub własnego zdjęcia. Dodaj tekst, dopasuj wygląd napisów i pobierz obraz do publikacji.'),
-  page('/tools/mockup', 'Generator mockupów online dla projektantów', 'Pokaż swój projekt na telefonie, opakowaniu, plakacie lub koszulce. Dopasuj grafikę do szablonu i pobierz gotowy mockup PNG za darmo.'),
+  page('/tools/mockup', 'Generator mockupów online dla projektantów', 'Pokaż projekt na telefonie, opakowaniu, plakacie lub koszulce. Wgraj grafikę raz i pobierz pojedynczy mockup PNG lub całą paczkę w ZIP-ie.'),
   page('/tools/social-resize', 'Zmiana rozmiaru grafik do social mediów', 'Dopasuj grafikę do formatów Instagram, YouTube, LinkedIn i innych platform. Przygotuj kilka rozmiarów do swoich postów i materiałów reklamowych.'),
   page('/tools/color-palette', 'Generator palety kolorów ze zdjęcia', 'Wczytaj zdjęcie i odczytaj jego dominujące kolory. Przygotuj paletę do grafik reklamowych, marki, strony internetowej lub prezentacji.'),
   page('/tools/format', 'Zmiana formatu i rozmiaru zdjęć online', 'Konwertuj zdjęcia między PNG, JPG i WebP oraz zmniejszaj ich wymiary w pikselach. Ustaw maksymalną szerokość lub wysokość i zachowaj proporcje.'),

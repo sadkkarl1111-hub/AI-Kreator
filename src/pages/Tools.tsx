@@ -84,7 +84,7 @@ const tools = [
   { to: '/tools/collage', icon: LayoutGrid, label: 'Kolaż zdjęć', desc: 'Połącz wiele zdjęć w jeden obraz z gotowymi układami.', color: 'from-lime-500 to-green-600', credits: false },
   { to: '/tools/watermark', icon: Stamp, label: 'Watermark', desc: 'Dodaj znak wodny jako tekst lub podpis graficzny.', color: 'from-slate-500 to-gray-600', credits: false },
   { to: '/tools/meme', icon: Laugh, label: 'Meme Generator', desc: 'Twórz memy z szablonami albo własnymi zdjęciami.', color: 'from-orange-500 to-red-500', credits: false },
-  { to: '/tools/mockup', icon: Monitor, label: 'Generator mockupów', desc: 'Pokaż projekt na telefonie, opakowaniu lub koszulce. Dopasuj grafikę i pobierz PNG.', color: 'from-purple-500 to-indigo-600', credits: false },
+  { to: '/tools/mockup', icon: Monitor, label: 'Generator mockupów', desc: 'Pokaż jeden projekt na kilku nośnikach. Pobierz mockupy jako osobne PNG lub razem w ZIP-ie.', color: 'from-purple-500 to-indigo-600', credits: false },
   { to: '/tools/social-resize', icon: LayoutGrid, label: 'Smart Resize Social', desc: 'Dopasuj jedną grafikę do formatów Instagram, YouTube, LinkedIn i innych.', color: 'from-orange-500 to-amber-600', credits: false },
   { to: '/tools/color-palette', icon: Pipette, label: 'Paleta kolorów', desc: 'Wyciągnij dominujące kolory ze zdjęcia.', color: 'from-rose-500 to-pink-600', credits: false },
   { to: '/tools/format', icon: FileType, label: 'Zmiana formatu i rozmiaru', desc: 'Konwertuj PNG, JPG i WebP oraz zmniejszaj wymiary obrazów.', color: 'from-green-500 to-emerald-600', credits: false },

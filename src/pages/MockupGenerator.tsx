@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { AppLayout } from '@/components/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,16 +6,55 @@ import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Monitor, Upload, ArrowLeft, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { MOCKUPS, MOCKUP_CATEGORIES } from '@/components/mockup/mockupTemplates';
-import { decodeLocalImage, fitImageRect } from '@/lib/localDesignExport';
+import { MOCKUPS, MOCKUP_CATEGORIES, type MockupTemplate } from '@/components/mockup/mockupTemplates';
+import { canvasPng, decodeLocalImage, fitImageRect, saveLocalBlob } from '@/lib/localDesignExport';
+
+type ImageFit = 'contain' | 'cover' | 'stretch';
+
+function drawMockup(canvas: HTMLCanvasElement, template: MockupTemplate, image: HTMLImageElement | null, fit: ImageFit) {
+  const { canvasW, canvasH, bgColor, imageArea, draw, drawOverlay } = template;
+  canvas.width = canvasW;
+  canvas.height = canvasH;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Nie udało się przygotować mockupu.');
+
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, canvasW, canvasH);
+  draw(ctx, canvasW, canvasH);
+
+  if (image) {
+    const rect = fit === 'stretch'
+      ? { x: 0, y: 0, width: imageArea.w, height: imageArea.h }
+      : fitImageRect(image.naturalWidth, image.naturalHeight, imageArea.w, imageArea.h, fit);
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(imageArea.x, imageArea.y, imageArea.w, imageArea.h);
+    ctx.clip();
+    ctx.drawImage(image, imageArea.x + rect.x, imageArea.y + rect.y, rect.width, rect.height);
+    ctx.restore();
+  } else {
+    ctx.fillStyle = 'rgba(200,200,200,0.3)';
+    ctx.fillRect(imageArea.x, imageArea.y, imageArea.w, imageArea.h);
+    ctx.fillStyle = '#999';
+    ctx.font = '20px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Twoja grafika tutaj', imageArea.x + imageArea.w / 2, imageArea.y + imageArea.h / 2);
+  }
+  drawOverlay?.(ctx, canvasW, canvasH);
+}
 
 const MockupGenerator = () => {
   const [selectedMockup, setSelectedMockup] = useState(MOCKUPS[0]);
   const [userImage, setUserImage] = useState<HTMLImageElement | null>(null);
-  const [fit, setFit] = useState<'contain' | 'cover' | 'stretch'>('contain');
+  const [fit, setFit] = useState<ImageFit>('contain');
   const [reading, setReading] = useState(false);
+  const [batchIds, setBatchIds] = useState<string[]>([]);
+  const [packedCount, setPackedCount] = useState<number | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const packing = packedCount !== null;
+  const locked = reading || packing;
 
   const handleFile = async (file: File) => {
     setReading(true);
@@ -30,48 +69,9 @@ const MockupGenerator = () => {
     }
   };
 
-  const drawMockup = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const { canvasW, canvasH, bgColor, imageArea, draw, drawOverlay } = selectedMockup;
-    canvas.width = canvasW;
-    canvas.height = canvasH;
-    const ctx = canvas.getContext('2d')!;
-
-    // Background
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(0, 0, canvasW, canvasH);
-
-    // Draw mockup frame
-    draw(ctx, canvasW, canvasH);
-
-    // Place user image
-    if (userImage) {
-      const rect = fit === 'stretch'
-        ? { x: 0, y: 0, width: imageArea.w, height: imageArea.h }
-        : fitImageRect(userImage.naturalWidth, userImage.naturalHeight, imageArea.w, imageArea.h, fit);
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(imageArea.x, imageArea.y, imageArea.w, imageArea.h);
-      ctx.clip();
-      ctx.drawImage(userImage, imageArea.x + rect.x, imageArea.y + rect.y, rect.width, rect.height);
-      ctx.restore();
-    } else {
-      // Placeholder
-      ctx.fillStyle = 'rgba(200,200,200,0.3)';
-      ctx.fillRect(imageArea.x, imageArea.y, imageArea.w, imageArea.h);
-      ctx.fillStyle = '#999';
-      ctx.font = '20px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('Twoja grafika tutaj', imageArea.x + imageArea.w / 2, imageArea.y + imageArea.h / 2);
-    }
-    drawOverlay?.(ctx, canvasW, canvasH);
-  }, [selectedMockup, userImage, fit]);
-
   useEffect(() => {
-    drawMockup();
-  }, [drawMockup]);
+    if (canvasRef.current) drawMockup(canvasRef.current, selectedMockup, userImage, fit);
+  }, [selectedMockup, userImage, fit]);
 
   const download = () => {
     if (!canvasRef.current) return;
@@ -81,6 +81,31 @@ const MockupGenerator = () => {
     link.click();
     toast.success('Mockup pobrany!');
   };
+
+  async function downloadBatch() {
+    if (!userImage || locked || !batchIds.length) return;
+    const templates = MOCKUPS.filter(template => batchIds.includes(template.id));
+    const canvas = document.createElement('canvas');
+    setPackedCount(0);
+    try {
+      const { zipSync } = await import('fflate');
+      const files: Record<string, Uint8Array> = {};
+      for (const [index, template] of templates.entries()) {
+        drawMockup(canvas, template, userImage, fit);
+        const png = await canvasPng(canvas);
+        files[`mockup-${template.id}.png`] = new Uint8Array(await png.arrayBuffer());
+        setPackedCount(index + 1);
+      }
+      saveLocalBlob(new Blob([zipSync(files, { level: 0 })], { type: 'application/zip' }), 'paczka-mockupow.zip');
+      toast.success(`Paczka jest gotowa · ${templates.length} plików PNG.`);
+    } catch {
+      toast.error('Nie udało się przygotować paczki. Spróbuj ponownie.');
+    } finally {
+      canvas.width = 1;
+      canvas.height = 1;
+      setPackedCount(null);
+    }
+  }
 
   return (
     <AppLayout>
@@ -95,18 +120,18 @@ const MockupGenerator = () => {
 
         <Card>
           <CardContent className="pt-6 space-y-5">
-            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" disabled={reading} onChange={event => {
+            <input ref={fileInputRef} type="file" accept="image/*" aria-label="Wgraj grafikę do mockupów" className="hidden" disabled={locked} onChange={event => {
               const file = event.target.files?.[0];
               event.target.value = '';
               if (file) void handleFile(file);
             }} />
 
-            <Button variant="outline" className="gap-2" disabled={reading} onClick={() => fileInputRef.current?.click()}>
+            <Button variant="outline" className="gap-2" disabled={locked} onClick={() => fileInputRef.current?.click()}>
               <Upload className="w-4 h-4" /> {reading ? 'Wczytuję grafikę…' : userImage ? 'Zmień grafikę' : 'Wgraj grafikę'}
             </Button>
             {userImage && <label className="grid gap-2 text-sm font-medium sm:max-w-xs">
               Dopasowanie grafiki
-              <select value={fit} onChange={event => setFit(event.target.value as typeof fit)} className="min-h-11 rounded-md border bg-background px-3">
+              <select value={fit} disabled={locked} onChange={event => setFit(event.target.value as ImageFit)} className="min-h-11 rounded-md border bg-background px-3">
                 <option value="contain">Cała grafika</option>
                 <option value="cover">Wypełnij ramkę</option>
                 <option value="stretch">Rozciągnij do ramki</option>
@@ -126,6 +151,7 @@ const MockupGenerator = () => {
                           key={m.id}
                           size="sm"
                           variant={selectedMockup.id === m.id ? 'default' : 'outline'}
+                          aria-pressed={selectedMockup.id === m.id}
                           onClick={() => setSelectedMockup(m)}
                           className="text-xs"
                         >
@@ -138,9 +164,44 @@ const MockupGenerator = () => {
               })}
             </div>
 
-            <canvas ref={canvasRef} className="max-w-full max-h-[520px] mx-auto rounded-lg border bg-muted" style={{ display: 'block' }} />
+            <canvas ref={canvasRef} role="img" aria-label={`Podgląd mockupu: ${selectedMockup.label}`} className="max-w-full max-h-[520px] mx-auto rounded-lg border bg-muted" style={{ display: 'block' }} />
 
-            <Button onClick={download} disabled={reading} className="gap-2"><Download className="w-4 h-4" /> Pobierz mockup</Button>
+            <Button onClick={download} disabled={locked} className="gap-2"><Download className="w-4 h-4" /> Pobierz mockup</Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="space-y-4 pt-6">
+            <div>
+              <h2 className="text-lg font-semibold">Paczka mockupów</h2>
+              <p className="text-sm text-muted-foreground">Wybierz nośniki, na których chcesz pokazać tę samą grafikę. Paczka użyje wybranego wyżej dopasowania i zapisze każdy mockup jako osobny PNG.</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button variant="outline" size="sm" disabled={locked || batchIds.length === MOCKUPS.length} onClick={() => setBatchIds(MOCKUPS.map(template => template.id))}>Zaznacz wszystkie</Button>
+              <Button variant="ghost" size="sm" disabled={locked || !batchIds.length} onClick={() => setBatchIds([])}>Wyczyść wybór</Button>
+              <span className="text-sm text-muted-foreground">Wybrano {batchIds.length} z {MOCKUPS.length}</span>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {MOCKUP_CATEGORIES.map(category => (
+                <fieldset key={category} disabled={locked} className="space-y-1">
+                  <legend className="mb-1 text-sm font-medium">{category}</legend>
+                  {MOCKUPS.filter(template => template.category === category).map(template => (
+                    <label key={template.id} className="flex min-h-10 items-center gap-2 text-sm">
+                      <input type="checkbox" checked={batchIds.includes(template.id)} className="size-4 accent-primary" onChange={event => {
+                        const checked = event.target.checked;
+                        setBatchIds(previous => checked ? [...previous, template.id] : previous.filter(id => id !== template.id));
+                      }} />
+                      {template.label}
+                    </label>
+                  ))}
+                </fieldset>
+              ))}
+            </div>
+            <Button onClick={downloadBatch} disabled={locked || !userImage || !batchIds.length} className="gap-2">
+              <Download className="h-4 w-4" /> Pobierz paczkę ZIP
+            </Button>
+            {!userImage && <p className="text-sm text-muted-foreground">Wgraj grafikę u góry, aby pobrać paczkę.</p>}
+            {packing && <p role="status" className="text-sm text-muted-foreground">Przygotowuję mockupy · {packedCount} z {batchIds.length}</p>}
           </CardContent>
         </Card>
       </motion.div>
