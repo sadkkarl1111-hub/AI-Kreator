@@ -3,8 +3,8 @@ import { fitImageRect } from './localDesignExport';
 type Vertex = [number, number, number];
 type Point = { x: number; y: number };
 type Quad = [Vertex, Vertex, Vertex, Vertex];
-type Face = { vertices: Vertex[]; color: string; fabric?: boolean; artwork?: { quad: Quad; from?: number; to?: number; drape?: boolean } };
-type Model = { faces: Face[]; title: string; artRatio: number; print?: boolean; seams?: Vertex[][] };
+type Face = { vertices: Vertex[]; color: string; fabric?: boolean; glass?: boolean; artwork?: { quad: Quad; from?: number; to?: number; drape?: boolean } };
+type Model = { faces: Face[]; title: string; artRatio: number; cameraCutout?: boolean; print?: boolean; seams?: Vertex[][] };
 export type StudioFit = 'contain' | 'cover' | 'stretch';
 
 export const STUDIO_VIEWS = [
@@ -15,10 +15,24 @@ export const STUDIO_VIEWS = [
   { id: 'flat', label: 'Na leżąco', yaw: -22, pitch: 56 },
 ] as const;
 export type StudioView = typeof STUDIO_VIEWS[number]['id'];
-export type StudioBackground = 'light' | 'warm' | 'dark';
+export type StudioBackground = 'light' | 'warm' | 'dark' | 'transparent';
 export const STUDIO_BACKGROUNDS: Record<StudioBackground, string> = {
-  light: 'Jasne studio', warm: 'Ciepłe studio', dark: 'Ciemne studio',
+  light: 'Jasne studio', warm: 'Ciepłe studio', dark: 'Ciemne studio', transparent: 'Bez tła · przezroczysty PNG',
 };
+export type ArtworkFrame = { zoom: number; horizontal: number; vertical: number };
+export const DEFAULT_ARTWORK_FRAME: ArtworkFrame = { zoom: 100, horizontal: 0, vertical: 0 };
+
+export function artworkRect(image: HTMLImageElement, width: number, height: number, fit: StudioFit, frame: ArtworkFrame) {
+  const fitted = fit === 'stretch' ? { width, height } : fitImageRect(image.naturalWidth, image.naturalHeight, width, height, fit);
+  const scaledWidth = fitted.width * frame.zoom / 100;
+  const scaledHeight = fitted.height * frame.zoom / 100;
+  return {
+    x: (width - scaledWidth) * (frame.horizontal + 100) / 200,
+    y: (height - scaledHeight) * (frame.vertical + 100) / 200,
+    width: scaledWidth,
+    height: scaledHeight,
+  };
+}
 
 function rect(x: number, y: number, w: number, h: number, z: number): Quad {
   return [[x - w / 2, y + h, z], [x + w / 2, y + h, z], [x + w / 2, y, z], [x - w / 2, y, z]];
@@ -54,16 +68,32 @@ function addPanel(faces: Face[], w: number, h: number, y: number, z: number, col
 
 function device(w: number, h: number, title: string): Model {
   const faces: Face[] = [];
-  const front = addPanel(faces, w, h, 0, .074, '#303538', .13);
-  const back = front.map(([x, y]): Vertex => [x, y, -.074]);
-  faces.push({ vertices: [...back].reverse(), color: '#62686d' });
-  for (let i = 0; i < front.length; i++) {
-    const j = (i + 1) % front.length;
-    faces.push({ vertices: [front[j], front[i], back[i], back[j]], color: '#969b9e' });
+  const phone = w < 1.55;
+  const bezel = phone ? .056 : .105;
+  const depth = phone ? .056 : .074;
+  const radius = phone ? .165 : .13;
+  const ring = addPanel([], w, h, 0, depth - .013, '#8f979e', radius);
+  const front = addPanel(faces, w - .024, h - .024, .012, depth, '#12161b', radius - .012);
+  const back = addPanel([], w - .019, h - .019, .0095, -depth, '#6e757c', radius - .01);
+  faces.push({ vertices: [...back].reverse(), color: '#676c70' });
+  function connect(near: Vertex[], far: Vertex[], color: string) {
+    for (let i = 0; i < near.length; i++) {
+      const next = (i + 1) % near.length;
+      faces.push({ vertices: [near[next], near[i], far[i], far[next]], color });
+    }
   }
-  addPanel(faces, w - .105, h - .105, .053, .08, '#141820', .09, true);
-  if (w < 1.55) addPanel(faces, .26, .067, h - .17, .085, '#161a20', .029);
-  return { faces, title, artRatio: (w - .105) / (h - .105) };
+  const rearRing = ring.map(([x, y]): Vertex => [x, y, -depth + .012]);
+  connect(front, ring, '#c8cdd1');
+  connect(ring, rearRing, '#8a9298');
+  connect(rearRing, back, '#6b757c');
+  addPanel(faces, w - bezel, h - bezel, bezel / 2, depth + .004, '#11151d', radius - bezel / 2, true);
+  faces[faces.length - 1].glass = true;
+  if (phone) {
+    addBox(faces, -w / 2 - .006, h * .69, 0, .024, .18, .044, '#aeb6bd');
+    addBox(faces, -w / 2 - .006, h * .58, 0, .024, .17, .044, '#aeb6bd');
+    addBox(faces, w / 2 + .006, h * .61, 0, .024, .25, .044, '#aeb6bd');
+  }
+  return { faces, title, artRatio: (w - bezel) / (h - bezel), cameraCutout: phone };
 }
 
 function computer(laptop: boolean): Model {
@@ -208,7 +238,7 @@ function garment(hoodie: boolean): Model {
 }
 
 const MODELS: Record<string, () => Model> = {
-  iphone: () => device(1.24, 2.42, 'Telefon'),
+  iphone: () => device(1.18, 2.50, 'iPhone'),
   tablet: () => device(1.85, 2.45, 'Tablet'),
   macbook: () => computer(true),
   imac: () => computer(false),
@@ -275,7 +305,7 @@ function lighting([a, b, c]: Vertex[]) {
   return .64 + .39 * Math.max(0, (-.42 * nx + .71 * ny + .56 * nz) / magnitude);
 }
 
-function createArtwork(model: Model, image: HTMLImageElement | null, fit: StudioFit) {
+function createArtwork(model: Model, image: HTMLImageElement | null, fit: StudioFit, frame: ArtworkFrame) {
   const canvas = document.createElement('canvas');
   canvas.width = Math.round(900 * Math.min(1, model.artRatio));
   canvas.height = Math.round(900 / Math.max(1, model.artRatio));
@@ -283,7 +313,7 @@ function createArtwork(model: Model, image: HTMLImageElement | null, fit: Studio
   if (!ctx) return canvas;
   const { width, height } = canvas;
   if (image) {
-    const box = fit === 'stretch' ? { x: 0, y: 0, width, height } : fitImageRect(image.naturalWidth, image.naturalHeight, width, height, fit);
+    const box = artworkRect(image, width, height, fit, frame);
     ctx.drawImage(image, box.x, box.y, box.width, box.height);
     return canvas;
   }
@@ -355,7 +385,7 @@ function mapArtwork(ctx: CanvasRenderingContext2D, art: HTMLCanvasElement, quad:
   }
 }
 
-export function drawStudioMockup(canvas: HTMLCanvasElement, id: string, image: HTMLImageElement | null, fit: StudioFit, viewId: StudioView, background: StudioBackground) {
+export function drawStudioMockup(canvas: HTMLCanvasElement, id: string, image: HTMLImageElement | null, fit: StudioFit, viewId: StudioView, background: StudioBackground, frame = DEFAULT_ARTWORK_FRAME, showShadow = true) {
   const model = MODELS[id]();
   const view = studioViewsFor(id).find(option => option.id === viewId) ?? STUDIO_VIEWS[0];
   const vertices = model.faces.flatMap(face => face.vertices);
@@ -383,28 +413,47 @@ export function drawStudioMockup(canvas: HTMLCanvasElement, id: string, image: H
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Nie udało się przygotować sceny 3D.');
 
-  const backdrop = ctx.createRadialGradient(size * .38, size * .34, size * .1, size * .55, size * .49, size * .78);
-  const colors = background === 'dark' ? ['#404753', '#191d24'] : background === 'warm' ? ['#fffaf1', '#ded1bd'] : ['#ffffff', '#e2e5e9'];
-  backdrop.addColorStop(0, colors[0]);
-  backdrop.addColorStop(1, colors[1]);
-  ctx.fillStyle = backdrop;
-  ctx.fillRect(0, 0, size, size);
+  if (background !== 'transparent') {
+    const backdrop = ctx.createRadialGradient(size * .38, size * .34, size * .1, size * .55, size * .49, size * .78);
+    const colors = background === 'dark' ? ['#404753', '#191d24'] : background === 'warm' ? ['#fffaf1', '#ded1bd'] : ['#ffffff', '#e2e5e9'];
+    backdrop.addColorStop(0, colors[0]);
+    backdrop.addColorStop(1, colors[1]);
+    ctx.fillStyle = backdrop;
+    ctx.fillRect(0, 0, size, size);
+  }
 
-  const shadow = hull(oriented.map(([x, y, z]) => screen([x + y * .53, 0, z - y * .26])));
-  ctx.save();
-  ctx.filter = 'blur(17px)';
-  ctx.fillStyle = 'rgba(24,26,30,0.25)';
-  trace(ctx, shadow);
-  ctx.fill();
-  ctx.filter = 'blur(8px)';
-  const contact = screen([0, 0, 0]);
-  ctx.beginPath();
-  ctx.ellipse(contact.x, contact.y, Math.max(18, (maxX - minX) * scale * .31), Math.max(7, scale * .05), 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(20,21,22,0.30)';
-  ctx.fill();
-  ctx.restore();
+  if (showShadow) {
+    const shadow = hull(oriented.map(([x, y, z]) => screen([x + y * .53, 0, z - y * .26])));
+    ctx.save();
+    ctx.filter = 'blur(17px)';
+    ctx.fillStyle = 'rgba(24,26,30,0.25)';
+    trace(ctx, shadow);
+    ctx.fill();
+    ctx.filter = 'blur(8px)';
+    const contact = screen([0, 0, 0]);
+    ctx.beginPath();
+    ctx.ellipse(contact.x, contact.y, Math.max(18, (maxX - minX) * scale * .31), Math.max(7, scale * .05), 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(20,21,22,0.30)';
+    ctx.fill();
+    ctx.restore();
+  }
 
-  const art = createArtwork(model, image, fit);
+  const art = createArtwork(model, image, fit, frame);
+  if (model.cameraCutout) {
+    const screenContext = art.getContext('2d');
+    if (screenContext) {
+      const cutoutHeight = art.height * .025;
+      const cutoutY = art.height * .029;
+      screenContext.fillStyle = '#080b10';
+      screenContext.beginPath();
+      screenContext.roundRect(art.width * .39, cutoutY, art.width * .22, cutoutHeight, cutoutHeight / 2);
+      screenContext.fill();
+      screenContext.fillStyle = '#29354b';
+      screenContext.beginPath();
+      screenContext.ellipse(art.width * .58, cutoutY + cutoutHeight / 2, cutoutHeight * .20, cutoutHeight * .20, 0, 0, 2 * Math.PI);
+      screenContext.fill();
+    }
+  }
   const faces = model.faces.map(face => {
     const points = face.vertices.map(project);
     const area = points.reduce((sum, point, index) => {
@@ -436,7 +485,14 @@ export function drawStudioMockup(canvas: HTMLCanvasElement, id: string, image: H
     ctx.save();
     ctx.clip();
     mapArtwork(ctx, art, face.artwork.quad, project, face.artwork.from, face.artwork.to, face.artwork.drape);
-    if (!model.print) {
+    if (face.glass) {
+      const reflection = ctx.createLinearGradient(face.points[0].x, face.points[0].y, face.points[0].x + size * .55, face.points[0].y + size * .34);
+      reflection.addColorStop(0, 'rgba(234,244,255,.16)');
+      reflection.addColorStop(.36, 'rgba(234,244,255,.04)');
+      reflection.addColorStop(.63, 'rgba(234,244,255,0)');
+      ctx.fillStyle = reflection;
+      ctx.fillRect(0, 0, size, size);
+    } else if (!model.print) {
       ctx.globalAlpha = (1 - Math.min(1, light)) * .76;
       ctx.fillStyle = '#080b12';
       ctx.fillRect(0, 0, size, size);

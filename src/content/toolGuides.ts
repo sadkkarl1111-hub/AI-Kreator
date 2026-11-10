@@ -11,8 +11,8 @@ const TOOL_GUIDES: Record<string, ToolGuide> = {
     title: 'Jak zrobić mockup projektu online?',
     intro: 'Mockup pomaga pokazać klientowi, jak projekt będzie wyglądał na ekranie, opakowaniu albo produkcie. Możesz przygotować podgląd aplikacji na telefonie, okładki na książce lub logo na torbie.',
     steps: [
-      'Wybierz nośnik, np. telefon, pudełko, koszulkę lub kubek. W modelach oznaczonych 3D możesz zmienić kąt, pozycję i tło studia.',
-      'Wgraj grafikę. Wybierz „Cała grafika”, gdy ważne są krawędzie i napisy, albo „Wypełnij ramkę”, gdy projekt ma sięgać do jej brzegów.',
+      'Wybierz nośnik, np. telefon, pudełko, koszulkę lub kubek. W modelach 3D możesz ustawić ujęcie i wyeksportować PNG bez tła, z cieniem lub bez.',
+      'Wgraj grafikę. Wypełnij nią ekran albo pokaż cały projekt. Suwakami powiększ obraz i przesuń kadr.',
       'Pobierz jeden mockup jako PNG albo zaznacz kilka nośników w sekcji „Paczka mockupów”. Możesz dodać do ZIP-u wszystkie ujęcia wybranych modeli 3D.',
     ],
     tip: 'Przy opakowaniu użyj płaskiej grafiki frontu. Do podglądu logo na koszulce najlepiej nadaje się PNG z przezroczystym tłem.',
