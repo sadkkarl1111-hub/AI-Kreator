@@ -91,7 +91,7 @@ function ConceptCard({ ad, index, onUse, imageGenerator }: { ad: AdPromptResult;
             Załącz zdjęcie: {ad.needsImage ? 'TAK' : 'NIE'}
           </p>
           <p className="mt-1.5 text-xs leading-relaxed opacity-80">
-            {ad.imageNote || (ad.needsImage ? 'Dodaj w generatorze zdjęcie osoby albo produktu, który ma zostać zachowany.' : 'AI może stworzyć postać, produkt i całą scenę od podstaw.')}
+            {ad.imageNote || (ad.needsImage ? 'Dodaj w generatorze zdjęcie osoby albo produktu, który ma zostać zachowany.' : 'AI odtworzy scenę opisaną w wybranym pomyśle.')}
           </p>
         </div>
         <Button className="w-full gap-2 gradient-bg" onClick={() => onUse(ad)}><ExternalLink className="h-4 w-4" />Użyj tej reklamy</Button>
@@ -132,6 +132,7 @@ export default function AdPromptGenerator() {
   const [showBrief, setShowBrief] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const scrollToResultsRef = useRef(false);
   const controllerRef = useRef<AbortController | null>(null);
   const readingRef = useRef(false);
 
@@ -142,10 +143,10 @@ export default function AdPromptGenerator() {
       if (!active) return;
       restoredOwner.current = access.userId;
       controllerRef.current?.abort();
-      setResult(null); setImages([]); setText(''); setError('');
+      setResult(null); setImages([]); setText(''); setError(''); setShowBrief(true);
       const last = access.data?.lastSession;
       if (last?.prompts?.length) {
-        setText(last.inputText || ''); setResult({ ok: true, prompts: last.prompts }); setShowBrief(false);
+        setText(last.inputText || ''); setResult({ ok: true, prompts: last.prompts });
       }
     });
     return () => { active = false; };
@@ -153,7 +154,10 @@ export default function AdPromptGenerator() {
   useEffect(() => () => controllerRef.current?.abort(), []);
 
   useEffect(() => {
-    if (result) resultsRef.current?.scrollIntoView?.({ behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    if (result && scrollToResultsRef.current) {
+      scrollToResultsRef.current = false;
+      resultsRef.current?.scrollIntoView?.({ behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    }
   }, [result]);
 
   const addFiles = async (files: FileList | File[]) => {
@@ -186,6 +190,7 @@ export default function AdPromptGenerator() {
       }, { retryAuthOnly: true });
       if (!data.ok || !Array.isArray(data.prompts) || !data.prompts.length) throw new Error('Nie otrzymaliśmy propozycji. Spróbuj ponownie.');
       if (controller.signal.aborted) return;
+      scrollToResultsRef.current = true;
       setResult(data);
       setCampaignVersion(previous=>previous+1);
       setShowBrief(false);
@@ -223,9 +228,9 @@ export default function AdPromptGenerator() {
       </header>
 
       <div className="mb-5 space-y-2 rounded-xl border bg-card p-4 text-sm" aria-label="Limit darmowych promptów">
-        <p className="font-semibold">Darmowe prompty: 1 zestaw co 7 dni na adres IP i konto · 0 kredytów</p>
-        <p className="text-muted-foreground">Limit jest zużywany przy rozpoczęciu generowania. Grafiki z wybranego promptu są rozliczane osobno kredytami.</p>
-        <p role="status">{access.data.campaign.remaining ? 'Możesz teraz przygotować bezpłatny zestaw.' : `Limit wykorzystany. Następne generowanie: ${adQuotaDate(access.data.campaign)}.`}</p>
+        <p className="font-semibold">{access.data.campaign.unlimited ? 'Administrator · prompty bez limitu tygodniowego' : 'Darmowe prompty: 1 zestaw co 7 dni na adres IP i konto · 0 kredytów'}</p>
+        <p className="text-muted-foreground">{access.data.campaign.unlimited ? 'Możesz przygotowywać kolejne zestawy reklam.' : 'Limit jest zużywany przy rozpoczęciu generowania. Grafiki z wybranego promptu są rozliczane osobno kredytami.'}</p>
+        <p role="status">{access.data.campaign.unlimited ? 'Dostęp administratora aktywny.' : access.data.campaign.remaining ? 'Możesz teraz przygotować bezpłatny zestaw.' : `Limit wykorzystany. Następne generowanie: ${adQuotaDate(access.data.campaign)}.`}</p>
         {!access.data.campaign.remaining && result && <p className="text-muted-foreground">Twój zapisany zestaw pozostaje dostępny poniżej — możesz nadal używać promptów i generować z nich grafiki.</p>}
       </div>
       <Card className="overflow-hidden">

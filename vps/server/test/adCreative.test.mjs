@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { AD_IMAGE_QUALITY_LOCK, AD_STYLES, ANALYSIS_SCHEMA, CONCEPT_SCHEMA, parseAdAnalysis, parseAdConcepts, isCompiledAdPrompt } from '../dist/lib/adCreative.js';
+import { AD_IMAGE_QUALITY_LOCK, AD_STYLES, ANALYSIS_SCHEMA, CONCEPT_SCHEMA, parseAdAnalysis, parseAdConcepts, isCompiledAdPrompt, adSubjectInstructions } from '../dist/lib/adCreative.js';
 import { AD_ANALYSIS_MODEL, AD_PROMPT_MODEL, AdBriefError, AdProviderError, createAdJsonClient, generateAdCampaign, toOpenAiAdSchema } from '../dist/lib/adCreativeAi.js';
 
 const description = 'Automatyzuję faktury dla małych firm. Dane z formularza trafiają do CRM. Umów rozmowę o wdrożeniu.';
@@ -126,6 +126,40 @@ test('scenic concepts cannot silently turn back into generic office scenes', () 
   for (const style of AD_STYLES.filter(s => s.category === 'scenic')) {
     assert.throws(() => parseAdConcepts({ concepts: [row(style, { artDirectionEn: row(styles[0]).artDirectionEn })] }, [style], parsedAnalysis()), /Scena nie odpowiada/);
   }
+});
+test('an explicitly people-free campaign keeps every scenic setting and never requires a portrait',async()=>{
+ const brief=description+' Bez postaci i bez ludzi.';
+ const result=await generateAdCampaign(async req=>{
+  if(req.images)return analysis;
+  const input=JSON.parse(req.input);assert.equal(input.analysis.excludePeople,true);
+  return {concepts:input.styles.map(style=>row(AD_STYLES.find(item=>item.id===style.id),{
+   includePeople:false,needsImage:false,imageNote:'AI wygeneruje przedmioty i puste otoczenie.',
+   artDirectionEn:'An empty '+({jungle:'jungle',pool:'swimming pool',mountains:'mountain trail',worksite:'construction site'}[style.id]||'studio')+' scene with a blank invoice folder and a clear visual path leading to a minimal abstract CRM object. Use layered depth, tactile materials and warm directional lighting with a quiet dark copy zone. No people, faces, silhouettes or hands.',
+  }))};
+ },brief,[],request().signal);
+ assert.equal(result.prompts.length,12);
+ for(const concept of result.prompts){assert.equal(concept.includePeople,false);assert.equal(concept.needsImage,false);assert.match(concept.prompt,/SUBJECT LOCK: This advertisement contains NO PEOPLE/);}
+ assert.deepEqual(result.prompts.filter(item=>item.category==='scenic').map(item=>item.styleId),['jungle','pool','mountains','worksite']);
+});
+test('a concept without a person gets a people-free lock, including older saved prompts',()=>{
+ const scene='A tangible glass product on a clean pedestal, with leaf shadows crossing the surface. A lush jungle clearing surrounds the product in the background. Use a deep green palette, warm directional light, rich material detail and a quiet zone for copy.';
+ const [ad]=parseAdConcepts({concepts:[row(AD_STYLES[8],{artDirectionEn:scene,needsImage:false,imageNote:'AI stworzy produkt w dżungli.'})]},[AD_STYLES[8]],parsedAnalysis());
+ assert.equal(ad.includePeople,false);assert.match(adSubjectInstructions(ad.prompt),/NO PEOPLE/);
+ const legacy='Create ONE finished advertising image.\n\nArt direction: '+scene+'\n\nLayout: headline above.\nBEGIN_VISIBLE_TEXT\n[]\nEND_VISIBLE_TEXT';
+ assert.match(adSubjectInstructions(legacy),/NO PEOPLE/);
+ const invalid={concepts:[row(styles[0],{includePeople:false})]};
+ assert.throws(()=>parseAdConcepts(invalid,[styles[0]],parsedAnalysis()),/bez postaci/);
+});
+test('a failed scenic batch is repaired by requesting its missing styles with unique hooks',async()=>{
+ let failures=0,repairs=0;
+ const result=await generateAdCampaign(async req=>{
+  if(req.images)return analysis;
+  const input=JSON.parse(req.input),requested=input.styles.map(style=>AD_STYLES.find(item=>item.id===style.id));
+  if(requested[0].id==='jungle'&&!input.avoidHooks){failures++;throw Error('Temporary malformed scenic group');}
+  if(input.avoidHooks){repairs++;assert.deepEqual(requested.map(item=>item.id),['jungle','pool','mountains','worksite']);}
+  return concepts(requested);
+ },description,[],request().signal);
+ assert.equal(failures,2);assert.equal(repairs,1);assert.equal(result.prompts.length,12);assert.equal(result.partial,false);
 });
 
 test('duplicate hook gets one targeted repair without losing its scenic direction', async () => {

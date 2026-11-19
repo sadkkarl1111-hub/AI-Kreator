@@ -29,10 +29,11 @@ function ImagePanel({ ad,index,disabled,onBusyChange }: { ad: AdPromptResult; in
   const job=useRef<AbortController|null>(null),uploaded=useRef<{file:File;owner:string;path:string}|null>(null);
   const {user}=useAuth();const owner=user?.id;
   const visibleResults=results.filter(item=>item.owner===owner);
+  const resultLimitReached=!credits.isAdmin&&visibleResults.length>=3;
   useEffect(()=>()=>{if(job.current){job.current.abort();job.current=null;onBusyChange(false);}},[onBusyChange,owner]);
   const insufficient=!credits.isAdmin&&model&&credits.balance!==null&&credits.balance<model.cost;
   const submit=async()=>{
-    if(job.current||disabled||!model||!owner||insufficient||credits.loading||visibleResults.length>=3||ad.needsImage&&(!file||!model.supportsReferenceImages))return;
+    if(job.current||disabled||!model||!owner||insufficient||credits.loading||resultLimitReached||ad.needsImage&&(!file||!model.supportsReferenceImages))return;
     const controller=new AbortController();job.current=controller;setBusy(true);onBusyChange(true);setError('');
     const current=()=>!controller.signal.aborted&&job.current===controller&&getStoredAuthSession()?.user?.id===owner;
     try{
@@ -62,8 +63,8 @@ function ImagePanel({ ad,index,disabled,onBusyChange }: { ad: AdPromptResult; in
     </fieldset>
     {ad.needsImage&&model&&!model.supportsReferenceImages&&<p className="text-xs text-destructive">Ten model nie obsługuje zdjęcia referencyjnego. Wybierz inny model.</p>}
     {insufficient&&<p className="text-xs text-destructive">Brakuje kredytów na ten model. <Link to="/credits" className="underline">Doładuj saldo</Link>.</p>}
-    <Button type="button" className="h-auto min-h-11 w-full gap-2 whitespace-normal" onClick={()=>void submit()} disabled={disabled||busy||modelsLoading||!model||credits.loading||Boolean(insufficient)||!owner||visibleResults.length>=3||ad.needsImage&&(!file||!model.supportsReferenceImages)}>{busy?<Loader2 className="h-4 w-4 animate-spin"/>:<ImagePlus className="h-4 w-4"/>}{busy?phase:credits.isAdmin?'Generuj 1 grafikę · administrator':`Generuj 1 grafikę · ${model?.cost??'—'} kredytów`}</Button>
-    <p className="text-[11px] text-muted-foreground">{credits.isAdmin?'Administrator: bez potrącania kredytów.':'Koszt dotyczy jednej grafiki.'} Do 3 wyników na pomysł w tej sesji. Wyniki zapisują się w galerii. Zamknięcie strony nie zatrzymuje pracy AI; po błędzie połączenia sprawdź galerię przed ponowną próbą.</p>
+    <Button type="button" className="h-auto min-h-11 w-full gap-2 whitespace-normal" onClick={()=>void submit()} disabled={disabled||busy||modelsLoading||!model||credits.loading||Boolean(insufficient)||!owner||resultLimitReached||ad.needsImage&&(!file||!model.supportsReferenceImages)}>{busy?<Loader2 className="h-4 w-4 animate-spin"/>:<ImagePlus className="h-4 w-4"/>}{busy?phase:credits.isAdmin?'Generuj 1 grafikę · administrator':`Generuj 1 grafikę · ${model?.cost??'—'} kredytów`}</Button>
+    <p className="text-[11px] text-muted-foreground">{credits.isAdmin?'Administrator: bez potrącania kredytów i bez limitu wyników.':'Koszt dotyczy jednej grafiki. Do 3 wyników na pomysł w tej sesji.'} Wyniki zapisują się w galerii. Zamknięcie strony nie zatrzymuje pracy AI; po błędzie połączenia sprawdź galerię przed ponowną próbą.</p>
     {!modelsLoading&&!aiModels.length&&<p role="status" className="text-xs">Brak dostępnych modeli grafiki. Odśwież stronę.</p>}
     {error&&<p role="alert" className="text-sm text-destructive">{error}</p>}
     {!!visibleResults.length&&<div className="grid gap-3">{visibleResults.map((item,i)=><div key={i} className="space-y-2"><img src={item.url} alt={`Gotowa reklama ${index+1}, wariant ${i+1}`} className="max-h-96 w-full rounded-lg border object-contain"/><Button type="button" variant="outline" size="sm" className="w-full gap-2" disabled={downloading} onClick={()=>void download(item.url,i+1)}><Download className="h-4 w-4"/>Pobierz wariant {i+1}</Button></div>)}<Button variant="link" asChild><Link to="/gallery">Otwórz galerię grafik</Link></Button></div>}

@@ -7,7 +7,8 @@ import { getPostgresPool } from './postgres.js';
 
 export type AdQuotaScope = 'campaign' | 'research';
 export const AD_QUOTA_DAYS = 7;
-export type AdQuota = { remaining: number; nextAvailableAt: string | null; limit: number; windowDays: number };
+export type AdQuota = { remaining: number; nextAvailableAt: string | null; limit: number; windowDays: number; unlimited?: boolean };
+export const unlimitedAdQuota = (): AdQuota => ({ remaining: 1, nextAvailableAt: null, limit: 0, windowDays: 0, unlimited: true });
 
 export function normalizeAdIp(value: string) {
   let address = value.trim().toLowerCase();

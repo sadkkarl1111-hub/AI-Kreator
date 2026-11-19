@@ -78,7 +78,7 @@ async function validatedRequest<T>(client: AdJsonClient, request: JsonRequest, p
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     request.signal.throwIfAborted();
     try {
-      return parse(await client({ ...request, input: request.input + (attempt ? '\nPoprzednia odpowiedź była niekompletna lub niezgodna. Odpowiedz od nowa, zwięźle, według schematu i limitów. Zachowaj wyłącznie fakty z oryginalnego materiału.' : '') }));
+      return parse(await client({ ...request, instructions: request.instructions + (attempt ? '\nPoprzednia odpowiedź była niekompletna lub niezgodna. Odpowiedz od nowa, zwięźle, według schematu i limitów. Zachowaj wyłącznie fakty z oryginalnego materiału.' : '') }));
     } catch (error) {
       if (request.signal.aborted || attempt === maxAttempts - 1 || (error instanceof AdProviderError && !error.retryable)) throw error;
       if (error instanceof AdProviderError && error.status) await delay(2000, undefined, { signal: request.signal });
@@ -109,6 +109,8 @@ export async function generateAdCampaign(client: AdJsonClient, description: stri
     maxOutputTokens: 9000,
   }, value => parseAdConcepts(value, styles, analysis))));
   signal.throwIfAborted();
+  const fatalProviderFailure = results.find(result => result.status === 'rejected' && result.reason instanceof AdProviderError && !result.reason.retryable);
+  if (fatalProviderFailure?.status === 'rejected') throw fatalProviderFailure.reason;
   const seen = new Set<string>();
   const duplicateDirections: { style: typeof AD_STYLES[number]; needsImage: boolean }[] = [];
   const prompts = results.flatMap(result => result.status === 'fulfilled' ? result.value : []).filter(p => {
@@ -120,9 +122,13 @@ export async function generateAdCampaign(client: AdJsonClient, description: stri
     seen.add(key);
     return true;
   });
-  // Repair only duplicate directions, at most four in one extra provider call.
-  // Never rerun the full campaign or silently discard a requested scene on the first duplicate.
-  const repairDirections = duplicateDirections.slice(0, 4);
+  // Repair missing scenery and duplicate hooks in one bounded group.
+  const failedScenery = AD_STYLES.filter(style => style.category === 'scenic' && !prompts.some(prompt => prompt.styleId === style.id) && !duplicateDirections.some(item => item.style.id === style.id));
+  const repairDirections = [
+    ...duplicateDirections.filter(item => item.style.category === 'scenic'),
+    ...failedScenery.map((style, index) => ({ style, needsImage: !analysis.excludePeople && index < 2 })),
+    ...duplicateDirections.filter(item => item.style.category !== 'scenic'),
+  ].slice(0, 4);
   const repairStyles = repairDirections.map(item => ({ ...item.style, requiredNeedsImage: item.needsImage }));
   if (repairStyles.length) {
     try {
@@ -138,7 +144,7 @@ export async function generateAdCampaign(client: AdJsonClient, description: stri
         if (concepts.some(concept => seen.has(concept.hookPl.toLocaleLowerCase('pl')))) throw new Error('Powtórzony hook po poprawce.');
         if (concepts.some((concept, index) => concept.needsImage !== repairDirections[index]?.needsImage)) throw new Error('Poprawka zmieniła plan zdjęcia.');
         return concepts;
-      }, 1);
+      }, failedScenery.length ? 2 : 1);
       prompts.push(...repaired);
     } catch { signal.throwIfAborted(); }
   }

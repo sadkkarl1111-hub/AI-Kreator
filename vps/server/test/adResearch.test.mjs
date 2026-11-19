@@ -36,7 +36,7 @@ test('provider errors never leak Meta response messages containing secrets',asyn
  await assert.rejects(searchMetaAds(readMetaSearch({query:'test'}),'secret-token','v24.0',new AbortController().signal,async()=>Response.json({error:{message:'secret-token'}},{status:401})),error=>error.status===502&&!error.message.includes('secret-token'));
 });
 async function withApi(overrides,action){
- let calls=0;const app=express();app.use(express.json());app.use(createAdResearchRouter({authenticate:(req,res,next)=>{req.authUser={id:'test-user',email:null};next();},authorize:(_req,_res,next)=>next(),quota:{consume:async()=>({claimed:true,remaining:0,nextAvailableAt:new Date(Date.now()+604800000).toISOString(),limit:1,windowDays:7})},subjects:()=>['ip','account'],apiAvailable:()=>true,configured:()=>false,search:async()=>{calls++;return{ads:[],limited:false};},research:async()=>{calls++;return report;},...overrides}));
+ let calls=0;const app=express();app.use(express.json());app.use(createAdResearchRouter({authenticate:(req,res,next)=>{req.authUser={id:'test-user',email:null};next();},authorize:(_req,_res,next)=>next(),isAdmin:async()=>false,quota:{consume:async()=>({claimed:true,remaining:0,nextAvailableAt:new Date(Date.now()+604800000).toISOString(),limit:1,windowDays:7})},subjects:()=>['ip','account'],apiAvailable:()=>true,configured:()=>false,search:async()=>{calls++;return{ads:[],limited:false};},research:async()=>{calls++;return report;},...overrides}));
  const server=app.listen(0,'127.0.0.1');await new Promise(resolve=>server.once('listening',resolve));const base=`http://127.0.0.1:${server.address().port}`;
  const post=(route,body)=>fetch(`${base}/ad-generator/library/${route}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});
  try{await action({base,post,calls:()=>calls});}finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}
@@ -50,5 +50,14 @@ test('missing connector configuration is explicit while manual research remains 
   assert.equal((await post('search',{query:'Dowolna branża'})).status,503);assert.equal(calls(),0);
   assert.equal((await post('analyze',{text:'Nasza własna oferta',...options})).status,200);assert.equal(calls(),1);
   assert.equal((await post('analyze',{text:'',...options})).status,400);assert.equal(calls(),1);
+ });
+});
+test('administrator research ignores an exhausted weekly quota',async()=>{
+ await withApi({isAdmin:async()=>true,quota:{consume:async()=>{throw Error('Must not consume admin quota');}}},async({post,calls})=>{
+  for(let index=0;index<2;index++){
+   const response=await post('analyze',{text:'Nasza oferta',...options});
+   assert.equal(response.status,200);assert.equal((await response.json()).quota.unlimited,true);
+  }
+  assert.equal(calls(),2);
  });
 });

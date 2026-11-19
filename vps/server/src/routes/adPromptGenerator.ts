@@ -1,5 +1,6 @@
 import { createMeteredAdClient } from '../lib/adUsage.js';
-import { adWeeklyStore, adQuotaSubjects } from '../lib/adWeeklyAccess.js';
+import { adWeeklyStore, adQuotaSubjects, unlimitedAdQuota } from '../lib/adWeeklyAccess.js';
+import { hasLocalUserRole } from '../lib/localUserData.js';
 import { adQuotaBlocked } from '../lib/adQuotaResponse.js';
 import { Router, type RequestHandler, type Request } from "express";
 import sharp from "sharp";
@@ -37,6 +38,7 @@ function readInput(body: Record<string, unknown>): { description: string; images
 
 type Dependencies = {
   authenticate: RequestHandler;
+  isAdmin: (userId: string) => Promise<boolean>;
   quota: typeof adWeeklyStore;
   subjects: (request: Request) => string[];
   apiKey: () => string;
@@ -46,23 +48,33 @@ type Dependencies = {
 };
 export function createAdPromptGeneratorRouter(overrides: Partial<Dependencies> = {}) {
 const deps: Dependencies = {
-  authenticate: requireAuthenticatedUser, quota: adWeeklyStore, subjects: adQuotaSubjects, apiKey: () => env.openAiApiKey,
+  authenticate: requireAuthenticatedUser, isAdmin: id => hasLocalUserRole(id, 'admin'), quota: adWeeklyStore, subjects: adQuotaSubjects, apiKey: () => env.openAiApiKey,
   generate: (id, description, images, signal, options) => generateAdCampaign(createMeteredAdClient(env.openAiApiKey, id, 'campaign'), description, images, signal, options),
   save: createLocalAdPromptSession, latest: listLocalAdPromptSessions, ...overrides,
 };
 const adPromptGeneratorRouter = Router();
+const adminAccess: RequestHandler = async (req, res, next) => {
+  try { res.locals.adAdmin = await deps.isAdmin(req.authUser!.id); next(); }
+  catch (error) { next(error); }
+};
 adPromptGeneratorRouter.use(createAdResearchRouter());
-adPromptGeneratorRouter.get('/ad-generator/access', deps.authenticate, requireAdGeneratorAccess, async (req, res) => {
+adPromptGeneratorRouter.get('/ad-generator/access', deps.authenticate, requireAdGeneratorAccess, adminAccess, async (req, res) => {
   try {
-    const keys = deps.subjects(req);
-    const [campaign, research, sessions] = await Promise.all([deps.quota.status('campaign', keys), deps.quota.status('research', keys), deps.latest(req.authUser!.id, 1)]);
+    const isAdmin = res.locals.adAdmin === true;
+    const keys = isAdmin ? [] : deps.subjects(req);
+    const [campaign, research, sessions] = await Promise.all([
+      isAdmin ? unlimitedAdQuota() : deps.quota.status('campaign', keys),
+      isAdmin ? unlimitedAdQuota() : deps.quota.status('research', keys),
+      deps.latest(req.authUser!.id, 1),
+    ]);
     const last = sessions[0];
     res.json({ campaign, research, lastSession: last ? { id: last.id, inputText: last.input_text, prompts: last.prompts, createdAt: last.created_at } : null });
   } catch { res.status(503).json({ error: 'Nie udało się sprawdzić limitu. Odśwież dostęp przed generowaniem.' }); }
 });
 
 const generationRate = createRateLimitMiddleware({ scope: 'ad-generator', max: 20, windowMs: 15 * 60 * 1000, message: 'Zbyt wiele analiz reklam. Spróbuj ponownie za kilka minut.', keyResolver: req => [req.authUser!.id] });
-adPromptGeneratorRouter.post("/ad-generator/generate", deps.authenticate, requireAdGeneratorAccess, generationRate, async (req, res) => {
+adPromptGeneratorRouter.post("/ad-generator/generate", deps.authenticate, requireAdGeneratorAccess, adminAccess,
+  (req, res, next) => res.locals.adAdmin ? next() : generationRate(req, res, next), async (req, res) => {
   const user = req.authUser!;
   let locked = false;
   const controller = new AbortController();
@@ -91,7 +103,9 @@ adPromptGeneratorRouter.post("/ad-generator/generate", deps.authenticate, requir
     activeUsers.add(user.id);
     locked = true;
     controller.signal.throwIfAborted();
-    const quota = await deps.quota.consume('campaign', deps.subjects(req));
+    const quota = res.locals.adAdmin
+      ? { ...unlimitedAdQuota(), claimed: true }
+      : await deps.quota.consume('campaign', deps.subjects(req));
     if (!quota.claimed) return adQuotaBlocked(res, quota);
     const result = await deps.generate(user.id, input.description, input.images, controller.signal, options);
     const session = await deps.save({ userId: user.id, inputText: input.description, imageCount: input.images.length, prompts: result.prompts }).catch(() => null);
@@ -102,16 +116,17 @@ adPromptGeneratorRouter.post("/ad-generator/generate", deps.authenticate, requir
   } catch (error) {
     if (error instanceof AdBriefError && !res.destroyed) return res.status(422).json({ error: error.message });
     console.error("[ad-generator] failed", { kind: error instanceof Error ? error.name : "unknown", aborted: controller.signal.aborted, providerStatus: error instanceof AdProviderError ? error.status : undefined, providerCode: error instanceof AdProviderError ? error.code : undefined });
+    const retryHint = res.locals.adAdmin ? 'Możesz ponowić generowanie.' : 'Sprawdź datę kolejnej próby.';
     if (!res.destroyed) return res.status(502).json({
       error: controller.signal.aborted
-        ? "Analiza trwała zbyt długo. Materiały pozostały w formularzu. Rozpoczęta próba zużyła limit tygodniowy."
+        ? `Analiza trwała zbyt długo. Materiały pozostały w formularzu. ${res.locals.adAdmin ? retryHint : 'Rozpoczęta próba zużyła limit tygodniowy.'}`
         : error instanceof AdProviderError && error.code === 'insufficient_quota'
           ? "Limit rozliczeniowy OpenAI został wyczerpany. Administrator musi sprawdzić saldo API; Twoje materiały zostały zachowane."
         : error instanceof AdProviderError && (error.code === 'model_not_found' || error.status === 403)
           ? "Model GPT-5.6 Luna nie jest dostępny dla skonfigurowanego konta OpenAI. Administrator musi sprawdzić dostęp do modelu."
         : error instanceof AdProviderError && error.status === 429
-          ? "Usługa AI ma obecnie ograniczoną dostępność. Materiały pozostały w formularzu. Sprawdź datę kolejnej próby."
-          : "Nie udało się przygotować reklam. Materiały zostały zachowane. Sprawdź datę kolejnej próby.",
+          ? `Usługa AI ma obecnie ograniczoną dostępność. Materiały pozostały w formularzu. ${retryHint}`
+          : `Nie udało się przygotować reklam. Materiały zostały zachowane. ${retryHint}`,
     });
   } finally {
     clearTimeout(timeout);

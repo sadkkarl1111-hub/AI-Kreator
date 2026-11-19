@@ -32,3 +32,12 @@ it('prevents duplicate paid requests and ignores a late result after account cha
 it('retains previous results on provider error and does not spend on insufficient balance',async()=>{
  open();fireEvent.click(screen.getByRole('button',{name:'Generuj 1 grafikę · 25 kredytów'}));await screen.findByRole('img');vi.mocked(vpsFetch).mockRejectedValueOnce(new Error('Błąd dostawcy'));fireEvent.click(screen.getByRole('button',{name:'Generuj 1 grafikę · 25 kredytów'}));expect(await screen.findByRole('alert')).toHaveTextContent('Błąd dostawcy');expect(screen.getByRole('img')).toBeInTheDocument();cleanup();credits.balance=0;open();await waitFor(()=>expect(screen.getByRole('button',{name:'Generuj 1 grafikę · 25 kredytów'})).toBeDisabled());
 });
+it('lets the administrator generate more than three images for one idea',async()=>{
+ credits.isAdmin=true;credits.balance=0;open();
+ for(let index=1;index<=4;index++){
+  fireEvent.click(screen.getByRole('button',{name:'Generuj 1 grafikę · administrator'}));
+  await waitFor(()=>expect(screen.getAllByRole('img')).toHaveLength(index));
+ }
+ expect(screen.getByRole('button',{name:'Generuj 1 grafikę · administrator'})).toBeEnabled();
+ expect(screen.getByText(/bez limitu wyników/)).toBeVisible();
+});

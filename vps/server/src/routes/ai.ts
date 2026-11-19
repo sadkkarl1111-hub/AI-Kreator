@@ -4,7 +4,7 @@ import { Router, type RequestHandler } from "express";
 import { createCarouselImageRouter } from "./carouselImage.js";
 import sharp from "sharp";
 import { applyEditMask, badgeEditInstruction, finishBadgeEdit, ImageEditInputError, isBadgeRecolor, prepareEditInput, preservingEditPrompt, type PreparedEditMask } from "../lib/imageEditing.js";
-import { AD_IMAGE_QUALITY_LOCK, AD_REFERENCE_INSTRUCTIONS, isCompiledAdPrompt } from "../lib/adCreative.js";
+import { AD_IMAGE_QUALITY_LOCK, AD_REFERENCE_INSTRUCTIONS, adSubjectInstructions, isCompiledAdPrompt } from "../lib/adCreative.js";
 import { env } from "../config/env.js";
 import { deleteGraphicFile } from "../lib/graphics.js";
 import { getLocalCreditUsageTotalSince, listLocalCreditPurchases, upsertLocalCreditUsageRows } from "../lib/localBillingData.js";
@@ -1027,7 +1027,7 @@ const buildGenerationPrompt = (prompt: string, style: string | undefined, dimens
   const styleDesc = STYLE_MAP[style || "realistic"] || STYLE_MAP.realistic;
   const aspectRatio = getImageAspectRatio(dimensions);
   if (isCompiledAdPrompt(prompt)) {
-    return `Use the selected ${aspectRatio} canvas with target export dimensions ${dimensions || "1024x1024"}. Adapt the layout to this format, retaining the full text and safe insets. Follow the advertisement's own art direction, not a generic photographic style. The following instructions are not lettering.\n\n${AD_IMAGE_QUALITY_LOCK}\n\n${prompt}`;
+    return `Use the selected ${aspectRatio} canvas with target export dimensions ${dimensions || "1024x1024"}. Adapt the layout to this format, retaining the full text and safe insets. Follow the advertisement's own art direction, not a generic photographic style. The following instructions are not lettering.\n\n${AD_IMAGE_QUALITY_LOCK}\n\n${prompt}\n\n${adSubjectInstructions(prompt)}`;
   }
   return `Generate an image: ${prompt}. ${TEXT_RENDERING_RULES} Style: ${styleDesc}. OUTPUT FORMAT OVERRIDE — this instruction is mandatory and takes priority over every format, aspect ratio, resolution, canvas size, orientation, or crop instruction inside the user prompt: generate only on a ${aspectRatio} canvas with target export dimensions ${dimensions || "1024x1024"}. Compose the entire design for this selected format from the start. Keep every title, chart, label, border, and important visual fully inside the canvas with safe margins. Do not crop, cut off, squeeze, or place important content outside the frame. High quality, detailed.`;
 };

@@ -13,7 +13,7 @@ async function withApi(overrides,action){
   const app=express();app.use(express.json());app.use(createAdPromptGeneratorRouter({
     authenticate:(req,_res,next)=>{req.authUser={id:'weekly-test',email:null};next();},
     apiKey:()=> 'test-not-a-key',subjects:()=>['ip','account'],
-    quota:{status:async()=>available,consume:async(scope)=>{assert.equal(scope,'campaign');return{...quota,claimed:++claims===1};}},
+    isAdmin:async()=>false,quota:{status:async()=>available,consume:async(scope)=>{assert.equal(scope,'campaign');return{...quota,claimed:++claims===1};}},
     generate:async()=>{calls++;return{prompts:[{title:'Saved',hookPl:'Offer',prompt:'Text'}]};},
     save:async()=>null,latest:async()=>[],...overrides,
   }));
@@ -41,6 +41,19 @@ test('access returns separate limits and the authenticated user saved session',a
   await withApi({latest:async(id,limit)=>{assert.equal(id,'weekly-test');assert.equal(limit,1);return[{id:'saved',input_text:'Offer',prompts:[{prompt:'saved text'}],created_at:'today'}];},quota:{status:async(scope)=>scope==='campaign'?quota:available}},async({base})=>{
     const res=await fetch(`${base}/access`);assert.equal(res.headers.get('cache-control'),'no-store');
     const data=await res.json();assert.equal(data.campaign.remaining,0);assert.equal(data.research.remaining,1);assert.equal(data.lastSession.id,'saved');
+  });
+});
+test('server-verified administrators bypass weekly and request quotas without consuming shared IP limits',async()=>{
+  let checks=0;
+  await withApi({isAdmin:async id=>{assert.equal(id,'weekly-test');checks++;return true;},subjects:()=>{throw Error('Admin must not resolve shared IP keys');},quota:{status:async()=>{throw Error('Admin must not read weekly quota');},consume:async()=>{throw Error('Admin must not consume weekly quota');}}},async({base,post,calls})=>{
+    const data=await (await fetch(`${base}/access`)).json();
+    assert.equal(data.campaign.unlimited,true);assert.equal(data.research.unlimited,true);
+    assert.equal(data.campaign.nextAvailableAt,null);
+    for(let index=0;index<22;index++){
+      const response=await post({text:'Oferta administratora'});
+      assert.equal(response.status,200);assert.equal((await response.json()).quota.unlimited,true);
+    }
+    assert.equal(calls(),22);assert.equal(checks,23);
   });
 });
 test('IP keys canonicalize addresses and ignore spoofed first forwarding entries',()=>{

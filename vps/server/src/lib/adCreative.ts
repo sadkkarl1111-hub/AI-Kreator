@@ -1,16 +1,16 @@
 // Keep factual analysis, visible copy and drawing instructions separate.
 export const AD_STYLES = [
-  { id: 'impact', label: 'Mocny plakat', category: 'performance', direction: 'High-impact direct-response poster: enormous condensed headline occupying the upper/central third, dramatic cutout person or product offset to one side, deep textured background with a subtle halftone or diagonal pattern. Use warm amber/yellow accents on near-black unless brand colors were specified. Add rim light, 2-3 offer-related objects or simple benefit pictograms, one or two curved directional arrows leading to a broad contrasting CTA with a crisp border and controlled glow. Arrange approved benefit ticks as a compact secondary cluster, not a wall of text. The CTA is a major visual anchor, never a tiny plain link. An optional outlined badge contains approved copy only. Adapt this graphic style, not a template topic: no mandatory giant number, error checklist, free gift, warning, testimonial or invented bonus.' },
-  { id: 'cinematic', label: 'Filmowa historia', category: 'creative', direction: 'A specific human action in a real environment, foreground/midground/background, motivated cinematic light and atmospheric depth. The action visualizes the customer problem or benefit. Typography sits in intentional quiet space.' },
+  { id: 'impact', label: 'Mocny plakat', category: 'performance', direction: 'High-impact direct-response poster: enormous condensed headline occupying the upper/central third, dramatic cutout product, object or explicitly requested person offset to one side, deep textured background with a subtle halftone or diagonal pattern. Use warm amber/yellow accents on near-black unless brand colors were specified. Add rim light, 2-3 offer-related objects or simple benefit pictograms, one or two curved directional arrows leading to a broad contrasting CTA with a crisp border and controlled glow. Arrange approved benefit ticks as a compact secondary cluster, not a wall of text. The CTA is a major visual anchor, never a tiny plain link. An optional outlined badge contains approved copy only. Adapt this graphic style, not a template topic: no mandatory giant number, error checklist, free gift, warning, testimonial or invented bonus.' },
+  { id: 'cinematic', label: 'Filmowa historia', category: 'creative', direction: 'A specific product, object or explicitly requested human action in a real environment, foreground/midground/background, motivated cinematic light and atmospheric depth. The action visualizes the customer problem or benefit. Typography sits in intentional quiet space.' },
   { id: 'editorial', label: 'Nowoczesna typografia', category: 'modern', direction: 'Asymmetric editorial grid, huge confident headline, tactile light background, bold crop and a single striking accent. A precise designed CTA; crisp shadows instead of neon.' },
   { id: 'product', label: 'Produkt i efekt 3D', category: 'performance', direction: 'Tangible product or physical metaphor of the service, studio materials and reflections, dynamic perspective, 2 supporting props and layered light. Express the actual mechanism, never fictional product features.' },
   { id: 'collage', label: 'Kreatywny kolaż', category: 'creative', direction: 'Art-directed cutout collage, paper textures, oversized object, one marker accent, controlled overlap and a surprising visual metaphor tied to the hook. Keep copy and CTA clean.' },
   { id: 'contrast', label: 'Problem → rozwiązanie', category: 'performance', direction: 'Show contrast in a real task or situation: manual vs automated, confusing vs explained, unfinished vs finished. One visual transition, distinct lighting on each side, actionable CTA. No invented before/after results.' },
   { id: 'demo', label: 'Pokaż, jak działa', category: 'educational', direction: 'A compelling close-up of the real mechanism, process, tool or supplied proof; tactile background and sharp detail. Brief annotations only when relevant. Do not force trading charts, testimonials or fake dashboards.' },
   { id: 'premium', label: 'Eleganckie premium', category: 'premium', direction: 'Confident spacious commercial-ad layout, premium material texture, precise light, one sculptural hero and elegant oversized typography. Luxury mood must never reduce readability: use bright ivory copy on a dark background or deep near-black copy on a pale background, never muted gray on brown or black. Give the emphasized phrase a clearly brighter metallic accent. The CTA must be an unmistakable contrasting filled button, not a black shape disappearing into a dark scene. Less ornament, strong visual intent.' },
-  { id: 'jungle', label: 'Dżungla · wyjście z chaosu', category: 'scenic', direction: 'Set the scene in an unmistakable lush jungle: layered foreground leaves, vines, a sunlit clearing and cinematic atmospheric depth. Show a person parting foliage or the actual product emerging into the clearing. Turn the specific customer obstacle into a visual metaphor using 1-2 relevant props; a simple path or unlabelled map can represent a process, not a promised downloadable bonus. The hook and action must connect the jungle metaphor to this offer. Use rich greens with warm directional light, clean dark copy space and a bold contrasting CTA. This is an imaginative advertising setting, not a claim that the business operates in a jungle.' },
-  { id: 'pool', label: 'Basen · chwila oddechu', category: 'scenic', direction: 'Set the scene beside a clearly visible swimming pool: turquoise water, sunlit pool edge, soft caustic reflections and a relaxed human action or tangible product in the foreground. For automation, someone can sip coffee while a relevant process is visualized nearby; for learning, someone can review materials by the water; adapt the action and props to the actual offer. Use this as an everyday lifestyle metaphor, never a promise of passive income, effortless profits or a luxury lifestyle. Keep a calm solid area behind a huge readable headline and a vivid contrasting CTA. No generic office scene, yacht, mansion or unrelated finance chart.' },
-  { id: 'mountains', label: 'Góry · droga do celu', category: 'scenic', direction: 'Set the scene on a mountain trail with unmistakable layered peaks, a visible route and atmospheric distance. Show a person choosing the next step, consulting an unlabelled route card, or the real product involved in a relevant outdoor action. Translate a concrete process, preparation or customer obstacle into a journey metaphor connected to the hook. Use natural stone textures, cool mountain depth and warm sunrise rim light, with an intentional quiet sky/copy area and a strong CTA. A trail represents steps, not guaranteed financial growth or an invented milestone; do not turn the peaks into a fake investment chart.' },
+  { id: 'jungle', label: 'Dżungla · wyjście z chaosu', category: 'scenic', direction: 'Set the scene in an unmistakable lush jungle: layered foreground leaves, vines, a sunlit clearing and cinematic atmospheric depth. Use a relevant product or object emerging into the clearing, or a clearly composed empty path. Include a person only when explicitly specified in the scene description. Turn the specific customer obstacle into a visual metaphor using 1-2 relevant props; a simple path or unlabelled map can represent a process, not a promised downloadable bonus. The hook and action must connect the jungle metaphor to this offer. Use rich greens with warm directional light, clean dark copy space and a bold contrasting CTA. This is an imaginative advertising setting, not a claim that the business operates in a jungle.' },
+  { id: 'pool', label: 'Basen · chwila oddechu', category: 'scenic', direction: 'Set the scene beside a clearly visible swimming pool: turquoise water, sunlit pool edge, soft caustic reflections and a relevant tangible product or object in the foreground, or a clearly empty poolside scene. Include a human action only when explicitly specified in the scene description. Adapt the props to the actual offer. Use this as an everyday lifestyle metaphor, never a promise of passive income, effortless profits or a luxury lifestyle. Keep a calm solid area behind a huge readable headline and a vivid contrasting CTA. No generic office scene, yacht, mansion or unrelated finance chart.' },
+  { id: 'mountains', label: 'Góry · droga do celu', category: 'scenic', direction: 'Set the scene on a mountain trail with unmistakable layered peaks, a visible route and atmospheric distance. Use an empty route, relevant equipment or the real product involved in an outdoor scene. Include a person only when explicitly specified in the scene description. Translate a concrete process, preparation or customer obstacle into a journey metaphor connected to the hook. Use natural stone textures, cool mountain depth and warm sunrise rim light, with an intentional quiet sky/copy area and a strong CTA. A trail represents steps, not guaranteed financial growth or an invented milestone; do not turn the peaks into a fake investment chart.' },
   { id: 'worksite', label: 'Budowa · mocne fundamenty', category: 'scenic', direction: 'Set the scene at a recognizable construction site: physical foundations, scaffolding or unfinished structure, tactile materials and purposeful work. Match tools and props to the real offer; for a non-construction service use building blocks or an unlabelled plan as a clearly metaphorical structure for the process. Show safe, plausible activity and appropriate protective equipment when people work onsite. Use layered industrial depth, warm work light and one high-contrast accent linking the dominant headline to the wide CTA. Do not invent a building service, certification, completed customer project or guaranteed result.' },
 ] as const;
 
@@ -32,7 +32,26 @@ const AD_TYPOGRAPHY: Record<AdStyleId, string> = {
 export const ANALYSIS_LISTS = ['painPoints', 'desiredOutcomes', 'mechanisms', 'concreteBenefits', 'differentiators', 'proofPoints', 'exactClaims', 'objections', 'visualEvidence', 'brandCues', 'missingInformation'] as const;
 export const ANALYSIS_TEXT = ['offer', 'audience', 'campaignGoal', 'ctaDirection'] as const;
 export type AdFact = { id: string; text: string; source: string; quote: string };
-export type AdAnalysis = Record<typeof ANALYSIS_TEXT[number], string> & Record<typeof ANALYSIS_LISTS[number], string[]> & { facts: AdFact[] };
+export type AdAnalysis = Record<typeof ANALYSIS_TEXT[number], string> & Record<typeof ANALYSIS_LISTS[number], string[]> & { facts: AdFact[]; excludePeople?: boolean };
+
+export function excludesAdPeople(text: string): boolean {
+  const normalized = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/ł/g, 'l');
+  return /\b(?:bez\s+(?:(?:zadnych|zadnej|zadnego|widocznych)\s+)?(?:postaci|ludzi|osob|czlowieka|twarzy)|(?:nie\s+(?:dodawaj|generuj|pokazuj)|usun)\s+(?:postaci|ludzi|osoby)|(?:no|without)\s+(?:(?:any|visible|human)\s+)?(?:people|persons?|humans?|characters?|faces?))\b/.test(normalized);
+}
+
+function describesAdPeople(direction: string): boolean {
+  const positive = direction.replace(/\b(?:no|without|exclude|avoid|never add|do not add)\b[^.!?;]*(?:[.!?;]|$)/gi, '');
+  return /\b(?:person|people|human|man|woman|men|women|child|children|face|portrait|silhouette|owner|expert|instructor|worker|hiker|someone|hands?)\b/i.test(positive);
+}
+
+const AD_NO_PEOPLE = 'SUBJECT LOCK: This advertisement contains NO PEOPLE. Do not add a person, face, portrait, silhouette, body, hands, bystander or human reflection, including on screens or posters. Compose the scene with the specified environment, product, objects and typography. This overrides any generic suggestion of a person in a style or reference instruction.';
+const AD_WITH_PEOPLE = 'SUBJECT LOCK: Show only the people explicitly specified in Art direction. Do not add an extra model, presenter, expert, bystander or portrait to fill empty space. Preserve an empty environment when the scene calls for one.';
+
+export function adSubjectInstructions(prompt: string): string {
+  if (prompt.includes(AD_NO_PEOPLE) || excludesAdPeople(prompt)) return AD_NO_PEOPLE;
+  const direction = /(?:^|\n)Art direction:\s*([\s\S]*?)(?:\n\n|$)/i.exec(prompt)?.[1] || '';
+  return excludesAdPeople(direction) || !describesAdPeople(direction) ? AD_NO_PEOPLE : AD_WITH_PEOPLE;
+}
 
 const stringSchema = { type: 'STRING' };
 const stringsSchema = { type: 'ARRAY', items: stringSchema, maxItems: 6 };
@@ -72,7 +91,7 @@ layoutEn (EN): położenie hooka, bohatera, ticków i przycisku. Maksymalnie 3 l
 colors: 3-5 HEX. Wyraźnie różnicuj palety i kompozycje, zachowaj zadaną tożsamość marki.
 Czytelność jest bezwzględna: wszystkie napisy muszą mieć mocny kontrast względem bezpośredniego tła i wyglądać wyraźnie już jako mała miniatura. Zakazane są półprzezroczyste litery, przygaszony szary tekst na czerni/brązie, ciemny tekst na ciemnym tle, światło wpadające na litery oraz CTA zlewające się ze sceną. Hook i CTA mają pozostać czytelne także po wyobrażonym przełączeniu grafiki na skalę szarości. Jeśli klimat sceny konkuruje z tekstem, uprość lub przyciemnij/rozjaśnij lokalne tło pod copy, nigdy samego tekstu.
 Kompozycja ma być reklamą, nie prezentacją ani tablicą informacyjną. Maksymalnie 4 strefy: dominujący hook, jeden bohater/scena, zwarta grupa korzyści i CTA. Każdy rekwizyt musi pomagać zrozumieć hook; usuń dekoracje i panele konkurujące z przekazem. Karteczki, dokumenty, formularze, plany, ekrany, wykresy, kalendarze, plakaty i opakowania mają być bez napisów lub zawierać wyłącznie proste ikony, chyba że dokładny tekst jest w polu copy. Nie planuj fałszywych podpisów, liczb, notatek, UI ani drobnego tekstu dekoracyjnego. Dolna krawędź CTA ma znaleźć się minimum 10% nad dolną krawędzią obrazu.
-W KAŻDEJ grupie czterech stylów dokładnie 2 koncepcje muszą mieć needsImage=true, a dokładnie 2 needsImage=false. needsImage=true oznacza reklamę celowo zaprojektowaną pod prawdziwe zdjęcie osoby albo rzeczywistego produktu dodane później w generatorze obrazu — nie tylko sytuację, gdy zachowanie twarzy jest absolutnie konieczne. Dla usługi, eksperta, webinaru lub marki osobistej preferuj portret od pasa w górę, wyraźną twarz i pozę dopasowaną do hooka; dla produktu użyj jego rzeczywistego zdjęcia. W artDirectionEn koncepcji true nazwij supplied reference person albo supplied reference product głównym bohaterem i zbuduj wokół niego NOWĄ kompozycję. W grupie scenicznej preferuj co najmniej jedną reklamę z prawdziwą osobą w dżungli lub przy basenie. Koncepcje needsImage=false mają działać dobrze z neutralną postacią lub sceną stworzoną od zera.
+includePeople to jawna decyzja o postaciach: true wyłącznie gdy artDirectionEn rzeczywiście opisuje człowieka jako część sceny. Dla scen z przedmiotami, produktem lub samym otoczeniem ustaw false i wyraźnie opisz brak ludzi, twarzy, sylwetek i dłoni. Nie dodawaj prezentera ani eksperta, żeby wypełnić kadr. Gdy analysis.excludePeople=true, KAŻDA koncepcja musi mieć includePeople=false. Zakaz postaci ma pierwszeństwo przed stylistyką i sugestiami zdjęcia. Także neutralne i wygenerowane osoby są wtedy zabronione. Scenerie jungle, swimming pool, mountain trail i construction site pozostają wymagane. W tym przypadku needsImage=true wolno użyć tylko dla rzeczywistego produktu wskazanego w źródłach; jeśli brak takiego produktu, ustaw false we wszystkich koncepcjach. W pozostałych przypadkach w KAŻDEJ grupie czterech stylów dokładnie 2 koncepcje muszą mieć needsImage=true, a dokładnie 2 needsImage=false. needsImage=true oznacza reklamę celowo zaprojektowaną pod prawdziwe zdjęcie osoby albo rzeczywistego produktu dodane później w generatorze obrazu — nie tylko sytuację, gdy zachowanie twarzy jest absolutnie konieczne. Dla usługi, eksperta, webinaru lub marki osobistej preferuj portret od pasa w górę, wyraźną twarz i pozę dopasowaną do hooka; dla produktu użyj jego rzeczywistego zdjęcia. W artDirectionEn koncepcji true nazwij supplied reference person albo supplied reference product głównym bohaterem i zbuduj wokół niego NOWĄ kompozycję. Dobór zdjęć musi respektować includePeople. Koncepcje needsImage=false mają działać dobrze z produktem, przedmiotami, pustym otoczeniem lub osobą jedynie wtedy, gdy includePeople=true.
 imageNote jest zawsze wymagane i po polsku. Dla true zacznij od „Załącz” i krótko napisz, jakie ujęcie osoby/produktu dodać oraz jak zostanie użyte. Dla false wyjaśnij, co AI wygeneruje samo. Nie obiecuj, że referencja już została przesłana do generatora.
 Na końcu sprawdź zgodność copy z faktami, różnorodność hooków, relację tła do oferty i kompletność pól. Zwróć tylko JSON.`;
 
@@ -87,8 +106,8 @@ export const CONCEPT_SCHEMA = {
         artDirectionEn: stringSchema, layoutEn: stringSchema,
         colors: { type: 'ARRAY', items: stringSchema, minItems: 3, maxItems: 5 },
         sourceFactIds: { type: 'ARRAY', items: stringSchema, minItems: 1, maxItems: 4 },
-        needsImage: { type: 'BOOLEAN' }, imageNote: stringSchema,
-      }, required: ['styleId', 'title', 'hookPl', 'emphasisPl', 'subheadPl', 'benefitsPl', 'ctaPl', 'badgePl', 'hookMechanism', 'whyItWorks', 'sceneConcept', 'artDirectionEn', 'layoutEn', 'colors', 'sourceFactIds', 'needsImage', 'imageNote'],
+        needsImage: { type: 'BOOLEAN' }, imageNote: stringSchema, includePeople: { type: 'BOOLEAN' },
+      }, required: ['styleId', 'title', 'hookPl', 'emphasisPl', 'subheadPl', 'benefitsPl', 'ctaPl', 'badgePl', 'hookMechanism', 'whyItWorks', 'sceneConcept', 'artDirectionEn', 'layoutEn', 'colors', 'sourceFactIds', 'needsImage', 'imageNote', 'includePeople'],
     } },
   }, required: ['concepts'],
 };
@@ -115,6 +134,7 @@ export function parseAdAnalysis(value: unknown, description: string, imageCount:
     ...Object.fromEntries(ANALYSIS_TEXT.map(key => [key, textValue(record[key])])),
     ...Object.fromEntries(ANALYSIS_LISTS.map(key => [key, listValue(record[key])])),
     facts,
+    excludePeople: excludesAdPeople(description),
   } as AdAnalysis;
 }
 
@@ -128,13 +148,13 @@ function copyValue(value: unknown, maxWords: number, required = false): string {
 export type AdCreative = {
   styleId: AdStyleId; title: string; hookPl: string; emphasisPl: string; subheadPl: string; benefitsPl: string[]; ctaPl: string; badgePl: string;
   hookMechanism: string; whyItWorks: string; sceneConcept: string; artDirectionEn: string; layoutEn: string;
-  colors: string[]; needsImage: boolean; imageNote: string; sourceBasis: string[];
+  colors: string[]; needsImage: boolean; imageNote: string; sourceBasis: string[]; includePeople?: boolean;
   category: string; visualStyle: string; colorDirection: string; prompt: string;
 };
 
 const AD_PROMPT_PREFIX = 'Create ONE finished advertising image.';
 export const isCompiledAdPrompt = (prompt: string) => prompt.includes(AD_PROMPT_PREFIX) && prompt.includes('BEGIN_VISIBLE_TEXT') && prompt.includes('END_VISIBLE_TEXT');
-export const AD_REFERENCE_INSTRUCTIONS = 'Use the supplied references to preserve the specific person identity or product appearance when requested. Build a NEW advertisement in the art direction and layout described below. Do not inherit the source photo background, pose, typography or composition unless explicitly requested. Never copy source captions or numbers that are absent from the visible-text list.';
+export const AD_REFERENCE_INSTRUCTIONS = 'Use supplied references only for the subject requested in Art direction. A reference photo does not authorize adding a person to a people-free scene. Preserve a specific identity only when that person is explicitly requested; otherwise use only the relevant product or object. Build a NEW advertisement in the art direction and layout described below. Do not inherit source background, pose, typography or composition unless explicitly requested. Never copy source captions or numbers absent from the visible-text list.';
 export const AD_IMAGE_QUALITY_LOCK = [
   'AD QUALITY LOCK — these are drawing constraints, never visible lettering.',
   'Use a clean commercial hierarchy with at most four visual zones: one dominant headline zone, one hero scene or subject, one compact benefits cluster when requested, and one CTA.',
@@ -160,10 +180,11 @@ export function compileAdPrompt(c: Omit<AdCreative, 'prompt'>): string {
     `Visual style requirements: ${AD_STYLES.find(style => style.id === c.styleId)?.direction || ''}`,
     `Typography direction: ${AD_TYPOGRAPHY[c.styleId]}`,
     c.needsImage
-      ? `Reference image plan: REQUIRED. The user should supply the reference described here: ${c.imageNote} Preserve that person identity or real product appearance and make it a prominent hero of this new composition.`
+      ? `Reference image plan: REQUIRED. The user should supply the reference described here: ${c.imageNote} Preserve only the requested reference subject and make it prominent in this new composition.`
       : `Reference image plan: NOT REQUIRED. Generate the hero and scene from scratch as described here: ${c.imageNote}`,
     `Art direction: ${c.artDirectionEn}`,
     `Layout: ${c.layoutEn}`,
+    c.includePeople === true || (c.includePeople === undefined && describesAdPeople(c.artDirectionEn) && !excludesAdPeople(c.artDirectionEn)) ? AD_WITH_PEOPLE : AD_NO_PEOPLE,
     `Use this palette: ${c.colors.join(', ')}. The first text item is the dominant headline. Within that headline, typographically emphasize the existing character span matching ${JSON.stringify(c.emphasisPl)}; do not repeat it as a separate text element. It must visibly differ through accent color plus at least one additional device required by the typography direction: underline, marker, color block, outline, alternate weight or larger scale. Do not render the entire headline in one color, size and weight. The last text item is the large, contrasting CTA button with generous inner padding. Tick-prefixed items are supporting benefits. Remaining items are secondary copy.`,
     'CONTRAST LOCK: Every letter must be fully opaque and immediately readable at thumbnail size. Use bright ivory/white text on dark areas or deep near-black/navy text on light areas, with strong luminance separation behind every line. Never use muted gray on black, gray on brown, dark-on-dark, low-opacity type, gradient-faded type, backlit type or text crossed by shadows. Create a clean solid or gently darkened/lightened copy zone when needed. The emphasized phrase may use a vivid accent but must remain equally legible. The CTA must use the strongest accent-color fill with opposite light/dark bold text, a crisp edge and clear separation from the background; never render a black CTA on a dark scene or a pale CTA on a pale scene. Readability outranks cinematic mood and material effects.',
     'Keep all lettering and the entire CTA inside an inset of 9% on every edge. Use a quiet background behind copy. Reflow the headline into at most three lines and adjust font size to fit; never crop, distort, hyphenate or shorten any word. Maintain generous line spacing. Keep light effects, props and faces clear of lettering.',
@@ -199,17 +220,20 @@ export function parseAdConcepts(value: unknown, styles: readonly typeof AD_STYLE
     const needsImage = r.needsImage === true;
     const imageNote = textValue(r.imageNote, 300);
     if (!imageNote || (needsImage && !/^(załącz|dodaj|wgraj)\b/i.test(imageNote))) throw new Error('Niepoprawna instrukcja zdjęcia referencyjnego.');
+    const includePeople = typeof r.includePeople === 'boolean' ? r.includePeople : describesAdPeople(artDirectionEn) && !excludesAdPeople(artDirectionEn);
+    if ((analysis.excludePeople || !includePeople) && describesAdPeople(artDirectionEn)) throw new Error('Scena bez postaci nie może zawierać człowieka.');
+    if (analysis.excludePeople && includePeople) throw new Error('Opis wyklucza postacie.');
     const concept: Omit<AdCreative, 'prompt'> = {
       styleId: style.id, title: textValue(r.title, 100) || style.label,
       hookPl, emphasisPl, subheadPl, benefitsPl, ctaPl, badgePl, colors,
       hookMechanism: textValue(r.hookMechanism, 100), whyItWorks: textValue(r.whyItWorks, 400),
       sceneConcept: textValue(r.sceneConcept, 600), artDirectionEn, layoutEn,
-      needsImage, imageNote,
+      needsImage, imageNote, includePeople,
       sourceBasis: ids.map(id => analysis.facts.find(f => f.id === id)!.text),
       category: style.category, visualStyle: style.label, colorDirection: colors.join(' · '),
     };
     return { ...concept, prompt: compileAdPrompt(concept) };
   });
-  if (styles.length === 4 && concepts.filter(concept => concept.needsImage).length !== 2) throw new Error('Brak zrównoważonego miksu zdjęć referencyjnych.');
+  if (!analysis.excludePeople && styles.length === 4 && concepts.filter(concept => concept.needsImage).length !== 2) throw new Error('Brak zrównoważonego miksu zdjęć referencyjnych.');
   return concepts;
 }

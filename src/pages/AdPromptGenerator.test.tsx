@@ -101,6 +101,22 @@ it('disables generation after the weekly quota is exhausted and restores saved p
   expect(await screen.findByRole('heading',{name:'Faktury bez przepisywania'})).toBeVisible();
   expect(screen.getByText(/Następne generowanie/)).toBeVisible();
   expect(vi.mocked(vpsFetch).mock.calls.filter(([path])=>path==='/ad-generator/generate')).toHaveLength(0);
-  fireEvent.click(screen.getByRole('button',{name:/Twój opis i materiały/}));
+  expect(screen.getByLabelText('Co reklamujemy?')).toBeVisible();
+  expect(screen.getByRole('button',{name:'Wybierz zdjęcia'})).toBeVisible();
   expect(screen.getByRole('button',{name:'Przygotuj nowe propozycje'})).toBeDisabled();
+});
+
+it('restores admin campaigns with the brief expanded and unlimited generation', async () => {
+  access.data.campaign={remaining:1,nextAvailableAt:null,limit:0,windowDays:0,unlimited:true} as typeof access.data.campaign;
+  access.data.lastSession={id:'saved',inputText:'Zapisana oferta',prompts:response.prompts};
+  const scroll=vi.fn();
+  Object.defineProperty(Element.prototype,'scrollIntoView',{value:scroll,configurable:true});
+  render(<AdPromptGenerator/>);
+  await screen.findByRole('heading',{name:'Faktury bez przepisywania'});
+  expect(screen.getByLabelText('Co reklamujemy?')).toBeVisible();
+  expect(screen.getByRole('button',{name:'Wybierz zdjęcia'})).toBeVisible();
+  expect(screen.getByText(/prompty bez limitu tygodniowego/)).toBeVisible();
+  expect(screen.getByRole('button',{name:'Przygotuj nowe propozycje'})).toBeEnabled();
+  expect(scroll).not.toHaveBeenCalled();
+  Reflect.deleteProperty(Element.prototype,'scrollIntoView');
 });
