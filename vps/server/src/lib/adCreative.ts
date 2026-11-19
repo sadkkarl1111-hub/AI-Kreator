@@ -48,7 +48,8 @@ const AD_NO_PEOPLE = 'SUBJECT LOCK: This advertisement contains NO PEOPLE. Do no
 const AD_WITH_PEOPLE = 'SUBJECT LOCK: Show only the people explicitly specified in Art direction. Do not add an extra model, presenter, expert, bystander or portrait to fill empty space. Preserve an empty environment when the scene calls for one.';
 
 export function adSubjectInstructions(prompt: string): string {
-  if (prompt.includes(AD_NO_PEOPLE) || excludesAdPeople(prompt)) return AD_NO_PEOPLE;
+  if (prompt.includes(AD_NO_PEOPLE)) return AD_NO_PEOPLE;
+  if (prompt.includes(AD_WITH_PEOPLE)) return AD_WITH_PEOPLE;
   const direction = /(?:^|\n)Art direction:\s*([\s\S]*?)(?:\n\n|$)/i.exec(prompt)?.[1] || '';
   return excludesAdPeople(direction) || !describesAdPeople(direction) ? AD_NO_PEOPLE : AD_WITH_PEOPLE;
 }
