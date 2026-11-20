@@ -63,6 +63,17 @@ it('supports an image with no description', async () => {
   const call = vi.mocked(vpsFetch).mock.calls.find(([path]) => path === '/ad-generator/generate')!;
   expect(JSON.parse(String(call[1]?.body))).toMatchObject({ text: '', images: [{ mediaType: 'image/png' }] });
 });
+
+it('filters sketches and pinned notes and passes their illustration direction to the generator',async()=>{
+ const handmade=['sketch','doodle','minimal','pinned'].map((styleId,index)=>({...response.prompts[0],styleId,category:'handmade',title:'Ilustracja '+index,hookPl:'Krótki hook '+index,prompt:'Handmade prompt '+styleId}));
+ vi.mocked(vpsFetch).mockResolvedValue({...response,prompts:[...response.prompts,...handmade]} as never);
+ const results=await generate();
+ fireEvent.click(screen.getByRole('button',{name:/Szkice i karteczki/}));
+ for(const ad of handmade)expect(within(results).getByText(ad.hookPl)).toBeVisible();
+ expect(within(results).queryByRole('heading',{name:'Faktury bez przepisywania'})).not.toBeInTheDocument();
+ fireEvent.click(within(results).getAllByRole('button',{name:'Użyj tej reklamy'})[3]);
+ expect(openAdGenerator).toHaveBeenCalledWith('Handmade prompt pinned','illustration');
+});
 it('failed subsequent generation keeps prior results and user input', async () => {
   await generate(); fireEvent.click(screen.getByRole('button', { name: /Twój opis i materiały/ }));
   vi.mocked(vpsFetch).mockRejectedValueOnce(new Error('Spróbuj ponownie'));

@@ -176,11 +176,12 @@ const adStyleLabels: Record<string, string> = {
   product: 'Produkt i efekt 3D', collage: 'Kreatywny kolaż', contrast: 'Problem → rozwiązanie',
   demo: 'Pokaż, jak działa', premium: 'Eleganckie premium', jungle: 'Dżungla · wyjście z chaosu',
   pool: 'Basen · chwila oddechu', mountains: 'Góry · droga do celu', worksite: 'Budowa · mocne fundamenty',
+  sketch: 'Szkic odręczny · ołówek', doodle: 'Marker i bazgroły', minimal: 'Prosta ilustracja · jeden symbol', pinned: 'Przypięte karteczki',
 };
 
 const adCategoryLabels: Record<string, string> = {
   performance: 'Sprzedażowa', creative: 'Kreatywna', modern: 'Nowoczesna',
-  educational: 'Edukacyjna', premium: 'Premium', scenic: 'Sceniczna',
+  educational: 'Edukacyjna', premium: 'Premium', scenic: 'Sceniczna', handmade: 'Szkice i karteczki',
 };
 
 const getAdPromptColors = (prompt: AdPrompt) => {

@@ -48,7 +48,7 @@ function ImagePanel({ ad,index,disabled,onBusyChange }: { ad: AdPromptResult; in
         paths.push(uploaded.current.path);
       }
       setPhase('Generuję grafikę reklamową…');
-      const data=await vpsFetch<{imageUrl?:string}>('/ai/generate-image',{method:'POST',signal:controller.signal,body:JSON.stringify({prompt:ad.prompt+'\nTEST VARIATION (drawing instructions only): '+VARIANTS[variant],model:selectedModel,expectedCreditCost:model.cost,dimensions,style:ad.styleId==='collage'?'illustration':'realistic',count:1,referenceImagePaths:paths})},{retryAuthOnly:true});
+      const data=await vpsFetch<{imageUrl?:string}>('/ai/generate-image',{method:'POST',signal:controller.signal,body:JSON.stringify({prompt:ad.prompt+'\nTEST VARIATION (drawing instructions only): '+VARIANTS[variant],model:selectedModel,expectedCreditCost:model.cost,dimensions,style:['collage','sketch','doodle','minimal','pinned'].includes(ad.styleId||'')?'illustration':'realistic',count:1,referenceImagePaths:paths})},{retryAuthOnly:true});
       if(!current())return;if(!data.imageUrl)throw new Error('Brak obrazu w odpowiedzi. Sprawdź galerię przed kolejną próbą.');
       setResults(previous=>[...previous,{url:data.imageUrl!,variant,owner}]);
     }catch(reason){if(current())setError(reason instanceof Error?reason.message:'Nie udało się wygenerować obrazu. Sprawdź galerię przed ponowną próbą.');}

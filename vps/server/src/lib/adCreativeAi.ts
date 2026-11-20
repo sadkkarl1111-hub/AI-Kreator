@@ -122,11 +122,11 @@ export async function generateAdCampaign(client: AdJsonClient, description: stri
     seen.add(key);
     return true;
   });
-  // Repair missing scenery and duplicate hooks in one bounded group.
-  const failedScenery = AD_STYLES.filter(style => style.category === 'scenic' && !prompts.some(prompt => prompt.styleId === style.id) && !duplicateDirections.some(item => item.style.id === style.id));
+  // Repair missing visual families and duplicate hooks in one bounded group.
+  const failedDirections = AD_STYLES.filter(style => (style.category === 'scenic' || style.category === 'handmade') && !prompts.some(prompt => prompt.styleId === style.id) && !duplicateDirections.some(item => item.style.id === style.id));
   const repairDirections = [
     ...duplicateDirections.filter(item => item.style.category === 'scenic'),
-    ...failedScenery.map((style, index) => ({ style, needsImage: !analysis.excludePeople && index < 2 })),
+    ...failedDirections.map((style, index) => ({ style, needsImage: style.category !== 'handmade' && !analysis.excludePeople && index < 2 })),
     ...duplicateDirections.filter(item => item.style.category !== 'scenic'),
   ].slice(0, 4);
   const repairStyles = repairDirections.map(item => ({ ...item.style, requiredNeedsImage: item.needsImage }));
@@ -144,7 +144,7 @@ export async function generateAdCampaign(client: AdJsonClient, description: stri
         if (concepts.some(concept => seen.has(concept.hookPl.toLocaleLowerCase('pl')))) throw new Error('Powtórzony hook po poprawce.');
         if (concepts.some((concept, index) => concept.needsImage !== repairDirections[index]?.needsImage)) throw new Error('Poprawka zmieniła plan zdjęcia.');
         return concepts;
-      }, failedScenery.length ? 2 : 1);
+      }, failedDirections.length ? 2 : 1);
       prompts.push(...repaired);
     } catch { signal.throwIfAborted(); }
   }

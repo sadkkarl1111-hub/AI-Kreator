@@ -31,6 +31,7 @@ type GenerateResponse = { ok: boolean; prompts: AdPromptResult[]; analysis?: Ana
 const FILTERS = [
   ['all', 'Wszystkie'], ['performance', 'Sprzedażowe'], ['scenic', 'Sceniczne'], ['creative', 'Kreatywne'],
   ['modern', 'Nowoczesne'], ['educational', 'Edukacyjne'], ['premium', 'Premium'],
+  ['handmade', 'Szkice i karteczki'],
 ];
 const TOTAL_IMAGE_LIMIT = 14 * 1024 * 1024;
 const EXAMPLES = [
@@ -52,7 +53,7 @@ function fileToPayload(file: File): Promise<UploadedImage> {
 }
 
 function ConceptCard({ ad, index, onUse, imageGenerator }: { ad: AdPromptResult; index: number; onUse: (ad: AdPromptResult) => void; imageGenerator?: ReactNode }) {
-  const light = ['editorial', 'collage', 'demo'].includes(ad.styleId || '');
+  const light = ['editorial', 'collage', 'demo', 'sketch', 'doodle', 'minimal', 'pinned'].includes(ad.styleId || '');
   const colors = (ad.colors || []).filter(c => /^#[0-9a-f]{6}$/i.test(c)).slice(0, 5);
   const accent = colors[2] || '#a855f7';
   const emphasisIndex = ad.emphasisPl ? ad.hookPl.toLocaleLowerCase('pl').indexOf(ad.emphasisPl.toLocaleLowerCase('pl')) : -1;
@@ -205,7 +206,7 @@ export default function AdPromptGenerator() {
 
   const onUse = (ad: AdPromptResult) => {
     try {
-      openAdGenerator(ad.prompt, ad.styleId === 'collage' ? 'illustration' : 'realistic');
+      openAdGenerator(ad.prompt, ['collage', 'sketch', 'doodle', 'minimal', 'pinned'].includes(ad.styleId || '') ? 'illustration' : 'realistic');
       toast.success('Generator otwarty w nowej karcie. Propozycje pozostają tutaj.');
     } catch (e) { toast.error(e instanceof Error ? e.message : 'Nie udało się otworzyć generatora.'); }
   };
@@ -271,7 +272,7 @@ export default function AdPromptGenerator() {
             <label className="mt-5 block space-y-2 text-sm font-semibold">Cel kampanii<select aria-label="Cel kampanii" value={goal} onChange={event=>setGoal(event.target.value as AdCampaignGoal)} className="h-11 w-full rounded-md border bg-background px-3 font-normal">{AD_CAMPAIGN_GOALS.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
             <AdCompetitorResearch description={text} goal={goal} value={competitorExamples} onChange={setCompetitorExamples} disabled={loading||readingImages||imageJobs>0} quota={access.data.research} onQuotaRefresh={access.refresh}/>
             <div className="mt-6 flex flex-col justify-between gap-3 border-t pt-5 sm:flex-row sm:items-center">
-              <p className="max-w-md text-sm leading-relaxed text-muted-foreground">Jeden klik, 12 kierunków — od mocnego plakatu po dżunglę, basen i góry. Bez wybierania stylu na starcie.</p>
+              <p className="max-w-md text-sm leading-relaxed text-muted-foreground">16 kierunków z krótkimi hookami. Szkice, marker, proste ilustracje, przypięte karteczki i sceny z dżunglą lub basenem.</p>
               <Button type="submit" size="lg" className="h-auto min-h-11 w-full min-w-0 shrink-0 gap-2 whitespace-normal px-3 gradient-bg sm:w-auto" disabled={!access.data.campaign.remaining || (!text.trim() && !images.length) || loading || readingImages || imageJobs > 0}><Sparkles className="h-4 w-4 shrink-0" />{result ? 'Przygotuj nowe propozycje' : 'Przygotuj reklamy'}<ArrowRight className="hidden h-4 w-4 shrink-0 sm:block" /></Button>
             </div>
           </fieldset>

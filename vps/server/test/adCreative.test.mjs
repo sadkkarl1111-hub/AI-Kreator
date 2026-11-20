@@ -8,13 +8,13 @@ const analysis = { offer: 'Automatyzacja faktur i CRM', facts: [
   { id: 'F1', text: 'Automatyzacja faktur', source: 'opis', quote: 'Automatyzuję faktury' },
   { id: 'F2', text: 'Dane z formularza w CRM', source: 'opis', quote: 'Dane z formularza trafiają do CRM' },
 ] };
-const hooks = ['Faktury bez ręcznego przepisywania', 'Formularz wypełniony. CRM już wie.', 'Mniej kopiowania, więcej rozmów', 'Twoje dane trafiają do CRM', 'Nie przepisuj kolejnego formularza', 'Od formularza do gotowej faktury', 'Zobacz drogę danych do CRM', 'Zaprojektuj wygodniejszy obieg faktur', 'Przebij się przez stos faktur', 'Dane płyną prosto do CRM', 'Zaplanuj drogę formularza do CRM', 'Zbuduj sprawniejszą obsługę formularzy'];
+const hooks = ['Faktury bez ręcznego przepisywania', 'Formularz wypełniony. CRM już wie.', 'Mniej kopiowania, więcej rozmów', 'Twoje dane trafiają do CRM', 'Nie przepisuj kolejnego formularza', 'Od formularza do gotowej faktury', 'Zobacz drogę danych do CRM', 'Zaprojektuj wygodniejszy obieg faktur', 'Przebij się przez stos faktur', 'Dane płyną prosto do CRM', 'Zaplanuj drogę formularza do CRM', 'Zbuduj sprawniejszą obsługę formularzy', 'Faktury pod kontrolą', 'Koniec z kopiowaniem danych', 'Formularz zasila CRM', 'Przypnij sprawniejszy proces'];
 const row = (style, patch = {}) => {
-  const needsImage = AD_STYLES.indexOf(style) % 4 < 2;
+  const needsImage = style.category !== 'handmade' && AD_STYLES.indexOf(style) % 4 < 2;
   return ({
   styleId: style.id, title: style.label, hookPl: hooks[AD_STYLES.indexOf(style)], emphasisPl: hooks[AD_STYLES.indexOf(style)].split(' ').slice(0, 2).join(' '), subheadPl: '', benefitsPl: ['✓ Dane w CRM', 'Bez przepisywania'], ctaPl: 'Umów rozmowę', badgePl: '',
   hookMechanism: 'Konkretny problem', whyItWorks: 'Pokazuje zadanie, które można zautomatyzować.', sceneConcept: 'Właściciel odkłada faktury. Formularz łączy się z kartą CRM.',
-  artDirectionEn: style.category === 'scenic' ? style.direction : 'An owner closes a paper invoice folder at a warm wooden desk. A connected form and a minimal CRM card sit in the middle ground. In the background soft morning light reveals the texture of the wall. Use tactile paper, restrained depth and one orange directional accent.',
+  artDirectionEn: ['scenic','handmade'].includes(style.category) ? style.direction : 'An owner closes a paper invoice folder at a warm wooden desk. A connected form and a minimal CRM card sit in the middle ground. In the background soft morning light reveals the texture of the wall. Use tactile paper, restrained depth and one orange directional accent.',
   layoutEn: 'Headline in the upper left, hero in the center, benefits to the right and a wide CTA at the bottom inside generous insets.',
   colors: ['#102030', '#f8fafc', '#f97316'], sourceFactIds: ['F1', 'F2'], needsImage,
   imageNote: needsImage ? 'Załącz wyraźny portret właściciela od pasa w górę.' : 'AI wygeneruje neutralną postać i scenę od podstaw.', ...patch,
@@ -35,7 +35,7 @@ test('competitor inspiration and the campaign goal reach concepts without pollut
     assert(!JSON.stringify(input.analysis.facts).includes('1000 klientów'));
     return concepts(input.styles.map(style => AD_STYLES.find(item => item.id === style.id)));
   }, description, [], new AbortController().signal, context);
-  assert.equal(analysisCalls, 1); assert.equal(conceptCalls, 3); assert.equal(result.prompts.length, 12);
+  assert.equal(analysisCalls, 1); assert.equal(conceptCalls, 4); assert.equal(result.prompts.length, 16);
   assert.equal(result.prompts.filter(item => item.needsImage).length, 6);
 });
 
@@ -79,17 +79,17 @@ test('rejects technical copy, unknown facts, repeated styles/hooks and excessive
   const data = concepts(styles); data.concepts[1].styleId = styles[0].id;
   assert.throws(() => parseAdConcepts(data, styles, parsedAnalysis()));
 });
-test('twelve complete concepts include every style in three bounded batches', async () => {
+test('sixteen complete concepts include every style in four bounded batches', async () => {
   const calls = [];
   const result = await generateAdCampaign(async req => {
     calls.push(req); const input = JSON.parse(req.input);
     return input.styles ? concepts(AD_STYLES.filter(s => input.styles.some(x => x.id === s.id))) : analysis;
   }, description, [], request().signal);
-  assert.equal(result.prompts.length, 12); assert.equal(result.partial, false);
-  assert.equal(new Set(result.prompts.map(p => p.hookPl)).size, 12);
+  assert.equal(result.prompts.length, 16); assert.equal(result.partial, false);
+  assert.equal(new Set(result.prompts.map(p => p.hookPl)).size, 16);
   assert.equal(result.prompts.filter(p => p.needsImage).length, 6);
   assert.deepEqual(result.prompts.map(p => p.styleId), AD_STYLES.map(s => s.id));
-  assert.equal(calls.length, 4);
+  assert.equal(calls.length, 5);
   assert(calls.slice(1).every(call => JSON.parse(call.input).styles.length === 4));
   assert.equal(calls[0].model, AD_ANALYSIS_MODEL.id);
   assert.equal(calls[0].reasoningEffort, 'low');
@@ -105,6 +105,28 @@ test('each full batch mixes two reference-led and two generated-from-scratch con
     concept.imageNote = 'AI wygeneruje neutralną scenę od podstaw.';
   }
   assert.throws(() => parseAdConcepts(data, styles, parsedAnalysis()), /miksu zdjęć referencyjnych/);
+});
+
+test('handmade styles keep their technique and need no reference portrait',()=>{
+ const handmade=AD_STYLES.filter(style=>style.category==='handmade');
+ const ads=parseAdConcepts(concepts(handmade),handmade,parsedAnalysis());
+ assert.deepEqual(ads.map(ad=>ad.styleId),['sketch','doodle','minimal','pinned']);
+ for(const ad of ads){assert.equal(ad.needsImage,false);assert.match(ad.prompt,/Reference image plan: NOT REQUIRED/);}
+ assert.match(ads[0].prompt,/graphite pencil sketch/i);
+ assert.match(ads[1].prompt,/marker doodle/i);
+ assert.match(ads[2].prompt,/minimal flat illustration/i);
+ assert.match(ads[3].prompt,/ON the main pinned note/);
+ for(const style of handmade){
+  assert.throws(()=>parseAdConcepts({concepts:[row(style,{artDirectionEn:row(styles[0]).artDirectionEn})]},[style],parsedAnalysis()),/Scena nie odpowiada/);
+ }
+});
+
+test('short marketing hooks reject verbose headlines and dense handmade copy',()=>{
+ const long='Automatyzuj faktury i obsługę wszystkich formularzy firmowych';
+ assert.throws(()=>parseAdConcepts({concepts:[row(styles[0],{hookPl:long,emphasisPl:'Automatyzuj faktury'})]},[styles[0]],parsedAnalysis()),/tekst reklamy/);
+ const pinned=AD_STYLES.find(style=>style.id==='pinned');
+ const dense=row(pinned,{subheadPl:'Cały proces obsługi danych w Twojej firmie',benefitsPl:['Zapisuj dane w swoim CRM','Wysyłaj gotowe faktury do klientów','Porządkuj firmowe dane każdego dnia']});
+ assert.throws(()=>parseAdConcepts({concepts:[dense]},[pinned],parsedAnalysis()),/Zbyt długie/);
 });
 
 test('impact composition and scenery survive compilation without becoming visible copy', () => {
@@ -134,10 +156,10 @@ test('an explicitly people-free campaign keeps every scenic setting and never re
   const input=JSON.parse(req.input);assert.equal(input.analysis.excludePeople,true);
   return {concepts:input.styles.map(style=>row(AD_STYLES.find(item=>item.id===style.id),{
    includePeople:false,needsImage:false,imageNote:'AI wygeneruje przedmioty i puste otoczenie.',
-   artDirectionEn:'An empty '+({jungle:'jungle',pool:'swimming pool',mountains:'mountain trail',worksite:'construction site'}[style.id]||'studio')+' scene with a blank invoice folder and a clear visual path leading to a minimal abstract CRM object. Use layered depth, tactile materials and warm directional lighting with a quiet dark copy zone. No people, faces, silhouettes or hands.',
+   artDirectionEn:'An empty '+({jungle:'jungle',pool:'swimming pool',mountains:'mountain trail',worksite:'construction site',sketch:'graphite pencil sketch',doodle:'marker doodle',minimal:'minimal flat illustration',pinned:'pinned paper note with pushpin'}[style.id]||'studio')+' scene with a blank invoice folder and a clear visual path leading to a minimal abstract CRM object. Use layered depth, tactile materials and warm directional lighting with a quiet dark copy zone. No people, faces, silhouettes or hands.',
   }))};
  },brief,[],request().signal);
- assert.equal(result.prompts.length,12);
+ assert.equal(result.prompts.length,16);
  for(const concept of result.prompts){assert.equal(concept.includePeople,false);assert.equal(concept.needsImage,false);assert.match(concept.prompt,/SUBJECT LOCK: This advertisement contains NO PEOPLE/);}
  assert.deepEqual(result.prompts.filter(item=>item.category==='scenic').map(item=>item.styleId),['jungle','pool','mountains','worksite']);
 });
@@ -159,7 +181,7 @@ test('a failed scenic batch is repaired by requesting its missing styles with un
   if(input.avoidHooks){repairs++;assert.deepEqual(requested.map(item=>item.id),['jungle','pool','mountains','worksite']);}
   return concepts(requested);
  },description,[],request().signal);
- assert.equal(failures,2);assert.equal(repairs,1);assert.equal(result.prompts.length,12);assert.equal(result.partial,false);
+ assert.equal(failures,2);assert.equal(repairs,1);assert.equal(result.prompts.length,16);assert.equal(result.partial,false);
 });
 
 test('duplicate hook gets one targeted repair without losing its scenic direction', async () => {
@@ -182,8 +204,8 @@ test('duplicate hook gets one targeted repair without losing its scenic directio
     }
     return data;
   }, description, [], request().signal);
-  assert.equal(calls.length, 5);
-  assert.equal(result.partial, false); assert.equal(result.prompts.length, 12);
+  assert.equal(calls.length, 6);
+  assert.equal(result.partial, false); assert.equal(result.prompts.length, 16);
   assert.equal(result.prompts.filter(prompt => prompt.needsImage).length, 6);
   assert.deepEqual(result.prompts.map(p => p.styleId), AD_STYLES.map(s => s.id));
   assert.match(result.prompts.find(p => p.styleId === 'mountains').prompt, /mountain trail/);
@@ -201,7 +223,7 @@ test('failed duplicate repair stays bounded and keeps all other valid concepts',
     if (mountain) { mountain.hookPl = hooks[0]; mountain.emphasisPl = hooks[0].split(' ').slice(0, 2).join(' '); }
     return data;
   }, description, [], request().signal);
-  assert.equal(calls, 5); assert.equal(result.prompts.length, 11); assert.equal(result.partial, true);
+  assert.equal(calls, 6); assert.equal(result.prompts.length, 15); assert.equal(result.partial, true);
 });
 test('unreadable image does not become an invented offer about image readability', async () => {
   let calls = 0;
@@ -216,11 +238,11 @@ test('malformed analysis is retried from the original image, not damaged JSON', 
     if (req.images) { attempts.push(req); if (attempts.length === 1) throw new SyntaxError('Unterminated string'); return analysis; }
     const input = JSON.parse(req.input); return concepts(AD_STYLES.filter(s => input.styles.some(x => x.id === s.id)));
   }, description, images, request().signal);
-  assert.equal(result.prompts.length, 12); assert.equal(attempts.length, 2);
+  assert.equal(result.prompts.length, 16); assert.equal(attempts.length, 2);
   assert.deepEqual(attempts[1].images, images);
   assert(attempts[1].input.includes('Automatyzuję')); assert(!attempts[1].input.includes('Unterminated'));
 });
-test('one failed group preserves the other eight concepts and marks partial', async () => {
+test('one failed group preserves the other twelve concepts and marks partial', async () => {
   let failed = 0;
   const result = await generateAdCampaign(async req => {
     if (req.images) return analysis;
@@ -228,7 +250,7 @@ test('one failed group preserves the other eight concepts and marks partial', as
     const input = JSON.parse(req.input);
     return concepts(AD_STYLES.filter(s => input.styles.some(x => x.id === s.id)));
   }, description, [], request().signal);
-  assert.equal(failed, 2); assert.equal(result.prompts.length, 8); assert.equal(result.partial, true);
+  assert.equal(failed, 2); assert.equal(result.prompts.length, 12); assert.equal(result.partial, true);
 });
 test('cancellation never starts provider work', async () => {
   const controller = new AbortController(); controller.abort(); let calls = 0;
@@ -242,7 +264,7 @@ test('provider authorization failures are not retried or lost behind a generic J
     if (req.images) return analysis;
     throw new AdProviderError(false, 403, 'PERMISSION_DENIED');
   }, description, [], request().signal), error => error instanceof AdProviderError && error.status === 403);
-  assert.equal(calls, 4);
+  assert.equal(calls, 5);
 });
 test('Responses client supports fast Luna analysis and keeps Sol defaults for concepts', async t => {
   let body; const usage = [];
